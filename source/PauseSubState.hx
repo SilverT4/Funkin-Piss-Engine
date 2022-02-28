@@ -1,6 +1,5 @@
 package;
 
-import polymod.format.ParseRules.PlainTextParseFormat;
 import Controls.Control;
 import flixel.FlxG;
 import flixel.FlxSprite;

@@ -21,7 +21,7 @@ class Stage extends FlxGroup {
     ];
 
     public var stage:String;
-    public var camZoom:Float = 0.0;
+    public var camZoom:Float = 0.9;
 
     //ASSETS
     public var halloweenBG:FlxSprite;
@@ -59,6 +59,7 @@ class Stage extends FlxGroup {
 		switch (stage) {
             case 'stage':
                 camZoom = 0.9;
+
                 var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.stageImage('stageback', stage));
                 bg.antialiasing = true;
                 bg.scrollFactor.set(0.9, 0.9);
@@ -129,7 +130,7 @@ class Stage extends FlxGroup {
                 var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.stageImage('street', stage));
                 add(street);
 			case 'limo':
-                camZoom = 0.90;
+                camZoom = 0.9;
 
                 var skyBG:FlxSprite = new FlxSprite(-120, -50).loadGraphic(Paths.stageImage('limoSunset', stage));
                 skyBG.scrollFactor.set(0.1, 0.1);
@@ -172,7 +173,7 @@ class Stage extends FlxGroup {
                 fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.stageImage('fastCarLol', stage));
                 // add(limo);
 			case 'mall':
-                camZoom = 0.80;
+                camZoom = 0.8;
 
                 var bg:FlxSprite = new FlxSprite(-1000, -500).loadGraphic(Paths.stageImage('bgWalls', stage));
                 bg.antialiasing = true;

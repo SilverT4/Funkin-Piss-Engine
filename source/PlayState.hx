@@ -284,6 +284,8 @@ class PlayState extends MusicBeatState {
 		stage = new Stage(tempStageName);
 		add(stage);
 
+		defaultCamZoom = stage.camZoom;
+
 		gfVersion = 'gf';
 
 		switch (stage.stage) {
@@ -1567,43 +1569,55 @@ class PlayState extends MusicBeatState {
 				}
 	
 				if (PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection) {
+					//BF TURN
 					if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
 						FlxG.camera.zoom = defaultCamZoom;
 					}
-					camFollow.setPosition(bf.getMidpoint().x - 100, bf.getMidpoint().y - 100);
+					var daNewCameraPos = [
+						bf.getMidpoint().x - 100,
+						bf.getMidpoint().y - 100
+					];
 	
 					switch (stage.stage) {
 						case 'limo':
-							camFollow.x = bf.getMidpoint().x - 300;
+							daNewCameraPos[0] = bf.getMidpoint().x - 300;
 						case 'mall':
-							camFollow.y = bf.getMidpoint().y - 200;
+							daNewCameraPos[1] = bf.getMidpoint().y - 200;
 						case 'school':
-							camFollow.x = bf.getMidpoint().x - 200;
-							camFollow.y = bf.getMidpoint().y - 200;
+							daNewCameraPos[0] = bf.getMidpoint().x - 200;
+							daNewCameraPos[1] = bf.getMidpoint().y - 200;
 						case 'schoolEvil':
-							camFollow.x = bf.getMidpoint().x - 200;
-							camFollow.y = bf.getMidpoint().y - 200;
+							daNewCameraPos[0] = bf.getMidpoint().x - 200;
+							daNewCameraPos[1] = bf.getMidpoint().y - 200;
 					}
+
+					camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.05), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.05));
 	
 					if (SONG.song.toLowerCase() == 'tutorial') {
 						tweenCam(1);
 					}
 				}
-				else if (camFollow.x != dad.getMidpoint().x + 150) {
+				else {
+					//DAD TURN
 					FlxG.camera.zoom = defaultCamZoom;
-					camFollow.setPosition(dad.getMidpoint().x + 150, dad.getMidpoint().y - 100);
-					// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
-	
+					var daNewCameraPos = [
+						dad.getMidpoint().x + 150,
+						dad.getMidpoint().y - 100
+					];
+					
 					switch (dad.curCharacter) {
-						case 'mom':
-							camFollow.y = dad.getMidpoint().y;
+						case 'mom-car', 'mom':
+							daNewCameraPos[1] = dad.getMidpoint().y + 100;
 						case 'senpai':
-							camFollow.y = dad.getMidpoint().y - 430;
-							camFollow.x = dad.getMidpoint().x - 100;
+							daNewCameraPos[0] = dad.getMidpoint().x - 100;
+							daNewCameraPos[1] = dad.getMidpoint().y - 430;
 						case 'senpai-angry':
-							camFollow.y = dad.getMidpoint().y - 430;
-							camFollow.x = dad.getMidpoint().x - 100;
+							daNewCameraPos[0] = dad.getMidpoint().x - 100;
+							daNewCameraPos[1] = dad.getMidpoint().y - 430;
 					}
+
+					camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.05), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.05));
+					// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
 	
 					if (SONG.song.toLowerCase() == 'tutorial') {
 						tweenCam(1.3);

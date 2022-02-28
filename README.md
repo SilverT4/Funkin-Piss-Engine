@@ -23,3 +23,12 @@ haxelib install yaml
 * Week and Character configs are in YAML
 * Dialogue Cutscenes
 * And some fixes to Vanilla
+## Credits / Special Thanks
+### PEngine
+- [Paidyy](https://paidyy.newgrounds.com/) - PEngine Programmer
+### Special Thanks
+- [PolybiusProxy](https://github.com/brightfyregit/Friday-Night-Funkin-Mp4-Video-Support) - Video Loader for HaxeFlixel
+### Friday Night Funkin'
+- [ninjamuffin99](https://twitter.com/ninja_muffin99) - Programmer
+- [PhantomArcade3K](https://twitter.com/phantomarcade3k) and [Evilsk8r](https://twitter.com/evilsk8r) - Artists
+- [Kawaisprite](https://twitter.com/kawaisprite) - Musician

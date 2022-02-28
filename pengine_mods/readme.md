@@ -46,49 +46,49 @@ If you wanna to make it easier to set the x and y values:
 
 # Examples:
 Skin config file: (config.yml) <br>
-<code>
-#Default boyfriend offset values<br>
-offset:<br>
-  scared:<br>
-    x: -4<br>
-    y: 0<br>
-  deathLoop:<br>
-    x: 37<br>
-    y: 5<br>
-  singRIGHTmiss:<br>
-    x: -30<br>
-    y: 21<br>
-  singDOWN:<br>
-    x: -10<br>
-    y: -50<br>
-  singLEFTmiss:<br>
-    x: 12<br>
-    y: 24<br>
-  singUP:<br>
-    x: -29<br>
-    y: 27<br>
-  deathConfirm:<br>
-    x: 37<br>
-    y: 69<br>
-  firstDeath:<br>
-    x: 37<br>
-    y: 11<br>
-  hey:<br>
-    x: 7<br>
-    y: 4<br>
-  idle:<br>
-    x: -5<br>
-    y: 0<br>
-  singDOWNmiss:<br>
-    x: -11<br>
-    y: -19<br>
-  singRIGHT:<br>
-    x: -38<br>
-    y: -7<br>
-  singLEFT:<br>
-    x: 12<br>
-    y: -6<br>
-  singUPmiss:<br>
-    x: -29<br>
-    y: 27<br>
-</code>
+```
+#Default boyfriend offset values
+offset:
+  scared:
+    x: -4
+    y: 0
+  deathLoop:
+    x: 37
+    y: 5
+  singRIGHTmiss:
+    x: -30
+    y: 21
+  singDOWN:
+    x: -10
+    y: -50
+  singLEFTmiss:
+    x: 12
+    y: 24
+  singUP:
+    x: -29
+    y: 27
+  deathConfirm:
+    x: 37
+    y: 69
+  firstDeath:
+    x: 37
+    y: 11
+  hey:
+    x: 7
+    y: 4
+  idle:
+    x: -5
+    y: 0
+  singDOWNmiss:
+    x: -11
+    y: -19
+  singRIGHT:
+    x: -38
+    y: -7
+  singLEFT:
+    x: 12
+    y: -6
+  singUPmiss:
+    x: -29
+    y: 27
+```

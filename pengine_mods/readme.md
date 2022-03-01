@@ -1,3 +1,4 @@
+*If this is outdated please tell me*
 # Songs
 You can add custom songs to the game!
 (For now they are only available on Freeplay)
@@ -22,7 +23,7 @@ To add a skin:
 2. Copy the .xml and .png file and paste in ex. "mods/skins/< bf/gf/dad >/< your skin name >/" folder
 
 To add a icon make a image file with name "icon.png" also it should be 300x150
-To add a config create a file with name "config.yml" (example config is in "mods/skins/")
+To add a config create a file with name "config.yml" (example config is in Examples section)
 
 ## Offsets
 If the skin animation go a bit off use these

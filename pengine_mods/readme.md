@@ -116,3 +116,72 @@ function onNotePress(char)
 	end
 end
 ```
+
+Character config.yml file:
+```
+# Default boyfriend anim values
+# Note: Restarting the song will also reload this config!
+
+flipX: true
+X: 0
+Y: 450
+
+animations:
+  BF idle dance:
+    x: -5
+    y: 0
+    name: idle
+    isIdle: true
+  BF idle shaking:
+    x: -4
+    y: 0
+    name: scared
+  BF Dead Loop:
+    x: 37
+    y: 5
+    name: deathLoop
+  BF NOTE RIGHT MISS:
+    x: -30
+    y: 21
+    name: singRIGHTmiss
+  BF NOTE DOWN0:
+    x: -10
+    y: -50
+    name: singDOWN
+  BF NOTE LEFT MISS:
+    x: 12
+    y: 24
+    name: singLEFTmiss
+  BF NOTE UP0:
+    x: -29
+    y: 27
+    name: singUP
+  BF Dead confirm:
+    x: 37
+    y: 69
+    name: deathConfirm
+  BF dies:
+    x: 37
+    y: 11
+    name: firstDeath
+  BF HEY:
+    x: 7
+    y: 4
+    name: hey
+  BF NOTE DOWN MISS:
+    x: -11
+    y: -19
+    name: singDOWNmiss
+  BF NOTE RIGHT0:
+    x: -38
+    y: -7
+    name: singRIGHT
+  BF NOTE LEFT0:
+    x: 12
+    y: -6
+    name: singLEFT
+  BF NOTE UP MISS:
+    x: -29
+    y: 27
+    name: singUPmiss
+```

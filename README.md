@@ -1,10 +1,9 @@
 # Friday Night Funkin': PEngine
 Engine made mainly to improve vanilla and make modding easier.
 ## Setting Shit up
-1. Install Haxe and HaxeFlixel
+1. Install [Haxe](https://haxe.org/download/) and [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/)
 2. Install these libraries:
 ```
-haxelib install flixel
 haxelib install flixel-addons
 haxelib install flixel-ui
 haxelib install hscript
@@ -12,6 +11,7 @@ haxelib install faxe
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 haxelib install openfl-webm
 haxelib install yaml
+haxelib install linc_luajit
 ```
 3. And to compile just type ```lime test windows -debug``` or ```lime test windows``` in current folder command line
 ## Nice Stuff / Features
@@ -22,6 +22,7 @@ haxelib install yaml
 * Custom Skins
 * Week and Character configs are in YAML
 * Dialogue Cutscenes
+* Lua Support
 * And some fixes to Vanilla
 ## Credits / Special Thanks
 ### PEngine

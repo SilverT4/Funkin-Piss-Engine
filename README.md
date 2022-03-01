@@ -1,8 +1,8 @@
 # Friday Night Funkin': PEngine
-Engine made mainly to improve vanilla and make modding easier.
+Engine made mainly to improve vanilla client and make modding easier.
 ## Setting Shit up
 1. Install [Haxe](https://haxe.org/download/) and [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/)
-2. Install these libraries:
+2. Install these libraries using Command Line:
 ```
 haxelib install flixel-addons
 haxelib install flixel-ui

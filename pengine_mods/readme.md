@@ -92,3 +92,27 @@ offset:
     x: -29
     y: 27
 ```
+
+Song script.lua file example:
+```
+print("Hello World!")
+
+function beatHit()
+	print(curBeat)
+end
+
+function stepHit()
+	print(curStep)
+end
+
+function update()
+	print("balls")
+end
+
+function onNotePress(char)
+	if char == "dad" then
+		shakeCamera("hud", 0.005, 0.1)
+		shakeCamera("game", 0.01, 0.1)
+	end
+end
+```

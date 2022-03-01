@@ -2377,7 +2377,7 @@ class PlayState extends MusicBeatState {
 	}
 
 	function noteMiss(direction:Int = 1, tooLate:Bool = false, daNote:Note = null):Void {
-		if (!(daNote != null && daNote.canBeMissed)) {
+		if (daNote != null && !daNote.canBeMissed) {
 			
 			misses += 1;
 			combo = 0;

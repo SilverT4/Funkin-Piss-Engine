@@ -133,6 +133,7 @@
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="openfl-webm" if="desktop"/>
 	<haxelib name="yaml"/>
+	<haxelib name="linc_luajit"/>
 	
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 

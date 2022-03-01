@@ -136,6 +136,10 @@ class Paths {
 		return 'mods/songs/${song.toLowerCase()}/Inst.$SOUND_EXT';
 	}
 
+	inline static public function getLuaPath(song:String) {
+		return 'mods/songs/${song.toLowerCase()}/script.lua';
+	}
+
 	static public function skinIcon(char:String):String {
 		if (char == "bf") {
 			return Options.customBfPath + 'icon.png';

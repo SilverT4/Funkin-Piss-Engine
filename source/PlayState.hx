@@ -73,7 +73,7 @@ class PlayState extends MusicBeatState {
 	private var strumLine:FlxSprite;
 	private var curSection:Int = 0;
 
-	private var camFollow:FlxObject;
+	public static var camFollow:FlxObject;
 
 	private static var prevCamFollow:FlxObject;
 
@@ -100,7 +100,7 @@ class PlayState extends MusicBeatState {
 
 	public static var camHUD:FlxCamera;
 
-	private var camGame:FlxCamera;
+	public static var camGame:FlxCamera;
 
 	public static var sub:FlxText;
 	public static var sub_bg:FlxSprite;
@@ -643,6 +643,12 @@ class PlayState extends MusicBeatState {
 		}
 
 		startDiscordRPCTimer();
+
+		if (SysFile.exists(Paths.getLuaPath(curSong.toLowerCase()))) {
+			lua = new LuaShit(Paths.getLuaPath(curSong.toLowerCase()));
+
+			luaSetVariable("curDifficulty", storyDifficulty);
+		}
 
 		super.create();
 	}
@@ -1562,7 +1568,7 @@ class PlayState extends MusicBeatState {
 		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null) {
 			if (PlayState.SONG.notes[Std.int(curStep / 16)].centerCamera) {
 				camCenter();
-			} 
+			}
 			else {
 				if (curBeat % 4 == 0) {
 					// trace(PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection);
@@ -1570,9 +1576,6 @@ class PlayState extends MusicBeatState {
 	
 				if (PlayState.SONG.notes[Std.int(curStep / 16)].mustHitSection) {
 					//BF TURN
-					if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
-						FlxG.camera.zoom = defaultCamZoom;
-					}
 					var daNewCameraPos = [
 						bf.getMidpoint().x - 100,
 						bf.getMidpoint().y - 100
@@ -1591,18 +1594,22 @@ class PlayState extends MusicBeatState {
 							daNewCameraPos[1] = bf.getMidpoint().y - 200;
 					}
 
-					camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.05), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.05));
+					if (camFollow.x != daNewCameraPos[0] && camFollow.y != daNewCameraPos[1]) {
+						if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
+							FlxG.camera.zoom = defaultCamZoom;
+						}
+
+						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.04), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.04));
 	
-					if (SONG.song.toLowerCase() == 'tutorial') {
-						tweenCam(1);
+						if (SONG.song.toLowerCase() == 'tutorial') {
+							tweenCam(1);
+						}
+
+						luaCall("onCameraMove", ["bf"]);
 					}
 				}
 				else {
 					//DAD TURN
-					if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
-						//milf drop hard code 
-						FlxG.camera.zoom = defaultCamZoom;
-					}
 					var daNewCameraPos = [
 						dad.getMidpoint().x + 150,
 						dad.getMidpoint().y - 100
@@ -1619,12 +1626,20 @@ class PlayState extends MusicBeatState {
 							daNewCameraPos[1] = dad.getMidpoint().y - 430;
 					}
 
-					camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.05), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.05));
-					// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
-	
-					if (SONG.song.toLowerCase() == 'tutorial') {
-						//idk how to fix tutorial camera
-						tweenCam(1.3);
+					if (camFollow.x != daNewCameraPos[0] && camFollow.y != daNewCameraPos[1]) {
+						if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
+							FlxG.camera.zoom = defaultCamZoom;
+						}
+
+						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.04), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.04));
+						// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
+		
+						if (SONG.song.toLowerCase() == 'tutorial') {
+							//idk how to fix tutorial camera
+							tweenCam(1.3);
+						}
+
+						luaCall("onCameraMove", ["dad"]);
 					}
 				}
 			}
@@ -1632,6 +1647,9 @@ class PlayState extends MusicBeatState {
 
 		FlxG.watch.addQuick("beatShit", curBeat);
 		FlxG.watch.addQuick("stepShit", curStep);
+
+		luaSetVariable("curBeat", curBeat);
+		luaSetVariable("curStep", curStep);
 
 		if (curSong == 'Fresh') {
 			switch (curBeat) {
@@ -1811,6 +1829,12 @@ class PlayState extends MusicBeatState {
 					daNote.alpha = 0;
 				}
 				if (Std.int(songTime / 10) == Std.int(daNote.strumTime / 10)) {
+					if (daNote.mustPress) {
+						luaCall("onNotePress", ["bf"]);
+					} else {
+						luaCall("onNotePress", ["dad"]);
+					}
+					
 					ActionNoteonPressedButActuallyNotPressed(daNote);
 				}
 				if (SONG.song == "Stress") {
@@ -1837,6 +1861,8 @@ class PlayState extends MusicBeatState {
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+
+		luaCall("update");
 	}
 	public static function addSubtitle(text:String) {
 		if (text != "") {
@@ -2716,10 +2742,9 @@ class PlayState extends MusicBeatState {
 		if (dad.curCharacter == 'spooky' && curStep % 4 == 2) {
 			// dad.dance();
 		}
-	}
 
-	var lightningStrikeBeat:Int = 0;
-	var lightningOffset:Int = 8;
+		luaCall("stepHit");
+	}
 
 	override function beatHit() {
 		super.beatHit();
@@ -2832,7 +2857,22 @@ class PlayState extends MusicBeatState {
 		if (stage.stage == "spooky" && FlxG.random.bool(10) && curBeat > lightningStrikeBeat + lightningOffset) {
 			lightningStrikeShit();
 		}
+
+		luaCall("beatHit");
 	}
+
+	function luaCall(func, ?args) {
+		if (lua != null)
+			lua.call(func, args);
+	}
+
+	function luaSetVariable(name, value) {
+		if (lua != null)
+			lua.setVariable(name, value);
+	}
+
+	var lightningStrikeBeat:Int = 0;
+	var lightningOffset:Int = 8;
 
 	/*
 	
@@ -2922,6 +2962,8 @@ class PlayState extends MusicBeatState {
 	public static var gfVersion:String;
 
 	var timeLeftText:FlxText;
+
+	var lua:LuaShit;
 }
 
 /*		⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌

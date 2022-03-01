@@ -44,7 +44,7 @@ class TitleState extends MusicBeatState {
 
 	var wackyImage:FlxSprite;
 
-	var isFridayNight:Bool = false;
+	public static var isFridayNight:Bool = false;
 
 	override public function create():Void {
 		if (Date.now().getDay() == 5 && Date.now().getHours() >= 18) {

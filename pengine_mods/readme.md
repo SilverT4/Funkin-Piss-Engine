@@ -120,6 +120,7 @@ end
 Character config.yml file:
 ```
 # Default boyfriend anim values
+# IMPORTANT: If animation is for idle pose add isIdle: true
 # Note: Restarting the song will also reload this config!
 
 flipX: true

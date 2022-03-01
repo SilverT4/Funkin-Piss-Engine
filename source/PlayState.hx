@@ -2377,21 +2377,32 @@ class PlayState extends MusicBeatState {
 	}
 
 	function noteMiss(direction:Int = 1, tooLate:Bool = false, daNote:Note = null):Void {
-		if (daNote != null && !daNote.canBeMissed) {
-			
+		var ignore = false;
+
+		if (daNote == null) {
+			ignore = false;
+		}
+
+		if (daNote != null) {
+			if (daNote.canBeMissed == true) {
+				ignore = true;
+			} else {
+				if (!daNote.isSustainNote) {
+					accuracy.judge("miss");
+				} else {
+					accuracy.judge("missSus");
+				}
+			}
+		}
+
+		if (!ignore) {
 			misses += 1;
 			combo = 0;
 			songScore -= 10;
-
-			if (!daNote.isSustainNote) {
-				accuracy.judge("miss");
-			} else {
-				accuracy.judge("missSus");
-			}
-
+	
 			health -= 0.04;
 			if (tooLate) health -= 0.025;
-
+	
 			if (!bf.stunned) {
 				if (combo > 5 && gf.animOffsets.exists('sad')) {
 					gf.playAnim('sad');
@@ -2400,7 +2411,7 @@ class PlayState extends MusicBeatState {
 				FlxG.sound.play(Paths.soundRandom('missnote', 1, 3), FlxG.random.float(0.1, 0.2));
 				// FlxG.sound.play(Paths.sound('missnote1'), 1, false);
 				// FlxG.log.add('played imss note');
-
+	
 				if (SONG.whichK == 6) {
 					switch (direction) {
 						case 0:

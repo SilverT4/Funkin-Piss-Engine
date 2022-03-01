@@ -30,6 +30,10 @@ class OptionsSubState extends FlxSubState {
 
 	var grpOptionsTexts:FlxTypedGroup<FlxText>;
 
+	private var controls(get, never):Controls;
+
+	inline function get_controls():Controls
+		return PlayerSettings.player1.controls;
 	public function new(inGame) {
 		super();
 
@@ -75,17 +79,17 @@ class OptionsSubState extends FlxSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (FlxG.keys.justPressed.UP) {
+		if (controls.UP_P) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected -= 1;
 		}
 
-		if (FlxG.keys.justPressed.DOWN) {
+		if (controls.DOWN_P) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected += 1;
 		}
 
-		if (FlxG.keys.justPressed.LEFT) {
+		if (controls.LEFT_P) {
 			if (textMenuItems[curSelected].startsWith("FPS Limit")) {
 				if (Options.framerate > 5) {
 					Options.framerate -= 5;
@@ -140,7 +144,7 @@ class OptionsSubState extends FlxSubState {
 			updateMenu();
 		}
 
-		if (FlxG.keys.justPressed.RIGHT) {
+		if (controls.RIGHT_P) {
 			if (textMenuItems[curSelected].startsWith("FPS Limit")) {
 				Options.framerate += 5;
 				textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;

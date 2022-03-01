@@ -20,6 +20,10 @@ class OptionsCharacterSubState extends FlxSubState {
     var grpTexts:FlxTypedGroup<FlxText>;
     var inGame = false;
 
+	private var controls(get, never):Controls;
+
+	inline function get_controls():Controls
+		return PlayerSettings.player1.controls;
     override public function new(character, ?inGame) {
         super();
 
@@ -53,12 +57,12 @@ class OptionsCharacterSubState extends FlxSubState {
     override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (FlxG.keys.justPressed.UP) {
+		if (controls.UP_P) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected -= 1;
 		}
 
-		if (FlxG.keys.justPressed.DOWN) {
+		if (controls.DOWN_P) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected += 1;
 		}

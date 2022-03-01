@@ -1599,7 +1599,10 @@ class PlayState extends MusicBeatState {
 				}
 				else {
 					//DAD TURN
-					FlxG.camera.zoom = defaultCamZoom;
+					if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
+						//milf drop hard code 
+						FlxG.camera.zoom = defaultCamZoom;
+					}
 					var daNewCameraPos = [
 						dad.getMidpoint().x + 150,
 						dad.getMidpoint().y - 100
@@ -1607,7 +1610,7 @@ class PlayState extends MusicBeatState {
 					
 					switch (dad.curCharacter) {
 						case 'mom-car', 'mom':
-							daNewCameraPos[1] = dad.getMidpoint().y + 100;
+							daNewCameraPos[1] = dad.getMidpoint().y + 40;
 						case 'senpai':
 							daNewCameraPos[0] = dad.getMidpoint().x - 100;
 							daNewCameraPos[1] = dad.getMidpoint().y - 430;
@@ -1620,6 +1623,7 @@ class PlayState extends MusicBeatState {
 					// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
 	
 					if (SONG.song.toLowerCase() == 'tutorial') {
+						//idk how to fix tutorial camera
 						tweenCam(1.3);
 					}
 				}
@@ -1858,8 +1862,12 @@ class PlayState extends MusicBeatState {
 
 	function endSong():Void {
 		canPause = false;
+
+		timeLeftText.alpha = 0.0;
+
 		FlxG.sound.music.volume = 0;
 		vocals.volume = 0;
+		
 		if (SONG.validScore) {
 			#if !switch
 			Highscore.saveScore(SONG.song, songScore, storyDifficulty);

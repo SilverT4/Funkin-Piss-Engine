@@ -27,20 +27,13 @@ class HealthIcon extends FlxSprite {
 		switch (char) {
 			case 'bf-custom': 
 				curChar = char;
-				if (SysFile.exists(Paths.skinIcon("bf"))) {
-					type = "skin";
-				}
+				type = "skin";
 			case 'gf-custom': 
 				curChar = char;
-				if (SysFile.exists(Paths.skinIcon("gf"))) {
-					type = "skin";
-				}
 				type = "skin";
 			case 'dad-custom': 
 				curChar = char;
-				if (SysFile.exists(Paths.skinIcon("dad"))) {
-					type = "skin";
-				}
+				type = "skin";
 			case 'gf-christmas': curChar = "gf";
 			case 'gf-car': curChar = "gf";
 			case 'gf-pixel': curChar = "gf";
@@ -63,15 +56,25 @@ class HealthIcon extends FlxSprite {
 		}
 		if (type == "skin") {
 			if (isPlayer == false) {
-				if (char.startsWith("gf") && Options.customDad && SysFile.exists(Paths.skinIcon("gf"))) {
-					loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("gf"))), true, 150, 150);
+				if (char.startsWith("gf")) {
+					if (Options.customGf && SysFile.exists(Paths.skinIcon("gf"))) {
+						loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("gf"))), true, 150, 150);
+					} else {
+						loadGraphic(Paths.image('icons/icon-gf'), true, 150, 150);
+					}
 				}
-				else if (isPlayer == false && Options.customDad && SysFile.exists(Paths.skinIcon("dad"))) {
-					loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("dad"))), true, 150, 150);
+				else if (char.startsWith("dad")) {
+					if (Options.customDad && SysFile.exists(Paths.skinIcon("dad"))) {
+						loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("dad"))), true, 150, 150);
+					} else {
+						loadGraphic(Paths.image('icons/icon-dad'), true, 150, 150);
+					}
 				}
 			}
-			if (isPlayer && Options.customBf && SysFile.exists(Paths.skinIcon("bf"))) {
+			else if (isPlayer && Options.customBf && SysFile.exists(Paths.skinIcon("bf"))) {
 				loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("bf"))), true, 150, 150);
+			} else {
+				loadGraphic(Paths.image('icons/icon-bf'), true, 150, 150);
 			}
 		}
 		if (type == "mods") {

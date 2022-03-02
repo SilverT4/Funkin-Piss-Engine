@@ -125,7 +125,7 @@ class PlayState extends MusicBeatState {
 
 	public static var campaignScore:Int = 0;
 
-	var defaultCamZoom:Float = 1.05;
+	public static var camZoom:Float = 1.05;
 
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
@@ -284,7 +284,7 @@ class PlayState extends MusicBeatState {
 		stage = new Stage(tempStageName);
 		add(stage);
 
-		defaultCamZoom = stage.camZoom;
+		camZoom = stage.camZoom;
 
 		gfVersion = 'gf';
 
@@ -504,7 +504,7 @@ class PlayState extends MusicBeatState {
 
 		FlxG.camera.follow(camFollow, LOCKON, 0.04);
 		// FlxG.camera.setScrollBounds(0, FlxG.width, 0, FlxG.height);
-		FlxG.camera.zoom = defaultCamZoom;
+		FlxG.camera.zoom = camZoom;
 		FlxG.camera.focusOn(camFollow.getPosition());
 
 		FlxG.worldBounds.set(0, 0, FlxG.width, FlxG.height);
@@ -602,7 +602,7 @@ class PlayState extends MusicBeatState {
 						new FlxTimer().start(0.8, function(tmr:FlxTimer) {
 							camHUD.visible = true;
 							remove(blackScreen);
-							FlxTween.tween(FlxG.camera, {zoom: defaultCamZoom}, 2.5, {
+							FlxTween.tween(FlxG.camera, {zoom: camZoom}, 2.5, {
 								ease: FlxEase.quadInOut,
 								onComplete: function(twn:FlxTween) {
 									startCountdown();
@@ -1388,7 +1388,7 @@ class PlayState extends MusicBeatState {
 
 	function camCenter():Void {
 		camFollow.setPosition(gf.x + (gf.width / 2), gf.y + (gf.height / 2));
-		FlxG.camera.zoom = defaultCamZoom - 0.2;
+		FlxG.camera.zoom = camZoom - 0.2;
 	}
 
 	private var godMode = false;
@@ -1596,7 +1596,7 @@ class PlayState extends MusicBeatState {
 
 					if (camFollow.x != daNewCameraPos[0] && camFollow.y != daNewCameraPos[1]) {
 						if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
-							FlxG.camera.zoom = defaultCamZoom;
+							FlxG.camera.zoom = camZoom;
 						}
 
 						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.04), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.04));
@@ -1628,7 +1628,7 @@ class PlayState extends MusicBeatState {
 
 					if (camFollow.x != daNewCameraPos[0] && camFollow.y != daNewCameraPos[1]) {
 						if (!(camZooming && curBeat >= 168 && curBeat < 200 && curSong.toLowerCase() == 'milf')) {
-							FlxG.camera.zoom = defaultCamZoom;
+							FlxG.camera.zoom = camZoom;
 						}
 
 						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.04), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.04));
@@ -1853,7 +1853,7 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (camZooming) {
-			FlxG.camera.zoom = FlxMath.lerp(defaultCamZoom, FlxG.camera.zoom, 0.95);
+			FlxG.camera.zoom = FlxMath.lerp(camZoom, FlxG.camera.zoom, 0.95);
 			camHUD.zoom = FlxMath.lerp(1, camHUD.zoom, 0.95);
 		}
 

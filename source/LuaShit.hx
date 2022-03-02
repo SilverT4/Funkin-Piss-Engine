@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxTimer;
 import flixel.FlxCamera;
 import llua.Convert;
 import llua.Lua;
@@ -17,12 +18,17 @@ class LuaShit {
         #end
         Lua.init_callbacks(lua);
 
-        LuaL.dofile(lua, luaPath);
-
         setVariable("swagSong", PlayState.SONG);
 
         Lua_helper.add_callback(lua, "setCamPosition", function(x:Float = 0, y:Float = 0) {
 			PlayState.camFollow.setPosition(x, y);
+		});
+
+        Lua_helper.add_callback(lua, "addCamZoom", function(zoom:Float = 0, duration:Float = 0) {
+			PlayState.camZoom = zoom;
+            new FlxTimer().start(duration, function(timer) {
+                PlayState.camZoom = PlayState.stage.camZoom;
+            });
 		});
 
         Lua_helper.add_callback(lua, "shakeCamera", function(cam:String, intensity:Float = 0, duration:Float = 0) {
@@ -37,6 +43,8 @@ class LuaShit {
         Lua_helper.add_callback(lua, "trace", function(s:String = "") {
             trace(s);
 		});
+
+        LuaL.dofile(lua, luaPath);
     }
 
     public function setVariable(name:String, value:Dynamic) {

@@ -16,6 +16,8 @@ import openfl.utils.Assets as OpenFlAssets;
 using StringTools;
 
 class Paths {
+
+	// improve these because it's shit
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 
 	static var currentLevel:String;

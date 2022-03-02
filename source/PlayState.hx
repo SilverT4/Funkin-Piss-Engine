@@ -80,7 +80,7 @@ class PlayState extends MusicBeatState {
 	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
 
-	private var camZooming:Bool = false;
+	public static var camZooming:Bool = false;
 	private var curSong:String = "";
 
 	private var gfSpeed:Int = 1;
@@ -646,8 +646,9 @@ class PlayState extends MusicBeatState {
 
 		if (SysFile.exists(Paths.getLuaPath(curSong.toLowerCase()))) {
 			lua = new LuaShit(Paths.getLuaPath(curSong.toLowerCase()));
-
+			
 			luaSetVariable("curDifficulty", storyDifficulty);
+			luaSetVariable("stageZoom", PlayState.stage.camZoom);
 		}
 
 		super.create();
@@ -1237,8 +1238,8 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	function tweenCam(z0om:Float):Void {
-		FlxTween.tween(FlxG.camera, {zoom: z0om}, (Conductor.stepCrochet * 4 / 1000), {ease: FlxEase.elasticInOut});
+	public static function tweenCam(z0om:Float):Void {
+		FlxTween.num(camZoom, z0om, (Conductor.stepCrochet * 4 / 1000), null, f -> camZoom = f);
 	}
 
 	function spawnRollingTankmen() {
@@ -1393,10 +1394,9 @@ class PlayState extends MusicBeatState {
 
 	private var godMode = false;
 	override public function update(elapsed:Float) {
+		updateElapsed = elapsed;
+
 		bgDimness.alpha = Options.bgDimness;
-		#if !debug
-		perfectMode = false;
-		#end
 
 		#if debug
 		if (FlxG.keys.justPressed.SIX) {
@@ -1504,8 +1504,8 @@ class PlayState extends MusicBeatState {
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 
-		iconP1.setGraphicSize(Std.int(FlxMath.lerp(135, iconP1.width, 0.50)));
-		iconP2.setGraphicSize(Std.int(FlxMath.lerp(135, iconP2.width, 0.50)));
+		iconP1.setGraphicSize(Std.int(FlxMath.lerp(135, iconP1.width, 1 - elapsed * 23)));
+		iconP2.setGraphicSize(Std.int(FlxMath.lerp(135, iconP2.width, 1 - elapsed * 23)));
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -1565,6 +1565,13 @@ class PlayState extends MusicBeatState {
 			// Conductor.lastSongPos = FlxG.sound.music.time;
 		}
 
+		luaSetVariable("curSection", PlayState.SONG.notes[Std.int(curStep / 16)]);
+
+		// elapsed on 145 fps is 0.004 to 0.009
+		// elapsed on 60 fps is 0.013 to 0.017
+		// needs to be improved kinda
+		var fixedCumSpeed = elapsed * 2.6;
+
 		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null) {
 			if (PlayState.SONG.notes[Std.int(curStep / 16)].centerCamera) {
 				camCenter();
@@ -1599,7 +1606,7 @@ class PlayState extends MusicBeatState {
 							FlxG.camera.zoom = camZoom;
 						}
 
-						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.04), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.04));
+						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], fixedCumSpeed), FlxMath.lerp(camFollow.y, daNewCameraPos[1], fixedCumSpeed));
 	
 						if (SONG.song.toLowerCase() == 'tutorial') {
 							tweenCam(1);
@@ -1631,7 +1638,7 @@ class PlayState extends MusicBeatState {
 							FlxG.camera.zoom = camZoom;
 						}
 
-						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], 0.04), FlxMath.lerp(camFollow.y, daNewCameraPos[1], 0.04));
+						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], fixedCumSpeed), FlxMath.lerp(camFollow.y, daNewCameraPos[1], fixedCumSpeed));
 						// camFollow.setPosition(lucky.getMidpoint().x - 120, lucky.getMidpoint().y + 210);
 		
 						if (SONG.song.toLowerCase() == 'tutorial') {
@@ -1829,10 +1836,9 @@ class PlayState extends MusicBeatState {
 					daNote.alpha = 0;
 				}
 				if (Std.int(songTime / 10) == Std.int(daNote.strumTime / 10)) {
-					if (daNote.mustPress) {
-						luaCall("onNotePress", ["bf"]);
-					} else {
-						luaCall("onNotePress", ["dad"]);
+					//convert daNote to table
+					if (!daNote.mustPress) {
+						luaCall("onNotePress", ["dad", daNote.noteData]);
 					}
 					
 					ActionNoteonPressedButActuallyNotPressed(daNote);
@@ -1861,6 +1867,9 @@ class PlayState extends MusicBeatState {
 		if (FlxG.keys.justPressed.ONE)
 			endSong();
 		#end
+
+		luaSetVariable("camFollowX", camFollow.x);
+		luaSetVariable("camFollowY", camFollow.y);
 
 		luaCall("update");
 	}
@@ -2012,6 +2021,7 @@ class PlayState extends MusicBeatState {
 
 	private function popUpScore(daNote:Note):Void {
 		ActionNoteonPressed(daNote);
+		luaCall("onNotePress", ["bf", daNote.noteData]);
 		if (daNote.isGoodNote) {
 			var strumtime = daNote.strumTime;
 
@@ -2866,7 +2876,7 @@ class PlayState extends MusicBeatState {
 			lua.call(func, args);
 	}
 
-	function luaSetVariable(name, value) {
+	function luaSetVariable(name:String, value:Dynamic) {
 		if (lua != null)
 			lua.setVariable(name, value);
 	}
@@ -2964,6 +2974,8 @@ class PlayState extends MusicBeatState {
 	var timeLeftText:FlxText;
 
 	var lua:LuaShit;
+
+	public static var updateElapsed:Float = 0.0;
 }
 
 /*		⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌

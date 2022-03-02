@@ -1,5 +1,6 @@
 package;
 
+import flixel.math.FlxMath;
 import flixel.util.FlxTimer;
 import flixel.FlxCamera;
 import llua.Convert;
@@ -24,11 +25,9 @@ class LuaShit {
 			PlayState.camFollow.setPosition(x, y);
 		});
 
-        Lua_helper.add_callback(lua, "addCamZoom", function(zoom:Float = 0, duration:Float = 0) {
-			PlayState.camZoom = zoom;
-            new FlxTimer().start(duration, function(timer) {
-                PlayState.camZoom = PlayState.stage.camZoom;
-            });
+        Lua_helper.add_callback(lua, "setCamZoom", function(zoom:Float = 0) {
+            PlayState.tweenCam(zoom);
+            //PlayState.camZoom = FlxMath.lerp(PlayState.camZoom, zoom, PlayState.updateElapsed * 2.3);
 		});
 
         Lua_helper.add_callback(lua, "shakeCamera", function(cam:String, intensity:Float = 0, duration:Float = 0) {

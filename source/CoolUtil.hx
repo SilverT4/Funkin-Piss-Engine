@@ -1,5 +1,6 @@
 package;
 
+import haxe.io.Path;
 import lime.utils.Assets;
 
 using StringTools;
@@ -29,8 +30,12 @@ class CoolUtil {
 
 	public static function getCharacters():Array<String> {
 		var list = CoolUtil.coolTextFile(Paths.txt('characterList'));
-		for (char in SysFile.readDirectory("mods/characters/")) {
-			list.push(char);
+		var mods_characters_path = "mods/characters/";
+		for (char in SysFile.readDirectory(mods_characters_path)) {
+			var path = Path.join([mods_characters_path, char]);
+			if (SysFile.isDirectory(path)) {
+				list.push(char);
+			}
 		}
 		return list;
 	}

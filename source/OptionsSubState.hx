@@ -146,7 +146,8 @@ class OptionsSubState extends FlxSubState {
 
 		if (controls.RIGHT_P) {
 			if (textMenuItems[curSelected].startsWith("FPS Limit")) {
-				Options.framerate += 5;
+				if (Options.framerate < 240)
+					Options.framerate += 5;
 				textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
 			}
 			else if (textMenuItems[curSelected].startsWith("Background Dimness")) {

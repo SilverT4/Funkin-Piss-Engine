@@ -22,11 +22,12 @@ class LuaShit {
         setVariable("swagSong", PlayState.SONG);
 
         Lua_helper.add_callback(lua, "setCamPosition", function(x:Float = 0, y:Float = 0) {
-			PlayState.camFollow.setPosition(x, y);
+            PlayState.camFollow.setPosition(x, y);
+            //PlayState.tweenCamPos(x, y);
 		});
 
         Lua_helper.add_callback(lua, "setCamZoom", function(zoom:Float = 0) {
-            PlayState.tweenCam(zoom);
+            PlayState.tweenCamZoom(zoom);
             //PlayState.camZoom = FlxMath.lerp(PlayState.camZoom, zoom, PlayState.updateElapsed * 2.3);
 		});
 
@@ -39,10 +40,6 @@ class LuaShit {
             }
 		});
 
-        Lua_helper.add_callback(lua, "trace", function(s:String = "") {
-            trace(s);
-		});
-
         LuaL.dofile(lua, luaPath);
     }
 
@@ -53,14 +50,15 @@ class LuaShit {
 
     public function call(functionName:String, ?args:Array<Dynamic>) {
         Lua.getglobal(lua, functionName);
-        if (args != null) {
+
+        if (args != null)
             for (s in args) {
                 Convert.toLua(lua, s);
             }
-            Lua.pcall(lua, args.length, 1, 1);
-        } else {
-            Lua.pcall(lua, 0, 1, 1);
-        }
+        else
+            args = [];
+        
+        Lua.pcall(lua, args.length, 1, 1);
     }
 
     public function close() {

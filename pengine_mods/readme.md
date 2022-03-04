@@ -106,10 +106,6 @@ function stepHit()
 	print(curStep)
 end
 
-function update()
-	print("balls")
-end
-
 function onNotePress(char)
 	if char == "dad" then
 		shakeCamera("hud", 0.005, 0.1)

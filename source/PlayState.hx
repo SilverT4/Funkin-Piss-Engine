@@ -330,7 +330,7 @@ class PlayState extends MusicBeatState {
 				gf.visible = false;
 				if (isStoryMode) {
 					camPos.x += 600;
-					tweenCam(1.3);
+					tweenCamZoom(1.3);
 				}
 			case "spooky":
 				dad.y += 200;
@@ -1238,8 +1238,14 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public static function tweenCam(z0om:Float):Void {
+	public static function tweenCamZoom(z0om:Float):Void {
 		FlxTween.num(camZoom, z0om, (Conductor.stepCrochet * 4 / 1000), null, f -> camZoom = f);
+	}
+
+	public static function tweenCamPos(x:Float, y:Float):Void {
+		//dont use this
+		FlxTween.num(camFollow.y, x, (Conductor.stepCrochet * 16 / 1000), null, f -> camFollow.x = f);
+		FlxTween.num(camFollow.y, y, (Conductor.stepCrochet * 16 / 1000), null, f -> camFollow.y = f);
 	}
 
 	function spawnRollingTankmen() {
@@ -1570,7 +1576,7 @@ class PlayState extends MusicBeatState {
 		// elapsed on 145 fps is 0.004 to 0.009
 		// elapsed on 60 fps is 0.013 to 0.017
 		// needs to be improved kinda
-		var fixedCumSpeed = elapsed * 2.6;
+		var fixedCumSpeed = elapsed * 2.8;
 
 		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null) {
 			if (PlayState.SONG.notes[Std.int(curStep / 16)].centerCamera) {
@@ -1609,7 +1615,7 @@ class PlayState extends MusicBeatState {
 						camFollow.setPosition(FlxMath.lerp(camFollow.x, daNewCameraPos[0], fixedCumSpeed), FlxMath.lerp(camFollow.y, daNewCameraPos[1], fixedCumSpeed));
 	
 						if (SONG.song.toLowerCase() == 'tutorial') {
-							tweenCam(1);
+							tweenCamZoom(1);
 						}
 
 						luaCall("onCameraMove", ["bf"]);
@@ -1643,7 +1649,7 @@ class PlayState extends MusicBeatState {
 		
 						if (SONG.song.toLowerCase() == 'tutorial') {
 							//idk how to fix tutorial camera
-							tweenCam(1.3);
+							tweenCamZoom(1.3);
 						}
 
 						luaCall("onCameraMove", ["dad"]);
@@ -1806,6 +1812,7 @@ class PlayState extends MusicBeatState {
 					if (SONG.needsVoices)
 						vocals.volume = 1;
 
+					luaCall("onNotePress", ["dad", daNote.noteData]);
 					daNote.kill();
 					notes.remove(daNote, true);
 					daNote.destroy();
@@ -1837,9 +1844,6 @@ class PlayState extends MusicBeatState {
 				}
 				if (Std.int(songTime / 10) == Std.int(daNote.strumTime / 10)) {
 					//convert daNote to table
-					if (!daNote.mustPress) {
-						luaCall("onNotePress", ["dad", daNote.noteData]);
-					}
 					
 					ActionNoteonPressedButActuallyNotPressed(daNote);
 				}
@@ -1871,7 +1875,8 @@ class PlayState extends MusicBeatState {
 		luaSetVariable("camFollowX", camFollow.x);
 		luaSetVariable("camFollowY", camFollow.y);
 
-		luaCall("update");
+		//causes crashes, not using it
+		//luaCall("update", [elapsed]);
 	}
 	public static function addSubtitle(text:String) {
 		if (text != "") {

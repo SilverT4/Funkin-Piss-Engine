@@ -101,6 +101,7 @@ class TitleState extends MusicBeatState {
 			DiscordClient.shutdown();
 		});
 		#end
+		//FlxG.stage.displayState = StageDisplayState.FULL_SCREEN;
 	}
 
 	var logoBl:FlxSprite;
@@ -239,6 +240,10 @@ class TitleState extends MusicBeatState {
 	var transitioning:Bool = false;
 
 	override function update(elapsed:Float) {
+		if (FlxG.keys.justPressed.F5) {
+
+		}
+
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;
 		// FlxG.watch.addQuick('amp', FlxG.sound.music.amplitude);

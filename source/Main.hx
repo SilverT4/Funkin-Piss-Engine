@@ -1,5 +1,8 @@
 package;
 
+import openfl.display.StageDisplayState;
+import openfl.display.StageQuality;
+import openfl.filters.ShaderFilter;
 import flixel.FlxG;
 import flixel.FlxGame;
 import flixel.FlxState;

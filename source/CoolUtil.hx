@@ -2,6 +2,7 @@ package;
 
 import haxe.io.Path;
 import lime.utils.Assets;
+import yaml.Yaml;
 
 using StringTools;
 
@@ -10,6 +11,17 @@ class CoolUtil {
 
 	public static function difficultyString():String {
 		return difficultyArray[PlayState.storyDifficulty];
+	}
+
+	public static function strToBool(s:String):Dynamic {
+		switch (s.toLowerCase()) {
+			case "true":
+				return true;
+			case "false":
+				return false;
+			default:
+				return null;
+		}
 	}
 
 	public static function coolTextFile(path:String, ?modsFolder = false):Array<String> {
@@ -26,6 +38,14 @@ class CoolUtil {
 		}
 
 		return daList;
+	}
+
+	public static function readYAML(path:String) {
+		#if sys
+		return Yaml.read(path);
+		#else
+		return null;
+		#end
 	}
 
 	public static function getCharacters():Array<String> {

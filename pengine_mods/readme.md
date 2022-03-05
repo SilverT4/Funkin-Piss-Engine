@@ -96,7 +96,12 @@ offset:
 
 Song script.lua file example:
 ```
+-- Example Config so you don't have to think 30 minut how to do something
+
 print("Hello World!")
+print("Current Song Name: " .. swagSong.song)
+--Caches the character so it doesnt freeze the game when loading it
+cacheCharacter("dad", "obama")
 
 function beatHit()
 	print(curBeat)
@@ -104,6 +109,17 @@ end
 
 function stepHit()
 	print(curStep)
+  if curStep == 69 then
+		changeCharacter("dad", "obama")
+	end
+end
+
+function onCameraMove(char)
+	if char == "dad" then
+		setCamZoom("game", stageZoom + 0.2)
+	elseif char == "bf" then
+		setCamZoom("game", stageZoom)
+	end
 end
 
 function onNotePress(char)

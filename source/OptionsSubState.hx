@@ -61,13 +61,14 @@ class OptionsSubState extends FlxSubState {
 
 		updateMenu();
 
-		// set this state camera to camStatic
+		// sets this state camera to camStatic
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
 	function updateMenu() {
 		grpOptionsTexts.clear();
 		for (i in 0...textMenuItems.length) {
+			//not in Alphabet font for now because i dont want to fuck with it for 3 hours
 			var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, textMenuItems[i], 32);
 			optionText.scrollFactor.set();
 			optionText.ID = i;

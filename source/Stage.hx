@@ -83,6 +83,7 @@ class Stage extends FlxGroup {
 
                 add(stageCurtains);
 			case 'spooky':
+                camZoom = 1;
                 var hallowTex = Paths.stageSparrow('halloween_bg', stage);
 
                 halloweenBG = new FlxSprite(-200, -100);
@@ -93,6 +94,8 @@ class Stage extends FlxGroup {
                 halloweenBG.antialiasing = true;
                 add(halloweenBG);
 			case 'philly':
+                camZoom = 1.05;
+
                 var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.stageImage('sky', stage));
                 bg.scrollFactor.set(0.1, 0.1);
                 add(bg);
@@ -225,6 +228,7 @@ class Stage extends FlxGroup {
                 santa.antialiasing = true;
                 add(santa);
 			case 'mallEvil':
+                camZoom = 1.1;
                 var bg:FlxSprite = new FlxSprite(-400, -500).loadGraphic(Paths.stageImage('evilBG', stage));
                 bg.antialiasing = true;
                 bg.scrollFactor.set(0.2, 0.2);

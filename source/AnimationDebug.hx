@@ -100,6 +100,21 @@ class AnimationDebug extends FlxState {
 		add(text);
 		genBoyOffsets();
 
+		var info:FlxText = new FlxText(0, 0, 0, "", 15);
+		info.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		info.text = 
+		"WS - Change the animation\n" +
+		"ARROWS - Move the current animation (shift to move it further)\n" +
+		"V - Make a transparent clone of current animation\n" +
+		"IJKL - Move the camera\n" +
+		"QE - Decrease / Increase the camera zoom\n"
+		;
+		//flx text is bugged with \n
+		info.scrollFactor.set();
+		info.y = (FlxG.height - info.height) + (info.size * 2);
+		info.x = 10;
+		add(info);
+
 		camFollow = new FlxObject(0, 0, 2, 2);
 		camFollow.screenCenter();
 		add(camFollow);
@@ -134,14 +149,11 @@ class AnimationDebug extends FlxState {
 
 	override function update(elapsed:Float) {
 		textAnim.text = char.animation.curAnim.name;
-		if (char.animation.curAnim.name != highlitedAnim) {
-			for (text in dumbTexts) {
-				if (text.text.split(" ")[0] == char.animation.curAnim.name) {
-					text.color = FlxColor.YELLOW;
-					highlitedAnim = animList[curAnim];
-				} else {
-					text.color = FlxColor.BLUE;
-				}
+		for (text in dumbTexts) {
+			if (text.text.split(" ")[0] == char.animation.curAnim.name) {
+				text.color = FlxColor.YELLOW;
+			} else {
+				text.color = FlxColor.BLUE;
 			}
 		}
 
@@ -242,8 +254,6 @@ class AnimationDebug extends FlxState {
 
 		super.update(elapsed);
 	}
-
-	var highlitedAnim:String = "";
 
 	var dadO:Character;
 	var bfO:Boyfriend;

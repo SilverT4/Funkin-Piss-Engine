@@ -67,7 +67,7 @@ class PlayState extends MusicBeatState {
 	public static var gf:Character;
 	public static var bf:Boyfriend;
 
-	private var notes:FlxTypedGroup<Note>;
+	private static var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
 
 	private var strumLine:FlxSprite;
@@ -77,15 +77,17 @@ class PlayState extends MusicBeatState {
 
 	private static var prevCamFollow:FlxObject;
 
-	private var strumLineNotes:FlxTypedGroup<FlxSprite>;
+	private static var strumLineNotes:FlxTypedGroup<FlxSprite>;
 	private var playerStrums:FlxTypedGroup<FlxSprite>;
 
 	public static var camZooming:Bool = false;
 	private var curSong:String = "";
 
-	private var gfSpeed:Int = 1;
-	private var health:Float = 1;
-	private var combo:Int = 0;
+	public var gfSpeed:Int = 1;
+
+	//why this variable breaks when you change it to static lmao
+	public var health:Float = 1;
+	public var combo:Int = 0;
 
 	private var bgDimness:FlxSprite;
 
@@ -132,9 +134,9 @@ class PlayState extends MusicBeatState {
 
 	var inCutscene:Bool = false;
 
-	var preloadedCharacters:Map<String, Character>;
+	public static var preloadedCharacters:Map<String, Character>;
 
-	var preloadedBfs:Map<String, Boyfriend>;
+	public static var preloadedBfs:Map<String, Boyfriend>;
 
 	#if desktop
 	// Discord RPC variables
@@ -1034,13 +1036,7 @@ class PlayState extends MusicBeatState {
 
 				if (swagNote.action.toLowerCase() == "change character") {
 					var splicedValue = swagNote.actionValue.split(", ");
-					if (splicedValue[0] == "bf") {
-						trace("preloading character (boyfriend): " + splicedValue[1] + "...");
-						preloadedBfs.set(splicedValue[1], new Boyfriend(0, 0, splicedValue[1]));
-					} else {
-						trace("preloading character: " + splicedValue[1] + "...");
-						preloadedCharacters.set(splicedValue[1], new Character(0, 0, splicedValue[1]));
-					}
+					cacheCharacter(splicedValue[0], splicedValue[1]);
 				}
 
 				if (swagNote.mustPress) {
@@ -1060,6 +1056,16 @@ class PlayState extends MusicBeatState {
 		unspawnNotes.sort(sortByShit);
 
 		generatedMusic = true;
+	}
+
+	public static function cacheCharacter(char, daChar) {
+		if (char == "bf") {
+			trace("caching character (boyfriend): " + daChar + "...");
+			preloadedBfs.set(daChar, new Boyfriend(0, 0, daChar));
+		} else {
+			trace("caching character: " + daChar + "...");
+			preloadedCharacters.set(daChar, new Character(0, 0, daChar));
+		}
 	}
 
 	function sortByShit(Obj1:Note, Obj2:Note):Int {
@@ -1238,12 +1244,16 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public static function tweenCamZoom(z0om:Float):Void {
-		FlxTween.num(camZoom, z0om, (Conductor.stepCrochet * 4 / 1000), null, f -> camZoom = f);
+	public static function tweenCamZoom(z0om:Float, cam:String = "game"):Void {
+		if (cam == "game") {
+			FlxTween.num(camZoom, z0om, (Conductor.stepCrochet * 4 / 1000), null, f -> camZoom = f);
+		}
+		else if (cam == "hud") {
+			FlxTween.num(camHUD.zoom, z0om, (Conductor.stepCrochet * 4 / 1000), null, f -> camHUD.zoom = f);
+		}
 	}
 
 	public static function tweenCamPos(x:Float, y:Float):Void {
-		//dont use this
 		FlxTween.num(camFollow.y, x, (Conductor.stepCrochet * 16 / 1000), null, f -> camFollow.x = f);
 		FlxTween.num(camFollow.y, y, (Conductor.stepCrochet * 16 / 1000), null, f -> camFollow.y = f);
 	}
@@ -1875,7 +1885,7 @@ class PlayState extends MusicBeatState {
 		luaSetVariable("camFollowX", camFollow.x);
 		luaSetVariable("camFollowY", camFollow.y);
 
-		//causes crashes, not using it
+		//causes crashes not using it
 		//luaCall("update", [elapsed]);
 	}
 	public static function addSubtitle(text:String) {
@@ -2720,6 +2730,8 @@ class PlayState extends MusicBeatState {
 	}
 
 	override function stepHit() {
+		luaCall("stepHit");
+
 		super.stepHit();
 
 		if (FlxG.sound.music.time > Conductor.songPosition + 20 || FlxG.sound.music.time < Conductor.songPosition - 20) {
@@ -2757,8 +2769,6 @@ class PlayState extends MusicBeatState {
 		if (dad.curCharacter == 'spooky' && curStep % 4 == 2) {
 			// dad.dance();
 		}
-
-		luaCall("stepHit");
 	}
 
 	override function beatHit() {
@@ -2876,6 +2886,50 @@ class PlayState extends MusicBeatState {
 		luaCall("beatHit");
 	}
 
+	public static function changeCharacter(char:String, newChar:String) {
+		var newNewChar:Character = null;
+		var newBofrend:Boyfriend = null;
+
+		if (char != "bf") {
+			if (preloadedCharacters.exists(newChar)) {
+				newNewChar = preloadedCharacters.get(newChar);
+			} else {
+				newNewChar = new Character(0, 0, newChar);
+			}
+		} else {
+			if (preloadedBfs.exists(newChar)) {
+				newBofrend = preloadedBfs.get(newChar);
+			} else {
+				newBofrend = new Boyfriend(0, 0, newChar);
+			}
+		}
+
+		var charX = 0.0;
+		var charY = 0.0;
+		if (char == "dad") {
+			charX = dad.x;
+			charY = dad.y;
+			dad = newNewChar;
+			dad.x = charX;
+			dad.y = charY;
+		}
+		else if (char == "bf") { 
+			charX = bf.x;
+			charY = bf.y;
+			bf = newBofrend;
+			bf.x = charX;
+			bf.y = charY;
+		}
+		else if (char == "gf") {
+			charX = gf.x;
+			charY = gf.y;
+			gf = newNewChar;
+			gf.x = charX;
+			gf.y = charY;
+		}
+		updateChar(char);
+	}
+
 	function luaCall(func, ?args) {
 		if (lua != null)
 			lua.call(func, args);
@@ -2928,36 +2982,8 @@ class PlayState extends MusicBeatState {
                     gf.playAnim("picoShoot" + daNote.actionValue);
                 }
 			case "change character":
-				// idk how to preload every asset sorrey
-				// edit thamks for 0 likes i figured out how to preload
 				var splicedValue = daNote.actionValue.split(", ");
-				var charX = 0.0;
-				var charY = 0.0;
-				if (splicedValue[0] == "dad") {
-					//dad = new Character(dad.x, dad.y, splicedValue[1]);
-					charX = dad.x;
-					charY = dad.y;
-					dad = preloadedCharacters.get(splicedValue[1]);
-					dad.x = charX;
-					dad.y = charY;
-				}
-				else if (splicedValue[0] == "bf") { 
-					//bf = new Boyfriend(bf.x, bf.y, splicedValue[1]);
-					charX = bf.x;
-					charY = bf.y;
-					bf = preloadedBfs.get(splicedValue[1]);
-					bf.x = charX;
-					bf.y = charY;
-				}
-				else if (splicedValue[0] == "gf") {
-					//gf = new Character(gf.x, gf.y, splicedValue[1]);
-					charX = gf.x;
-					charY = gf.y;
-					gf = preloadedCharacters.get(splicedValue[1]);
-					gf.x = charX;
-					gf.y = charY;
-				}
-				updateChar(splicedValue[0]);
+				changeCharacter(splicedValue[0], splicedValue[1]);
         }
     }
 

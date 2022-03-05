@@ -770,13 +770,8 @@ class Character extends FlxSprite {
 
 				var idleAnim = null;
 
-				#if sys
-				try {
-					config = Yaml.read('mods/characters/$curCharacter/config.yml');
-				} catch (exc) {
-					config = null;
-				}
-				#end
+				config = CoolUtil.readYAML('mods/characters/$curCharacter/config.yml');
+
 				if (config != null) {
 					// take a shot everytime you see != null here
 					var map:TObjectMap<Dynamic, Dynamic> = config.get('animations');
@@ -788,19 +783,21 @@ class Character extends FlxSprite {
 						var _looped = false;
 						var _x = 0;
 						var _y = 0;
-						if (values.get('x') != null)
-							_x = values.get('x');
-						if (values.get('y') != null)
-							_y = values.get('y');
-						if (values.get('frames') != null)
-							_frames = values.get('frames');
-						if (values.get('looped') != null)
-							_looped = values.get('looped');
-						if (values.get('name') != null)
-							_name = values.get('name');
-						if (values.get('isIdle') == true)
-							idleAnim = _name;
-
+						if (values != null) {
+							if (values.get('x') != null)
+								_x = values.get('x');
+							if (values.get('y') != null)
+								_y = values.get('y');
+							if (values.get('frames') != null)
+								_frames = values.get('frames');
+							if (values.get('looped') != null)
+								_looped = values.get('looped');
+							if (values.get('name') != null)
+								_name = values.get('name');
+							if (values.get('isIdle') == true)
+								idleAnim = _name;
+						}
+						
 						animation.addByPrefix(_name, anim, _frames, _looped);
 						addOffset(_name, _x, _y);
 					}
@@ -813,7 +810,7 @@ class Character extends FlxSprite {
 					} else if (Std.string(config.get('flipX')) == "false") {
 						flipX = false;
 					}
-					//note to self: without converting data values with Std.string it will always return null
+					//note to self: without converting data values with Std.[type] it will always return null
 				}
 		}
 

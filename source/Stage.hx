@@ -1,5 +1,8 @@
 package;
 
+import openfl.display.BitmapData;
+import flixel.system.FlxAssets.FlxGraphicAsset;
+import yaml.util.ObjectMap.TObjectMap;
 import flixel.FlxG;
 import flixel.group.FlxGroup;
 import flixel.system.FlxSound;
@@ -465,6 +468,28 @@ class Stage extends FlxGroup {
 				bgTank3.scrollFactor.set(2.6, 1);
 				bgTank4.scrollFactor.set(1.6, 1);
 				bgTank5.scrollFactor.set(1.1, 1);
+            default:
+                if (SysFile.exists('mods/stages/$stage/')) {
+                    var config = CoolUtil.readYAML('mods/stages/$stage/config.yml');
+
+                    if (config.get("zoom") != null) camZoom = Std.parseFloat(Std.string(config.get("zoom")));
+                    
+                    if (config != null) {
+                        var map:TObjectMap<Dynamic, Dynamic> = config.get('images');
+                        for (image in map.keys()) {
+                            var keys = config.get('images').get(image);
+                            var stageSprite = new FlxSprite(0, 0).loadGraphic(BitmapData.fromBytes(SysFile.getBytes('mods/stages/$stage/images/$image.png')));
+                            if (keys != null) {
+                                if (keys.get("x") != null) stageSprite.x = keys.get("x");
+                                if (keys.get("y") != null) stageSprite.y = keys.get("y");
+                                if (keys.get("size") != null) stageSprite.setGraphicSize(Std.int(stageSprite.width * keys.get("size")));
+                                if (keys.get("scrollFactorX") != null) stageSprite.scrollFactor.x = keys.get("scrollFactorX");
+                                if (keys.get("scrollFactorY") != null) stageSprite.scrollFactor.y = keys.get("scrollFactorY");
+                            }
+                            add(stageSprite);
+                        }
+                    }
+                }
 		}
 	}
 }

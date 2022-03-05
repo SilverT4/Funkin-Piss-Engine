@@ -16,11 +16,11 @@ haxelib install linc_luajit
 3. And to compile just type ```lime test windows -debug``` or ```lime test windows``` in current folder command line
 ## Nice Stuff / Features
 * 6K Mania Support
-* Action/Event Notes
-* Make mods without touching code (like psych)
+* Action Notes
+* Make mods without touching code
 * Week 7 Ported with Week 7 and Note Splashes
 * Custom Skins
-* Week and Character configs are in YAML
+* Configs are in YAML so it is cleaner to read them
 * Dialogue Cutscenes
 * Lua Support
 * And some fixes to Vanilla

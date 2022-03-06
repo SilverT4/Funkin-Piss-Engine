@@ -48,6 +48,18 @@ class CoolUtil {
 		#end
 	}
 
+	public static function getStages():Array<String> {
+		var stages = Stage.stagesList;
+		var mods_characters_path = "mods/stages/";
+		for (stage in SysFile.readDirectory(mods_characters_path)) {
+			var path = Path.join([mods_characters_path, stage]);
+			if (SysFile.isDirectory(path)) {
+				stages.push(stage);
+			}
+		}
+		return stages;
+	}
+
 	public static function getCharacters():Array<String> {
 		var list = CoolUtil.coolTextFile(Paths.txt('characterList'));
 		var mods_characters_path = "mods/characters/";

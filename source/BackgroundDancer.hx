@@ -1,13 +1,12 @@
 package;
 
+import Stage.StageAsset;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 
-class BackgroundDancer extends FlxSprite
-{
-	public function new(x:Float, y:Float)
-	{
-		super(x, y);
+class BackgroundDancer extends StageAsset {
+	public function new(x:Float, y:Float, dancerID:Int) {
+		super(x, y, "limoDancer" + dancerID);
 
 		frames = Paths.stageSparrow("limoDancer");
 		animation.addByIndices('danceLeft', 'bg dancer sketch PINK', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
@@ -18,8 +17,7 @@ class BackgroundDancer extends FlxSprite
 
 	var danceDir:Bool = false;
 
-	public function dance():Void
-	{
+	public function dance():Void {
 		danceDir = !danceDir;
 
 		if (danceDir)

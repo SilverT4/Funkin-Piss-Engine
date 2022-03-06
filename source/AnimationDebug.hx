@@ -107,7 +107,8 @@ class AnimationDebug extends FlxState {
 		"ARROWS - Move the current animation (shift to move it further)\n" +
 		"V - Make a transparent clone of current animation\n" +
 		"IJKL - Move the camera\n" +
-		"QE - Decrease / Increase the camera zoom\n"
+		"QE - Decrease / Increase the camera zoom\n" +
+		"R - To reload the character\n"
 		;
 		//flx text is bugged with \n
 		info.scrollFactor.set();

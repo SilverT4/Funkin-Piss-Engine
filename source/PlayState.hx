@@ -1347,7 +1347,6 @@ class PlayState extends MusicBeatState {
 
 	private var godMode = false;
 	override public function update(elapsed:Float) {
-		trace(FlxG.camera.zoom);
 		updateElapsed = elapsed;
 
 		bgDimness.alpha = Options.bgDimness;

@@ -1393,14 +1393,14 @@ class PlayState extends MusicBeatState {
 		bgDimness.alpha = Options.bgDimness;
 
 		#if debug
-		if (FlxG.keys.justPressed.SIX) {
+		if (FlxG.keys.justPressed.F6) {
 			if (godMode == false) {
 				godMode = true;
 			} else {
 				godMode = false;
 			}
 		}
-		// useful for making custom stages, will change to stage editor
+		// useful for making custom stages, changed to stage editor
 		if (debugStageAsset != null) {
 			if (FlxG.keys.pressed.SHIFT) {
 				if (FlxG.mouse.wheel > 0) {
@@ -1486,12 +1486,28 @@ class PlayState extends MusicBeatState {
 			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 			#end
 		}
+		if (FlxG.keys.justPressed.EIGHT) {
+			FlxG.switchState(new AnimationDebugCharacterSelector());
+
+			#if desktop
+			DiscordClient.changePresence("Character Editor", null, null, true);
+			#end
+		}
+			
 
 		if (FlxG.keys.justPressed.SEVEN) {
 			FlxG.switchState(new ChartingState());
 
 			#if desktop
 			DiscordClient.changePresence("Chart Editor", null, null, true);
+			#end
+		}
+
+		if (FlxG.keys.justPressed.SIX) {
+			FlxG.switchState(new DebugStageSelector());
+
+			#if desktop
+			DiscordClient.changePresence("Stage Editor", null, null, true);
 			#end
 		}
 
@@ -1528,9 +1544,6 @@ class PlayState extends MusicBeatState {
 
 		/* if (FlxG.keys.justPressed.NINE)
 		    FlxG.switchState(new Charting()); */
-
-		if (FlxG.keys.justPressed.EIGHT)
-			FlxG.switchState(new AnimationDebugCharacterSelector());
 
 		if (startingSong) {
 			if (startedCountdown) {

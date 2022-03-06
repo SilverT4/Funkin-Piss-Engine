@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSprite;
 import openfl.display.BitmapData;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 import yaml.util.ObjectMap.TObjectMap;
@@ -9,7 +10,7 @@ import flixel.system.FlxSound;
 import flixel.group.FlxGroup.FlxTypedGroup;
 import flixel.FlxSprite;
 
-class Stage extends FlxGroup {
+class Stage extends FlxTypedGroup<Dynamic> {
 
     public static var stagesList = [
         "stage",
@@ -27,32 +28,32 @@ class Stage extends FlxGroup {
     public var camZoom:Float = 0.9;
 
     //ASSETS
-    public var halloweenBG:FlxSprite;
+    public var halloweenBG:StageAsset;
 
-	public var phillyCityLights:FlxTypedGroup<FlxSprite>;
-	public var phillyTrain:FlxSprite;
+	public var phillyCityLights:FlxTypedGroup<StageAsset>;
+	public var phillyTrain:StageAsset;
 	public var trainSound:FlxSound;
 
-	public var limo:FlxSprite;
+	public var limo:StageAsset;
 	public var grpLimoDancers:FlxTypedGroup<BackgroundDancer>;
-	public var fastCar:FlxSprite;
+	public var fastCar:StageAsset;
 
-	public var upperBoppers:FlxSprite;
-	public var bottomBoppers:FlxSprite;
-	public var santa:FlxSprite;
+	public var upperBoppers:StageAsset;
+	public var bottomBoppers:StageAsset;
+	public var santa:StageAsset;
 
 	public var bgGirls:BackgroundGirls;
 
-	public var bgSkittles:FlxSprite;
+	public var bgSkittles:StageAsset;
 
-    public var tankRolling:FlxSprite;
+    public var tankRolling:StageAsset;
 
-	public var bgTank0:FlxSprite;
-	public var bgTank1:FlxSprite;
-	public var bgTank2:FlxSprite;
-	public var bgTank3:FlxSprite;
-	public var bgTank4:FlxSprite;
-	public var bgTank5:FlxSprite;
+	public var bgTank0:StageAsset;
+	public var bgTank1:StageAsset;
+	public var bgTank2:StageAsset;
+	public var bgTank3:StageAsset;
+	public var bgTank4:StageAsset;
+	public var bgTank5:StageAsset;
 
 	public function new(stage:String = "stage") {
 		super();
@@ -63,13 +64,13 @@ class Stage extends FlxGroup {
             case 'stage':
                 camZoom = 0.9;
 
-                var bg:FlxSprite = new FlxSprite(-600, -200).loadGraphic(Paths.stageImage('stageback', stage));
+                var bg:StageAsset = new StageAsset(-600, -200, 'stageback').loadGraphic(Paths.stageImage('stageback', stage));
                 bg.antialiasing = true;
                 bg.scrollFactor.set(0.9, 0.9);
                 bg.active = false;
                 add(bg);
 
-                var stageFront:FlxSprite = new FlxSprite(-650, 600).loadGraphic(Paths.stageImage('stagefront', stage));
+                var stageFront:StageAsset = new StageAsset(-650, 600, 'stagefront').loadGraphic(Paths.stageImage('stagefront', stage));
                 stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
                 stageFront.updateHitbox();
                 stageFront.antialiasing = true;
@@ -77,7 +78,7 @@ class Stage extends FlxGroup {
                 stageFront.active = false;
                 add(stageFront);
 
-                var stageCurtains:FlxSprite = new FlxSprite(-500, -300).loadGraphic(Paths.stageImage('stagecurtains', stage));
+                var stageCurtains:StageAsset = new StageAsset(-500, -300, 'stagecurtains').loadGraphic(Paths.stageImage('stagecurtains', stage));
                 stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
                 stageCurtains.updateHitbox();
                 stageCurtains.antialiasing = true;
@@ -89,7 +90,7 @@ class Stage extends FlxGroup {
                 camZoom = 1;
                 var hallowTex = Paths.stageSparrow('halloween_bg', stage);
 
-                halloweenBG = new FlxSprite(-200, -100);
+                halloweenBG = new StageAsset(-200, -100, 'halloween_bg');
                 halloweenBG.frames = hallowTex;
                 halloweenBG.animation.addByPrefix('idle', 'halloweem bg0');
                 halloweenBG.animation.addByPrefix('lightning', 'halloweem bg lightning strike', 24, false);
@@ -99,21 +100,21 @@ class Stage extends FlxGroup {
 			case 'philly':
                 camZoom = 1.05;
 
-                var bg:FlxSprite = new FlxSprite(-100).loadGraphic(Paths.stageImage('sky', stage));
+                var bg:StageAsset = new StageAsset(-100, 0, 'sky').loadGraphic(Paths.stageImage('sky', stage));
                 bg.scrollFactor.set(0.1, 0.1);
                 add(bg);
 
-                var city:FlxSprite = new FlxSprite(-10).loadGraphic(Paths.stageImage('city', stage));
+                var city:StageAsset = new StageAsset(-10, 0, 'city').loadGraphic(Paths.stageImage('city', stage));
                 city.scrollFactor.set(0.3, 0.3);
                 city.setGraphicSize(Std.int(city.width * 0.85));
                 city.updateHitbox();
                 add(city);
 
-                phillyCityLights = new FlxTypedGroup<FlxSprite>();
+                phillyCityLights = new FlxTypedGroup<StageAsset>();
                 add(phillyCityLights);
 
                 for (i in 0...5) {
-                    var light:FlxSprite = new FlxSprite(city.x).loadGraphic(Paths.stageImage('win' + i, stage));
+                    var light:StageAsset = new StageAsset(city.x, 0, 'win').loadGraphic(Paths.stageImage('win' + i, stage));
                     light.scrollFactor.set(0.3, 0.3);
                     light.visible = false;
                     light.setGraphicSize(Std.int(light.width * 0.85));
@@ -122,27 +123,27 @@ class Stage extends FlxGroup {
                     phillyCityLights.add(light);
                 }
 
-                var streetBehind:FlxSprite = new FlxSprite(-40, 50).loadGraphic(Paths.stageImage('behindTrain', stage));
+                var streetBehind:StageAsset = new StageAsset(-40, 50, 'behindTrain').loadGraphic(Paths.stageImage('behindTrain', stage));
                 add(streetBehind);
 
-                phillyTrain = new FlxSprite(2000, 360).loadGraphic(Paths.stageImage('train', stage));
+                phillyTrain = new StageAsset(2000, 360, 'train').loadGraphic(Paths.stageImage('train', stage));
                 add(phillyTrain);
 
                 trainSound = new FlxSound().loadEmbedded(Paths.sound('train_passes'));
                 FlxG.sound.list.add(trainSound);
 
-                // var cityLights:FlxSprite = new FlxSprite().loadGraphic(AssetPaths.win0.png);
+                // var cityLights:StageAsset = new StageAsset().loadGraphic(AssetPaths.win0.png);
 
-                var street:FlxSprite = new FlxSprite(-40, streetBehind.y).loadGraphic(Paths.stageImage('street', stage));
+                var street:StageAsset = new StageAsset(-40, streetBehind.y, 'street').loadGraphic(Paths.stageImage('street', stage));
                 add(street);
 			case 'limo':
                 camZoom = 0.9;
 
-                var skyBG:FlxSprite = new FlxSprite(-120, -50).loadGraphic(Paths.stageImage('limoSunset', stage));
+                var skyBG:StageAsset = new StageAsset(-120, -50, 'limoSunset').loadGraphic(Paths.stageImage('limoSunset', stage));
                 skyBG.scrollFactor.set(0.1, 0.1);
                 add(skyBG);
 
-                var bgLimo:FlxSprite = new FlxSprite(-200, 480);
+                var bgLimo:StageAsset = new StageAsset(-200, 480, 'bgLimo');
                 bgLimo.frames = Paths.stageSparrow('bgLimo', stage);
                 bgLimo.animation.addByPrefix('drive', "background limo pink", 24);
                 bgLimo.animation.play('drive');
@@ -153,12 +154,12 @@ class Stage extends FlxGroup {
                 add(grpLimoDancers);
 
                 for (i in 0...5) {
-                    var dancer:BackgroundDancer = new BackgroundDancer((370 * i) + 130, bgLimo.y - 400);
+                    var dancer:BackgroundDancer = new BackgroundDancer((370 * i) + 130, bgLimo.y - 400, i);
                     dancer.scrollFactor.set(0.4, 0.4);
                     grpLimoDancers.add(dancer);
                 }
 
-                var overlayShit:FlxSprite = new FlxSprite(-500, -600).loadGraphic(Paths.stageImage('limoOverlay', stage));
+                var overlayShit:StageAsset = new StageAsset(-500, -600, 'limoOverlay').loadGraphic(Paths.stageImage('limoOverlay', stage));
                 overlayShit.alpha = 0.5;
                 // add(overlayShit);
 
@@ -170,18 +171,18 @@ class Stage extends FlxGroup {
 
                 var limoTex = Paths.stageSparrow('limoDrive', stage);
 
-                limo = new FlxSprite(-120, 550);
+                limo = new StageAsset(-120, 550, 'limoDrive');
                 limo.frames = limoTex;
                 limo.animation.addByPrefix('drive', "Limo stage", 24);
                 limo.animation.play('drive');
                 limo.antialiasing = true;
 
-                fastCar = new FlxSprite(-300, 160).loadGraphic(Paths.stageImage('fastCarLol', stage));
+                fastCar = new StageAsset(-300, 160, 'fastCarLol').loadGraphic(Paths.stageImage('fastCarLol', stage));
                 // add(limo);
 			case 'mall':
                 camZoom = 0.8;
 
-                var bg:FlxSprite = new FlxSprite(-1000, -500).loadGraphic(Paths.stageImage('bgWalls', stage));
+                var bg:StageAsset = new StageAsset(-1000, -500, 'bgWalls').loadGraphic(Paths.stageImage('bgWalls', stage));
                 bg.antialiasing = true;
                 bg.scrollFactor.set(0.2, 0.2);
                 bg.active = false;
@@ -189,7 +190,7 @@ class Stage extends FlxGroup {
                 bg.updateHitbox();
                 add(bg);
 
-                upperBoppers = new FlxSprite(-240, -90);
+                upperBoppers = new StageAsset(-240, -90, 'upperBop');
                 upperBoppers.frames = Paths.stageSparrow('upperBop', stage);
                 upperBoppers.animation.addByPrefix('bop', "Upper Crowd Bob", 24, false);
                 upperBoppers.antialiasing = true;
@@ -198,7 +199,7 @@ class Stage extends FlxGroup {
                 upperBoppers.updateHitbox();
                 add(upperBoppers);
 
-                var bgEscalator:FlxSprite = new FlxSprite(-1100, -600).loadGraphic(Paths.stageImage('bgEscalator', stage));
+                var bgEscalator:StageAsset = new StageAsset(-1100, -600, 'bgEscalator').loadGraphic(Paths.stageImage('bgEscalator', stage));
                 bgEscalator.antialiasing = true;
                 bgEscalator.scrollFactor.set(0.3, 0.3);
                 bgEscalator.active = false;
@@ -206,12 +207,12 @@ class Stage extends FlxGroup {
                 bgEscalator.updateHitbox();
                 add(bgEscalator);
 
-                var tree:FlxSprite = new FlxSprite(370, -250).loadGraphic(Paths.stageImage('christmasTree', stage));
+                var tree:StageAsset = new StageAsset(370, -250, 'christmasTree').loadGraphic(Paths.stageImage('christmasTree', stage));
                 tree.antialiasing = true;
                 tree.scrollFactor.set(0.40, 0.40);
                 add(tree);
 
-                bottomBoppers = new FlxSprite(-300, 140);
+                bottomBoppers = new StageAsset(-300, 140, 'bottomBop');
                 bottomBoppers.frames = Paths.stageSparrow('bottomBop', stage);
                 bottomBoppers.animation.addByPrefix('bop', 'Bottom Level Boppers', 24, false);
                 bottomBoppers.antialiasing = true;
@@ -220,19 +221,19 @@ class Stage extends FlxGroup {
                 bottomBoppers.updateHitbox();
                 add(bottomBoppers);
 
-                var fgSnow:FlxSprite = new FlxSprite(-600, 700).loadGraphic(Paths.stageImage('fgSnow', stage));
+                var fgSnow:StageAsset = new StageAsset(-600, 700, 'fgSnow').loadGraphic(Paths.stageImage('fgSnow', stage));
                 fgSnow.active = false;
                 fgSnow.antialiasing = true;
                 add(fgSnow);
 
-                santa = new FlxSprite(-840, 150);
+                santa = new StageAsset(-840, 150, 'santa');
                 santa.frames = Paths.stageSparrow('santa', stage);
                 santa.animation.addByPrefix('idle', 'santa idle in fear', 24, false);
                 santa.antialiasing = true;
                 add(santa);
 			case 'mallEvil':
                 camZoom = 1.1;
-                var bg:FlxSprite = new FlxSprite(-400, -500).loadGraphic(Paths.stageImage('evilBG', stage));
+                var bg:StageAsset = new StageAsset(-400, -500, 'evilBG').loadGraphic(Paths.stageImage('evilBG', stage));
                 bg.antialiasing = true;
                 bg.scrollFactor.set(0.2, 0.2);
                 bg.active = false;
@@ -240,36 +241,37 @@ class Stage extends FlxGroup {
                 bg.updateHitbox();
                 add(bg);
 
-                var evilTree:FlxSprite = new FlxSprite(300, -300).loadGraphic(Paths.stageImage('evilTree', stage));
+                var evilTree:StageAsset = new StageAsset(300, -300, 'evilTree').loadGraphic(Paths.stageImage('evilTree', stage));
                 evilTree.antialiasing = true;
                 evilTree.scrollFactor.set(0.2, 0.2);
                 add(evilTree);
 
-                var evilSnow:FlxSprite = new FlxSprite(-200, 700).loadGraphic(Paths.stageImage("evilSnow", stage));
+                var evilSnow:StageAsset = new StageAsset(-200, 700, "evilSnow").loadGraphic(Paths.stageImage("evilSnow", stage));
                 evilSnow.antialiasing = true;
                 add(evilSnow);
 			case 'school':
                 // defaultCamZoom = 0.9;
 
-                var bgSky = new FlxSprite().loadGraphic(Paths.stageImage('weebSky', stage));
+                var bgSky = new StageAsset().loadGraphic(Paths.stageImage('weebSky', stage));
+                bgSky.name = 'weebSky';
                 bgSky.scrollFactor.set(0.1, 0.1);
                 add(bgSky);
 
                 var repositionShit = -200;
 
-                var bgSchool:FlxSprite = new FlxSprite(repositionShit, 0).loadGraphic(Paths.stageImage('weebSchool', stage));
+                var bgSchool:StageAsset = new StageAsset(repositionShit, 0, 'weebSchool').loadGraphic(Paths.stageImage('weebSchool', stage));
                 bgSchool.scrollFactor.set(0.6, 0.90);
                 add(bgSchool);
 
-                var bgStreet:FlxSprite = new FlxSprite(repositionShit).loadGraphic(Paths.stageImage('weebStreet', stage));
+                var bgStreet:StageAsset = new StageAsset(repositionShit, 0, 'weebStreet').loadGraphic(Paths.stageImage('weebStreet', stage));
                 bgStreet.scrollFactor.set(0.95, 0.95);
                 add(bgStreet);
 
-                var fgTrees:FlxSprite = new FlxSprite(repositionShit + 170, 130).loadGraphic(Paths.stageImage('weebTreesBack', stage));
+                var fgTrees:StageAsset = new StageAsset(repositionShit + 170, 130, 'weebTreesBack').loadGraphic(Paths.stageImage('weebTreesBack', stage));
                 fgTrees.scrollFactor.set(0.9, 0.9);
                 add(fgTrees);
 
-                var bgTrees:FlxSprite = new FlxSprite(repositionShit - 380, -800);
+                var bgTrees:StageAsset = new StageAsset(repositionShit - 380, -800, 'weebTrees');
                 var treetex = Paths.stagePacker('weebTrees', stage);
                 bgTrees.frames = treetex;
                 bgTrees.animation.add('treeLoop', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18], 12);
@@ -277,7 +279,7 @@ class Stage extends FlxGroup {
                 bgTrees.scrollFactor.set(0.85, 0.85);
                 add(bgTrees);
 
-                var treeLeaves:FlxSprite = new FlxSprite(repositionShit, -40);
+                var treeLeaves:StageAsset = new StageAsset(repositionShit, -40, 'petals');
                 treeLeaves.frames = Paths.stageSparrow('petals', stage);
                 treeLeaves.animation.addByPrefix('leaves', 'PETALS ALL', 24, true);
                 treeLeaves.animation.play('leaves');
@@ -317,7 +319,7 @@ class Stage extends FlxGroup {
                 var posX = 400;
                 var posY = 200;
 
-                var bg:FlxSprite = new FlxSprite(posX, posY);
+                var bg:StageAsset = new StageAsset(posX, posY, 'animatedEvilSchool');
                 bg.frames = Paths.stageSparrow('animatedEvilSchool', stage);
                 bg.animation.addByPrefix('idle', 'background 2', 24);
                 bg.animation.play('idle');
@@ -326,13 +328,13 @@ class Stage extends FlxGroup {
                 add(bg);
 
                 /* 
-                    var bg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('evilSchoolBG'));
+                    var bg:StageAsset = new StageAsset(posX, posY).loadGraphic(Paths.image('evilSchoolBG'));
                     bg.scale.set(6, 6);
                     // bg.setGraphicSize(Std.int(bg.width * 6));
                     // bg.updateHitbox();
                     add(bg);
 
-                    var fg:FlxSprite = new FlxSprite(posX, posY).loadGraphic(Paths.image('evilSchoolFG'));
+                    var fg:StageAsset = new StageAsset(posX, posY).loadGraphic(Paths.image('evilSchoolFG'));
                     fg.scale.set(6, 6);
                     // fg.setGraphicSize(Std.int(fg.width * 6));
                     // fg.updateHitbox();
@@ -371,55 +373,56 @@ class Stage extends FlxGroup {
 			case 'tank':
 				camZoom = 0.95;
 
-				var tankSky:FlxSprite = new FlxSprite(-60, -400).loadGraphic(Paths.stageImage('tankSky', stage));
+				var tankSky:StageAsset = new StageAsset(-60, -400, 'tankSky').loadGraphic(Paths.stageImage('tankSky', stage));
 				tankSky.setGraphicSize(Std.int(tankSky.width * 1.3));
 				tankSky.antialiasing = true;
 				tankSky.active = false;
 				add(tankSky);
 
-				var tankMountains:FlxSprite = new FlxSprite(-20, 180).loadGraphic(Paths.stageImage('tankMountains', stage));
+				var tankMountains:StageAsset = new StageAsset(-20, 180, 'tankMountains').loadGraphic(Paths.stageImage('tankMountains', stage));
 				tankMountains.setGraphicSize(Std.int(tankMountains.width * 1.3));
 				tankMountains.antialiasing = true;
 				tankMountains.scrollFactor.set(0.4, 0.9);
 				tankMountains.active = false;
 				add(tankMountains);
 
-				var tankBuildings:FlxSprite = new FlxSprite(-190, 130).loadGraphic(Paths.stageImage('tankBuildings', stage));
+				var tankBuildings:StageAsset = new StageAsset(-190, 130, 'tankBuildings').loadGraphic(Paths.stageImage('tankBuildings', stage));
 				tankBuildings.setGraphicSize(Std.int(tankBuildings.width * 1.15));
 				tankBuildings.antialiasing = true;
 				tankBuildings.scrollFactor.set(0.4, 0.9);
 				tankBuildings.active = false;
 				add(tankBuildings);
 
-				var tankRuins:FlxSprite = new FlxSprite(-210, 140).loadGraphic(Paths.stageImage('tankRuins', stage));
+				var tankRuins:StageAsset = new StageAsset(-210, 140, 'tankRuins').loadGraphic(Paths.stageImage('tankRuins', stage));
 				tankRuins.setGraphicSize(Std.int(tankRuins.width * 1.15));
 				tankRuins.antialiasing = true;
 				tankRuins.scrollFactor.set(0.4, 0.9);
 				tankRuins.active = false;
 				add(tankRuins);
 
-				bgSkittles = new FlxSprite(0, 0);
+				bgSkittles = new StageAsset(0, 0, 'tankWatchtower');
 				bgSkittles.frames = Paths.stageSparrow('tankWatchtower', stage);
 				bgSkittles.animation.addByPrefix('bop', "watchtower gradient color instance 1", 24, false);
 				bgSkittles.antialiasing = true;
 				bgSkittles.scrollFactor.set(0.3, 0.6);
 				add(bgSkittles);
 
-				var smokeLeft:FlxSprite = new FlxSprite(-200, -130);
+				var smokeLeft:StageAsset = new StageAsset(-200, -130, 'smokeLeft');
 				smokeLeft.frames = Paths.stageSparrow('smokeLeft', stage);
 				smokeLeft.animation.addByPrefix('smoke', 'SmokeBlurLeft instance 1', 24);
 				smokeLeft.animation.play('smoke');
 				smokeLeft.scrollFactor.set(0.4, 0.4);
 				add(smokeLeft);
 
-				var smokeRight:FlxSprite = new FlxSprite(1200, 0);
+				var smokeRight:StageAsset = new StageAsset(1200, 0, 'smokeRight');
 				smokeRight.frames = Paths.stageSparrow('smokeRight', stage);
 				smokeRight.animation.addByPrefix('smoke', 'SmokeRight instance 1', 24);
 				smokeRight.animation.play('smoke');
 				smokeRight.scrollFactor.set(0.4, 0.4);
 				add(smokeRight);
 
-				tankRolling = new FlxSprite();
+				tankRolling = new StageAsset();
+                tankRolling.name = 'tankRolling';
 				tankRolling.frames = Paths.stageSparrow('tankRolling', stage);
 				tankRolling.animation.addByPrefix('rollin', 'BG tank w lighting instance 1', 24);
 				tankRolling.animation.play('rollin');
@@ -427,37 +430,37 @@ class Stage extends FlxGroup {
 				add(tankRolling);
 				tankRolling.kill();
 
-				var tankGround = new FlxSprite(-240, -110).loadGraphic(Paths.stageImage('tankGround', stage));
+				var tankGround = new StageAsset(-240, -110, 'tankGround').loadGraphic(Paths.stageImage('tankGround', stage));
 				tankGround.setGraphicSize(Std.int(tankGround.width * 1.1));
 				tankGround.scrollFactor.set(0.9, 0.9);
 				add(tankGround);
 
-				bgTank0 = new FlxSprite(-300, 470);
+				bgTank0 = new StageAsset(-300, 470, 'tank0');
 				bgTank0.frames = Paths.stageSparrow('tank0', stage);
 				bgTank0.animation.addByPrefix('bop', "fg tankhead far right instance 1", 24, false);
 				bgTank0.antialiasing = true;
 
-				bgTank1 = new FlxSprite(-30, 840);
+				bgTank1 = new StageAsset(-30, 840, 'tank1');
 				bgTank1.frames = Paths.stageSparrow('tank1', stage);
 				bgTank1.animation.addByPrefix('bop', "fg tankhead 5 instance 1", 24, false);
 				bgTank1.antialiasing = true;
 
-				bgTank2 = new FlxSprite(440, 780);
+				bgTank2 = new StageAsset(440, 780, 'tank2');
 				bgTank2.frames = Paths.stageSparrow('tank2', stage);
 				bgTank2.animation.addByPrefix('bop', "foreground man 3 instance 1", 24, false);
 				bgTank2.antialiasing = true;
 
-				bgTank3 = new FlxSprite(890, 830);
+				bgTank3 = new StageAsset(890, 830, 'tank3');
 				bgTank3.frames = Paths.stageSparrow('tank3', stage);
 				bgTank3.animation.addByPrefix('bop', "fg tankhead 4 instance 1", 24, false);
 				bgTank3.antialiasing = true;
 
-				bgTank4 = new FlxSprite(1250, 760);
+				bgTank4 = new StageAsset(1250, 760, 'tank4');
 				bgTank4.frames = Paths.stageSparrow('tank4', stage);
 				bgTank4.animation.addByPrefix('bop', "fg tankman bobbin 3 instance 1", 24, false);
 				bgTank4.antialiasing = true;
 
-				bgTank5 = new FlxSprite(1450, 460);
+				bgTank5 = new StageAsset(1450, 460, 'tank5');
 				bgTank5.frames = Paths.stageSparrow('tank5', stage);
 				bgTank5.animation.addByPrefix('bop', "fg tankhead far right instance 1", 24, false);
 				bgTank5.antialiasing = true;
@@ -478,11 +481,14 @@ class Stage extends FlxGroup {
                         var map:TObjectMap<Dynamic, Dynamic> = config.get('images');
                         for (image in map.keys()) {
                             var keys = config.get('images').get(image);
-                            var stageSprite = new FlxSprite(0, 0).loadGraphic(BitmapData.fromBytes(SysFile.getBytes('mods/stages/$stage/images/$image.png')));
+                            var stageSprite = new StageAsset(0, 0, image).loadGraphic(BitmapData.fromBytes(SysFile.getBytes('mods/stages/$stage/images/$image.png')));
                             if (keys != null) {
                                 if (keys.get("x") != null) stageSprite.x = keys.get("x");
                                 if (keys.get("y") != null) stageSprite.y = keys.get("y");
-                                if (keys.get("size") != null) stageSprite.setGraphicSize(Std.int(stageSprite.width * keys.get("size")));
+                                if (keys.get("size") != null) {
+                                    stageSprite.setGraphicSize(Std.int(stageSprite.width * keys.get("size")));
+                                    stageSprite.updateHitbox();
+                                }
                                 if (keys.get("scrollFactorX") != null) stageSprite.scrollFactor.x = keys.get("scrollFactorX");
                                 if (keys.get("scrollFactorY") != null) stageSprite.scrollFactor.y = keys.get("scrollFactorY");
                             }
@@ -492,4 +498,40 @@ class Stage extends FlxGroup {
                 }
 		}
 	}
+}
+
+class StageAsset extends FlxSprite {
+
+    public var name:String;
+
+    public function new(?X:Float = 0, ?Y:Float = 0, ?name:String) {
+        this.name = name;
+
+        super(X, Y);
+    }
+
+    	/**
+	 * Load an image from an embedded graphic file.
+	 *
+	 * HaxeFlixel's graphic caching system keeps track of loaded image data.
+	 * When you load an identical copy of a previously used image, by default
+	 * HaxeFlixel copies the previous reference onto the `pixels` field instead
+	 * of creating another copy of the image data, to save memory.
+	 *
+	 * @param   Graphic    The image you want to use.
+	 * @param   Animated   Whether the `Graphic` parameter is a single sprite or a row / grid of sprites.
+	 * @param   Width      Specify the width of your sprite
+	 *                     (helps figure out what to do with non-square sprites or sprite sheets).
+	 * @param   Height     Specify the height of your sprite
+	 *                     (helps figure out what to do with non-square sprites or sprite sheets).
+	 * @param   Unique     Whether the graphic should be a unique instance in the graphics cache.
+	 *                     Set this to `true` if you want to modify the `pixels` field without changing
+	 *                     the `pixels` of other sprites with the same `BitmapData`.
+	 * @param   Key        Set this parameter if you're loading `BitmapData`.
+	 * @return  This `FlxSprite` instance (nice for chaining stuff together, if you're into that).
+	 */
+	override public function loadGraphic(Graphic:FlxGraphicAsset, Animated:Bool = false, Width:Int = 0, Height:Int = 0, Unique:Bool = false, ?Key:String):StageAsset {
+        super.loadGraphic(Graphic, Animated, Width, Height, Unique);
+        return this;
+    }
 }

@@ -56,8 +56,8 @@ class StageDebug extends FlxState {
 		var daLoop:Int = 0;
 
         for (penis in stage) {
-            var text:FlxText = new FlxText(10, 40 + (18 * daLoop), 0, penis.name + " : " + "[ " + penis.x + ", " + penis.y + ", " + penis.sizeMultiplier + "]", 15);
-            text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+            var text:FlxText = new FlxText(10, 44 + (18 * daLoop), 0, penis.name + " : " + "[ " + penis.x + ", " + penis.y + ", " + penis.sizeMultiplier + "]", 15);
+            text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
             text.scrollFactor.set();
             text.color = FlxColor.GRAY;
             if (text.width + text.x > dumbTextsWidthWX) {
@@ -76,8 +76,8 @@ class StageDebug extends FlxState {
 		var daLoop:Int = 0;
 
         for (char in characters) {
-            var text:FlxText = new FlxText(dumbTextsWidthWX + 30, 40 + (18 * daLoop), 0, char.curCharacter + " : " + "[ " + char.x + ", " + char.y + "]", 15);
-            text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+            var text:FlxText = new FlxText(dumbTextsWidthWX + 30, 44 + (18 * daLoop), 0, char.curCharacter + " : " + "[ " + char.x + ", " + char.y + "]", 15);
+            text.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
             text.scrollFactor.set();
             text.color = FlxColor.GRAY;
             dumbTexts2.add(text);
@@ -135,7 +135,7 @@ class StageDebug extends FlxState {
         add(characters);
 
         textImg = new FlxText(15, 15, 0, "Images:", 20);
-        textImg.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+        textImg.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
         textImg.scrollFactor.set();
         add(textImg);
 
@@ -158,7 +158,7 @@ class StageDebug extends FlxState {
 		add(info);
 
         textChar = new FlxText(0, 15, 0, "Characters:", 20);
-        textChar.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+        textChar.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
         textChar.scrollFactor.set();
         textChar.x = dumbTextsWidthWX + 20;
         add(textChar);

@@ -88,25 +88,32 @@ class Character extends FlxSprite {
 					data = null;
 				}
 				#end
+
+				flipX = true;
+
 				if (data != null) {
-					for (name in animationsFromAlt) {
-						if (Std.string(data.get('offset').get(name)) != "null") {
-							var x = 0;
-							var y = 0;
-							if (Std.string(data.get('offset').get(name).get('x')) != "null") {
-								x = data.get('offset').get(name).get('x');
+					if (data.get('offset') != null) {
+						for (name in animationsFromAlt) {
+							if (data.get('offset').get(name) != null) {
+								var x = 0;
+								var y = 0;
+								if (Std.string(data.get('offset').get(name).get('x')) != "null") {
+									x = data.get('offset').get(name).get('x');
+								}
+								if (Std.string(data.get('offset').get(name).get('y')) != "null") {
+									y = data.get('offset').get(name).get('y');
+								}
+								addOffset(name, x, y);
 							}
-							if (Std.string(data.get('offset').get(name).get('y')) != "null") {
-								y = data.get('offset').get(name).get('y');
-							}
-							addOffset(name, x, y);
 						}
+					}
+
+					if (Std.string(data.get("flipX")) != "null") {
+						flipX = CoolUtil.strToBool(Std.string(data.get("flipX")));
 					}
 				}
 
 				playAnim('idle');
-
-				flipX = true;
 			case 'gf-custom':
 				for (file in SysFile.readDirectory(Options.customGfPath)) {
 					if (file.endsWith(".xml")) {
@@ -150,18 +157,24 @@ class Character extends FlxSprite {
 				}
 				#end
 				if (data != null) {
-					for (name in animationsFromAlt) {
-						if (Std.string(data.get('offset').get(name)) != "null") {
-							var x = 0;
-							var y = 0;
-							if (Std.string(data.get('offset').get(name).get('x')) != "null") {
-								x = data.get('offset').get(name).get('x');
+					if (data.get('offset') != null) {
+						for (name in animationsFromAlt) {
+							if (data.get('offset').get(name) != null) {
+								var x = 0;
+								var y = 0;
+								if (Std.string(data.get('offset').get(name).get('x')) != "null") {
+									x = data.get('offset').get(name).get('x');
+								}
+								if (Std.string(data.get('offset').get(name).get('y')) != "null") {
+									y = data.get('offset').get(name).get('y');
+								}
+								addOffset(name, x, y);
 							}
-							if (Std.string(data.get('offset').get(name).get('y')) != "null") {
-								y = data.get('offset').get(name).get('y');
-							}
-							addOffset(name, x, y);
 						}
+					}
+
+					if (Std.string(data.get("flipX")) != "null") {
+						flipX = CoolUtil.strToBool(Std.string(data.get("flipX")));
 					}
 				}
 
@@ -205,18 +218,24 @@ class Character extends FlxSprite {
 				}
 				#end
 				if (data != null) {
-					for (name in animationsFromAlt) {
-						if (Std.string(data.get('offset').get(name)) != "null") {
-							var x = 0;
-							var y = 0;
-							if (Std.string(data.get('offset').get(name).get('x')) != "null") {
-								x = data.get('offset').get(name).get('x');
+					if (data.get('offset') != null) {
+						for (name in animationsFromAlt) {
+							if (data.get('offset').get(name) != null) {
+								var x = 0;
+								var y = 0;
+								if (Std.string(data.get('offset').get(name).get('x')) != "null") {
+									x = data.get('offset').get(name).get('x');
+								}
+								if (Std.string(data.get('offset').get(name).get('y')) != "null") {
+									y = data.get('offset').get(name).get('y');
+								}
+								addOffset(name, x, y);
 							}
-							if (Std.string(data.get('offset').get(name).get('y')) != "null") {
-								y = data.get('offset').get(name).get('y');
-							}
-							addOffset(name, x, y);
 						}
+					}
+
+					if (Std.string(data.get("flipX")) != "null") {
+						flipX = CoolUtil.strToBool(Std.string(data.get("flipX")));
 					}
 				}
 

@@ -17,6 +17,32 @@ Or steal the data from some mod or idk and paste it in "mods/songs/yoursong/" fo
 ## Action Notes
 To add a Action Note that is not visible in the game press ALT + LEFT CLICK
 
+# Stages
+To add a stage create a folder in "mods/stages/" folder with the name of your stage
+After that create a "/images/" folder in it and place there your assets
+Then create a config.yml in "mods/stages/{stagename} with:
+```
+images:
+  image_name_from_images_folder:
+    
+  another_image:
+
+```
+To edit the stage go into any fucking song and press 6 then select your stage
+
+# Weeks
+To add a week create a folder in "mods/weeks/" with the name of your stage
+Then create a config.yml file in "mods/weeks/{weekname}" with:
+```
+songs:
+ songname:
+  
+ anothersongname:
+  
+```
+
+To add a week image (that in storymode) place a image with the name of your stage (in .png format)
+
 # Skins and Characters
 To add a skin:
 1. Download skin from gamebanana or just make one yourself
@@ -198,4 +224,34 @@ animations:
     x: -29
     y: 27
     name: singUPmiss
+```
+
+Week config.yml file:
+```
+# if you wanna to hide the week from story menu change the number value to -1
+# Sorry for no week unlock option i will probably add it sometime later
+
+color: "#2a3d42"
+storyModeName: "teh epic week"
+onlyInFreeplay: false
+
+songs:
+ songname:
+  character: pico
+ fsjfodsjofsp:
+  character: forgor
+```
+Stages config.yml file:
+```
+zoom: 0.9
+
+images:
+  bg:
+    x: -300
+    y: 0
+    size: 0.50
+  ground:
+    x: -200
+    y: 0
+    size: 0.70
 ```

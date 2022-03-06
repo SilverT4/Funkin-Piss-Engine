@@ -30,7 +30,7 @@ class StageDebug extends FlxState {
 		var daLoop:Int = 0;
 
         for (penis in stage) {
-            var text:FlxText = new FlxText(10, 40 + (18 * daLoop), 0, penis.name + " : " + "[ " + penis.x + ", " + penis.y + "]", 15);
+            var text:FlxText = new FlxText(10, 40 + (18 * daLoop), 0, penis.name + " : " + "[ " + penis.x + ", " + penis.y + ", " + penis.sizeMultiplier + "]", 15);
             text.scrollFactor.set();
             text.color = FlxColor.GRAY;
             dumbTexts.add(text);
@@ -73,7 +73,7 @@ class StageDebug extends FlxState {
         var info:FlxText = new FlxText(0, 0, 0, "", 15);
 		info.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
 		info.text =
-        "MOVE MOUSE - Move current Sprite\n" +
+        "DRAG MOUSE CLICK - Move current Sprite\n" +
         "WS - Change the Sprite\n" +
 		"IJKL - Move the camera\n"
 		;
@@ -138,6 +138,21 @@ class StageDebug extends FlxState {
                     if (penis.name == imageList[currentSprite]) {
                         penis.x = FlxG.mouse.x;
                         penis.y = FlxG.mouse.y;
+                    }
+                }
+            }
+
+            if (FlxG.mouse.wheel == 1) {
+                for (penis in stage) {
+                    if (penis.name == imageList[currentSprite]) {
+                        penis.setAssetSize(penis.sizeMultiplier + 0.01);
+                    }
+                }
+            }
+            if (FlxG.mouse.wheel == -1) {
+                for (penis in stage) {
+                    if (penis.name == imageList[currentSprite]) {
+                        penis.setAssetSize(penis.sizeMultiplier - 0.01);
                     }
                 }
             }

@@ -486,8 +486,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
                                 if (keys.get("x") != null) stageSprite.x = keys.get("x");
                                 if (keys.get("y") != null) stageSprite.y = keys.get("y");
                                 if (keys.get("size") != null) {
-                                    stageSprite.setGraphicSize(Std.int(stageSprite.width * keys.get("size")));
-                                    stageSprite.updateHitbox();
+                                    stageSprite.setAssetSize(keys.get("size"));
                                 }
                                 if (keys.get("scrollFactorX") != null) stageSprite.scrollFactor.x = keys.get("scrollFactorX");
                                 if (keys.get("scrollFactorY") != null) stageSprite.scrollFactor.y = keys.get("scrollFactorY");
@@ -504,13 +503,21 @@ class StageAsset extends FlxSprite {
 
     public var name:String;
 
+    public var sizeMultiplier:Float = 1.0;
+
     public function new(?X:Float = 0, ?Y:Float = 0, ?name:String) {
         this.name = name;
 
         super(X, Y);
     }
 
-    	/**
+    public function setAssetSize(sizeMultiplier:Float = 1.0) {
+        this.sizeMultiplier = sizeMultiplier;
+        setGraphicSize(Std.int(frameWidth * sizeMultiplier));
+        updateHitbox();
+    }
+
+    /**
 	 * Load an image from an embedded graphic file.
 	 *
 	 * HaxeFlixel's graphic caching system keeps track of loaded image data.

@@ -72,7 +72,7 @@ If you wanna to make it easier to set the x and y values:
  - E - zoom in camera
 
 # Examples:
-Skin config file: (config.yml) <br>
+#### Skin config file: (config.yml) <br>
 ```
 #Default boyfriend offset values
 offset:
@@ -120,7 +120,7 @@ offset:
     y: 27
 ```
 
-Song script.lua file example:
+#### Song script.lua file example:
 ```
 -- Example Config so you don't have to think 30 minut how to do something
 
@@ -156,7 +156,7 @@ function onNotePress(char)
 end
 ```
 
-Character config.yml file:
+#### Character config.yml file:
 ```
 # Default boyfriend anim values
 # IMPORTANT: If animation is for idle pose add isIdle: true
@@ -226,7 +226,7 @@ animations:
     name: singUPmiss
 ```
 
-Week config.yml file:
+#### Week config.yml file:
 ```
 # if you wanna to hide the week from story menu change the number value to -1
 # Sorry for no week unlock option i will probably add it sometime later

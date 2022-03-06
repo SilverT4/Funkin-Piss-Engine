@@ -286,20 +286,20 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (Options.customGf) {
-			gf = new Character(400, 130, 'gf-custom');
+			gf = new Character(stage.gfX, stage.gfY, 'gf-custom');
 		} else {
-			gf = new Character(400, 130, gfVersion);
+			gf = new Character(stage.gfX, stage.gfY, gfVersion);
 		}
 		gf.scrollFactor.set(0.95, 0.95);
 
 		if (Options.customGf && SONG.player2.startsWith("gf")) {
-			dad = new Character(100, 100, "gf-custom");
+			dad = new Character(stage.dadX, stage.dadY, "gf-custom");
 		}
 		else if (Options.customDad && !SONG.player2.startsWith("gf")) {
-			dad = new Character(100, 100, "dad-custom");
+			dad = new Character(stage.dadX, stage.dadY, "dad-custom");
 		}
 		else if (!Options.customDad) {
-			dad = new Character(100, 100, SONG.player2);
+			dad = new Character(stage.dadX, stage.dadY, SONG.player2);
 		}
 
 		var camPos:FlxPoint = new FlxPoint(dad.getGraphicMidpoint().x, dad.getGraphicMidpoint().y);
@@ -341,71 +341,30 @@ class PlayState extends MusicBeatState {
 				dad.y += 200;
          default:
 			if (dad.config != null) {
-				dad.x = Std.parseFloat(Std.string(dad.config.get("X")));
-				dad.y = Std.parseFloat(Std.string(dad.config.get("Y")));
+				dad.x += Std.parseFloat(Std.string(dad.config.get("X")));
+				dad.y += Std.parseFloat(Std.string(dad.config.get("Y")));
 			}
 		}
 
 		try {
 			if (Options.customBf) {
-				bf = new Boyfriend(770, 450, "bf-custom");
+				bf = new Boyfriend(stage.bfX, stage.bfY, "bf-custom");
 			}
 			else {
-				bf = new Boyfriend(770, 450, SONG.player1);
+				bf = new Boyfriend(stage.bfX, stage.bfY, SONG.player1);
 			}
 		}
 		catch (error) {
 			trace("Error BF: " + SONG.player1 + " | Changing to default");
 			SONG.player1 = "bf";
-			bf = new Boyfriend(770, 450, SONG.player1);
+			bf = new Boyfriend(stage.bfX, stage.bfY, SONG.player1);
 		}
 
-		// REPOSITIONING PER STAGE
 		switch (stage.stage) {
 			case 'limo':
-				bf.y -= 220;
-				bf.x += 260;
-
 				resetFastCar();
 				add(stage.fastCar);
-
-			case 'mall':
-				bf.x += 200;
-
-			case 'mallEvil':
-				bf.x += 320;
-				dad.y -= 80;
-			case 'school':
-				if (bf.curCharacter != "bf-custom") {
-					bf.x += 200;
-					bf.y += 220;
-				}
-				if (gf.curCharacter != "gf-custom") {
-					gf.x += 180;
-					gf.y += 300;
-				}
-			case 'schoolEvil':
-				// trailArea.scrollFactor.set();
-
-				var evilTrail = new FlxTrail(dad, null, 4, 24, 0.3, 0.069);
-				// evilTrail.changeValuesEnabled(false, false, false, false);
-				// evilTrail.changeGraphic()
-				add(evilTrail);
-				// evilTrail.scrollFactor.set(1.1, 1.1);
-
-				if (bf.curCharacter != "bf-custom") {
-					bf.x += 200;
-					bf.y += 220;
-				}
-				if (gf.curCharacter != "gf-custom") {
-					gf.x += 180;
-					gf.y += 300;
-				}
 			case 'tank':
-				bf.x += 50;
-				bf.y -= 50;
-				gf.x = 190;
-				gf.y = 50;
 				if (gfVersion == "pico-speaker") {
 					gf.x = 300;
 					gf.y = -50;
@@ -1388,6 +1347,7 @@ class PlayState extends MusicBeatState {
 
 	private var godMode = false;
 	override public function update(elapsed:Float) {
+		trace(FlxG.camera.zoom);
 		updateElapsed = elapsed;
 
 		bgDimness.alpha = Options.bgDimness;

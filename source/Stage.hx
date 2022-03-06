@@ -23,9 +23,19 @@ class Stage extends FlxTypedGroup<Dynamic> {
         "schoolEvil",
         "tank"
     ];
-
     public var stage:String;
     public var camZoom:Float = 0.9;
+
+
+    //Character position for current stage
+    public var gfX:Float = 400;
+    public var gfY:Float = 130;
+
+    public var dadX:Float = 100;
+    public var dadY:Float = 100;
+
+    public var bfX:Float = 770;
+    public var bfY:Float = 450;
 
     //ASSETS
     public var halloweenBG:StageAsset;
@@ -139,6 +149,9 @@ class Stage extends FlxTypedGroup<Dynamic> {
 			case 'limo':
                 camZoom = 0.9;
 
+                bfX += 260;
+                bfY -= 220;
+
                 var skyBG:StageAsset = new StageAsset(-120, -50, 'limoSunset').loadGraphic(Paths.stageImage('limoSunset', stage));
                 skyBG.scrollFactor.set(0.1, 0.1);
                 add(skyBG);
@@ -181,6 +194,8 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 // add(limo);
 			case 'mall':
                 camZoom = 0.8;
+
+                bfX += 200;
 
                 var bg:StageAsset = new StageAsset(-1000, -500, 'bgWalls').loadGraphic(Paths.stageImage('bgWalls', stage));
                 bg.antialiasing = true;
@@ -233,6 +248,10 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 add(santa);
 			case 'mallEvil':
                 camZoom = 1.1;
+
+                bfX += 320;
+				dadY -= 80;
+
                 var bg:StageAsset = new StageAsset(-400, -500, 'evilBG').loadGraphic(Paths.stageImage('evilBG', stage));
                 bg.antialiasing = true;
                 bg.scrollFactor.set(0.2, 0.2);
@@ -250,6 +269,15 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 evilSnow.antialiasing = true;
                 add(evilSnow);
 			case 'school':
+                if (!Options.customBf) {
+					bfX += 200;
+					bfY += 220;
+				}
+				if (!Options.customGf) {
+					gfX += 180;
+					gfY += 300;
+				}
+
                 // defaultCamZoom = 0.9;
 
                 var bgSky = new StageAsset().loadGraphic(Paths.stageImage('weebSky', stage));
@@ -313,6 +341,15 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 bgGirls.updateHitbox();
                 add(bgGirls);
 			case 'schoolEvil':
+                if (!Options.customBf) {
+					bfX += 200;
+					bfY += 220;
+				}
+				if (!Options.customGf) {
+					gfX += 180;
+					gfY += 300;
+				}
+                
                 //var waveEffectBG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 3, 2);
                 //var waveEffectFG = new FlxWaveEffect(FlxWaveMode.ALL, 2, -1, 5, 2);
 
@@ -372,6 +409,11 @@ class Stage extends FlxTypedGroup<Dynamic> {
                     */
 			case 'tank':
 				camZoom = 0.95;
+
+                bfX += 50;
+				bfY -= 50;
+				gfX = 190;
+				gfY = 50;
 
 				var tankSky:StageAsset = new StageAsset(-60, -400, 'tankSky').loadGraphic(Paths.stageImage('tankSky', stage));
 				tankSky.setGraphicSize(Std.int(tankSky.width * 1.3));
@@ -474,11 +516,20 @@ class Stage extends FlxTypedGroup<Dynamic> {
             default:
                 if (SysFile.exists('mods/stages/$stage/')) {
                     var config = CoolUtil.readYAML('mods/stages/$stage/config.yml');
-
-                    if (config.get("zoom") != null) camZoom = Std.parseFloat(Std.string(config.get("zoom")));
                     
                     if (config != null) {
+
+                        if (config.get("zoom") != null) camZoom = Std.parseFloat(Std.string(config.get("zoom")));
+
+                        if (config.get("gfX") != null) gfX = Std.parseFloat(Std.string(config.get("gfX")));
+                        if (config.get("gfY") != null) gfY = Std.parseFloat(Std.string(config.get("gfY")));
+                        if (config.get("dadX") != null) dadX = Std.parseFloat(Std.string(config.get("dadX")));
+                        if (config.get("dadY") != null) dadY = Std.parseFloat(Std.string(config.get("dadY")));
+                        if (config.get("bfX") != null) bfX = Std.parseFloat(Std.string(config.get("bfX")));
+                        if (config.get("bfY") != null) bfY = Std.parseFloat(Std.string(config.get("bfY")));
+
                         var map:TObjectMap<Dynamic, Dynamic> = config.get('images');
+
                         for (image in map.keys()) {
                             var keys = config.get('images').get(image);
                             var stageSprite = new StageAsset(0, 0, image).loadGraphic(BitmapData.fromBytes(SysFile.getBytes('mods/stages/$stage/images/$image.png')));

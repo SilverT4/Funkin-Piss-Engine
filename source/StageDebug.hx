@@ -44,6 +44,9 @@ class StageDebug extends FlxState {
 
 	var dumbTexts2:FlxTypedGroup<FlxText>;
 
+    var textImg:FlxText;
+    var textChar:FlxText;
+
     public function new(stageName:String = 'stage') {
 		super();
 		this.stageName = stageName;
@@ -129,9 +132,9 @@ class StageDebug extends FlxState {
 
         add(characters);
 
-        var text:FlxText = new FlxText(15, 15, 0, "Images:", 20);
-        text.scrollFactor.set();
-        add(text);
+        textImg = new FlxText(15, 15, 0, "Images:", 20);
+        textImg.scrollFactor.set();
+        add(textImg);
 
         dumbTexts = new FlxTypedGroup<FlxText>();
 		add(dumbTexts);
@@ -140,21 +143,21 @@ class StageDebug extends FlxState {
         var info:FlxText = new FlxText(0, 0, 0, "", 15);
 		info.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
 		info.text =
-        "DRAG MOUSE CLICK - Move current Sprite\n" +
-        "DRAG MOUSE WHEEL - Change the size of current Sprite\n" +
+        "CTRL + DRAG MOUSE CLICK - Move current Sprite\n" +
+        "CTRL + DRAG MOUSE WHEEL - Change the size of current Sprite\n" +
         "WS - Change the Sprite\n" +
         "AD - Change the tab (Images / Characters)\n" +
-		"IJKL - Move the camera\n"
+		"IJKL - Move the camera (Shift to 2x faster)\n"
 		;
 		info.scrollFactor.set();
 		info.y = (FlxG.height - info.height) + (info.size * 2);
 		info.x = 10;
 		add(info);
 
-        var text2:FlxText = new FlxText(0, 15, 0, "Characters:", 20);
-        text2.scrollFactor.set();
-        text2.x = dumbTextsWidthWX + 20;
-        add(text2);
+        textChar = new FlxText(0, 15, 0, "Characters:", 20);
+        textChar.scrollFactor.set();
+        textChar.x = dumbTextsWidthWX + 20;
+        add(textChar);
 
         dumbTexts2 = new FlxTypedGroup<FlxText>();
 		add(dumbTexts2);
@@ -169,8 +172,8 @@ class StageDebug extends FlxState {
 
         info.cameras = [hudCamera];
         dumbTexts.cameras = [hudCamera];
-        text.cameras = [hudCamera];
-        text2.cameras = [hudCamera];
+        textImg.cameras = [hudCamera];
+        textChar.cameras = [hudCamera];
         dumbTexts2.cameras = [hudCamera];
 
         super.create();
@@ -184,7 +187,9 @@ class StageDebug extends FlxState {
             curTab = 1;
         }
 
-        if (curTab == 0)
+        if (curTab == 0) {
+            textImg.color = FlxColor.YELLOW;
+            textChar.color = FlxColor.WHITE;
             for (text in dumbTexts) {
                 if (text.text.split(" ")[0] == imageList[currentSprite]) {
                     text.color = FlxColor.YELLOW;
@@ -192,8 +197,11 @@ class StageDebug extends FlxState {
                     text.color = FlxColor.GRAY;
                 }
             }
+        }
         
-        if (curTab == 1)
+        if (curTab == 1) {
+            textImg.color = FlxColor.WHITE;
+            textChar.color = FlxColor.YELLOW;
             for (text in dumbTexts2) {
                 if (text.text.split(" ")[0] == characterList[currentCharacter]) {
                     text.color = FlxColor.YELLOW;
@@ -201,6 +209,7 @@ class StageDebug extends FlxState {
                     text.color = FlxColor.GRAY;
                 }
             }
+        }
 
         if (FlxG.keys.justPressed.W)
             if (curTab == 0)
@@ -248,7 +257,7 @@ class StageDebug extends FlxState {
             camFollow.velocity.set();
         }
 
-        if (FlxG.mouse.pressed) {
+        if (FlxG.keys.pressed.CONTROL && FlxG.mouse.pressed) {
             if (FlxG.mouse.justMoved) {
                 if (curTab == 0)
                     for (penis in stage) {

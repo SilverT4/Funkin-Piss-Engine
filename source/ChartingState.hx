@@ -310,7 +310,7 @@ class ChartingState extends MusicBeatState {
 		whichKMenu.selectLabel(_song.whichK + "K");
 		var maniaText = new FlxText(whichKMenu.x - 5, whichKMenu.y - 15, 0, "Mania:");
 
-		var stagesMenu = new ScrollUIDropDownMenu(whichKMenu.x + 130, whichKMenu.y, Stage.stagesList, function onSelect(s, i) {
+		var stagesMenu = new ScrollUIDropDownMenu(whichKMenu.x + 130, whichKMenu.y, CoolUtil.getStages(), function onSelect(s, i) {
 			_song.stage = s;
 		}, 6);
 		stagesMenu.selectLabel(_song.stage);

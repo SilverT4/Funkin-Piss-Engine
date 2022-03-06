@@ -20,7 +20,7 @@ To add a Action Note that is not visible in the game press ALT + LEFT CLICK
 # Stages
 To add a stage create a folder in "mods/stages/" folder with the name of your stage
 After that create a "/images/" folder in it and place there your assets
-Then create a config.yml in "mods/stages/{stagename} with:
+Then create a config.yml in "mods/stages/{stagename}/" with:
 ```
 images:
   image_name_from_images_folder:
@@ -32,13 +32,13 @@ To edit the stage go into any fucking song and press 6 then select your stage
 
 # Weeks
 To add a week create a folder in "mods/weeks/" with the name of your stage
-Then create a config.yml file in "mods/weeks/{weekname}" with:
+Then create a config.yml file in "mods/weeks/{weekname}/" with:
 ```
 songs:
  songname:
   
  anothersongname:
-  
+
 ```
 
 To add a week image (that in storymode) place a image with the name of your stage (in .png format)

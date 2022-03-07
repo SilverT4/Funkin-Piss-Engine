@@ -2578,16 +2578,10 @@ class PlayState extends MusicBeatState {
 			#if cpp
 			if (health > 0 && !paused) {
 				DiscordClient.changePresence(detailsText
-					+ " "
-					+ SONG.song
-					+ " ("
-					+ storyDifficultyText
-					+ ")", "Score: "
-					+ songScore
-					+ " | Misses: "
-					+ misses,
-					iconRPC, true, songLength
-					- Conductor.songPosition);
+					+ " " + SONG.song + " (" + storyDifficultyText + ")", 
+					"Score: " + songScore + " | Misses: " + misses,
+					iconRPC, true,
+					songLength - Conductor.songPosition);
 			}
 			#end
 		}, 0);	

@@ -1,5 +1,6 @@
 package;
 
+import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.FlxSprite;
 import openfl.display.BitmapData;
 import flixel.system.FlxAssets.FlxGraphicAsset;
@@ -515,7 +516,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 				bgTank5.scrollFactor.set(1.1, 1);
             default:
                 if (SysFile.exists('mods/stages/$stage/')) {
-                    var config = CoolUtil.readYAML('mods/stages/$stage/config.yml');
+                    config = CoolUtil.readYAML('mods/stages/$stage/config.yml');
                     
                     if (config != null) {
 
@@ -528,10 +529,10 @@ class Stage extends FlxTypedGroup<Dynamic> {
                         if (config.get("bfX") != null) bfX = Std.parseFloat(Std.string(config.get("bfX")));
                         if (config.get("bfY") != null) bfY = Std.parseFloat(Std.string(config.get("bfY")));
 
-                        var map:TObjectMap<Dynamic, Dynamic> = config.get('images');
+                        var map:AnyObjectMap = config.get('images');
 
                         for (image in map.keys()) {
-                            var keys = config.get('images').get(image);
+                            var keys:AnyObjectMap = config.get('images').get(image);
                             var stageSprite = new StageAsset(0, 0, image).loadGraphic(BitmapData.fromBytes(SysFile.getBytes('mods/stages/$stage/images/$image.png')));
                             if (keys != null) {
                                 if (keys.get("x") != null) stageSprite.x = keys.get("x");
@@ -548,6 +549,8 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 }
 		}
 	}
+
+	public var config = null;
 }
 
 class StageAsset extends FlxSprite {

@@ -24,6 +24,18 @@ class CoolUtil {
 		}
 	}
 
+	public static function toBool(d):Dynamic {
+		var s = Std.string(d);
+		switch (s.toLowerCase()) {
+			case "true":
+				return true;
+			case "false":
+				return false;
+			default:
+				return null;
+		}
+	}
+
 	public static function coolTextFile(path:String, ?modsFolder = false):Array<String> {
 		var daList;
 		if (modsFolder) {

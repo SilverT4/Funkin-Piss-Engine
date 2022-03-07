@@ -1,5 +1,10 @@
 package;
 
+import yaml.Schema;
+import yaml.Parser.ParserOptions;
+import yaml.util.ObjectMap.AnyObjectMap;
+import yaml.Yaml;
+import yaml.util.ObjectMap.TObjectMap;
 import openfl.media.Sound;
 import flixel.FlxG;
 import flixel.FlxObject;
@@ -210,6 +215,10 @@ class AnimationDebug extends FlxState {
 			charO.alpha = 0.2;
 		}
 
+		if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) {
+			saveConfig();
+		}
+
 		if (curAnim < 0)
 			curAnim = animList.length - 1;
 
@@ -254,6 +263,32 @@ class AnimationDebug extends FlxState {
 		}
 
 		super.update(elapsed);
+	}
+
+	function saveConfig() {
+		if (char.config != null) {
+			var map:AnyObjectMap = char.config.get('animations');
+			for (anim in map.keys()) {
+				var values = char.config.get('animations').get(anim);
+				if (values != null) {
+					values.set('x', char.animOffsets.get(animList[anim])[0]);
+					values.set('y', char.animOffsets.get(animList[anim])[1]);
+				}
+			}
+
+			var receipt = {assistant:"Chris", items:[{rice:2.34}], teststst: true};
+			trace(Type.typeof(receipt));
+			trace(Yaml.render(receipt));
+			/*
+			#if cpp
+			var parserOptions = new ParserOptions();
+			parserOptions.maps = false;
+			var data = Yaml.read("test.yml", parserOptions);
+			trace(Type.typeof(data));
+			trace(Yaml.render(data));
+			#end
+			*/
+		}
 	}
 
 	var dadO:Character;

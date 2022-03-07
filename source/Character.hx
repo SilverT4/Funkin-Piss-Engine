@@ -23,7 +23,7 @@ class Character extends FlxSprite {
 
 	var animationsFromAlt:List<String>;
 
-	public var config = null;
+	public var config:AnyObjectMap = new AnyObjectMap();
 
 	public function addPrefixAlternative(name, prefix, frames, looped) {
 		animationsFromAlt.add(name);
@@ -83,6 +83,10 @@ class Character extends FlxSprite {
 				var data = null;
 				#if sys
 				try {
+					/*
+					var parserOptions = new ParserOptions();
+					parserOptions.maps = false;
+					*/
 					data = Yaml.read(Options.customBfPath + "config.yml");
 				} catch (exc) {
 					data = null;
@@ -793,9 +797,9 @@ class Character extends FlxSprite {
 
 				if (config != null) {
 					// take a shot everytime you see != null here
-					var map:TObjectMap<Dynamic, Dynamic> = config.get('animations');
+					var map:AnyObjectMap = config.get('animations');
 					for (anim in map.keys()) {
-						var values = config.get('animations').get(anim);
+						var values:AnyObjectMap = config.get('animations').get(anim);
 						//trace(anim, values.get('x'), values.get('y'), values.get('frames'), values.get('looped'), values.get('name'), values.get('isIdle'));
 						var _name = anim;
 						var _frames = 24;

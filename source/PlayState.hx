@@ -341,8 +341,8 @@ class PlayState extends MusicBeatState {
 				dad.y += 200;
          default:
 			if (dad.config != null) {
-				dad.x += Std.parseFloat(Std.string(dad.config.get("X")));
-				dad.y += Std.parseFloat(Std.string(dad.config.get("Y")));
+				if (Std.string(dad.config.get("X")) != "null") dad.x += Std.parseFloat(Std.string(dad.config.get("X")));
+				if (Std.string(dad.config.get("Y")) != "null") dad.y += Std.parseFloat(Std.string(dad.config.get("Y")));
 			}
 		}
 
@@ -598,26 +598,34 @@ class PlayState extends MusicBeatState {
 			case 0, "gf":
 				gfLayer.forEach(b -> gfLayer.remove(b));
 				gfLayer.add(gf);
+				/*
+				commented because the pos can be inacurrate
+
 				if (gf.config != null) {
 					gf.x = Std.parseFloat(Std.string(gf.config.get("X")));
 					gf.y = Std.parseFloat(Std.string(gf.config.get("Y")));
 				}
+				*/
 			case 1, "bf":
 				bfLayer.forEach(b -> bfLayer.remove(b));
 				bfLayer.add(bf);
 				iconP1.setChar(bf.curCharacter, true);
+				/*
 				if (bf.config != null) {
 					bf.x = Std.parseFloat(Std.string(bf.config.get("X")));
 					bf.y = Std.parseFloat(Std.string(bf.config.get("Y")));
 				}
+				*/
 			case 2, "dad":
 				dadLayer.forEach(b -> dadLayer.remove(b));
 				dadLayer.add(dad);
 				iconP2.setChar(dad.curCharacter, false);
+				/*
 				if (dad.config != null) {
 					dad.x = Std.parseFloat(Std.string(dad.config.get("X")));
 					dad.y = Std.parseFloat(Std.string(dad.config.get("Y")));
 				}
+				*/
 		}
 	}
 

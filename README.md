@@ -14,6 +14,7 @@ haxelib install yaml
 haxelib install linc_luajit
 ```
 3. And to compile just type ```lime test windows -debug``` or ```lime test windows``` in current folder command line
+
 *Message to motherfuckers from gamaverse: this engine doesn't fully support html5 so go fuck y'all*
 ## Nice Stuff / Features
 * 6K Mania Support

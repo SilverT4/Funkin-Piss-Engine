@@ -61,7 +61,7 @@ animations:
  xmlLeftAnimationName:
   name: singLEFT
 ```
-If animations positions go off set them in Character Editor (press 8 in any song to go into it)
+If animation position go off set them in Character Editor (press 8 in any song to go into it)
 "name" key: is very important for engine to get which animation is for: left, right, down, up, idle
 
 # Skins
@@ -71,6 +71,7 @@ To add a skin:
 
 To add a icon make a image file with name "icon.png" also it should be 300x150
 To add a config create a file with name "config.yml" (example config is in Examples section)
+If animation position go off set them in Character Editor (press 8 in any song to go into it)
 
 ## Offsets
 If the skin animation go a bit off use these

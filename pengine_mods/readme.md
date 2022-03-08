@@ -43,7 +43,28 @@ songs:
 
 To add a week image (that in storymode) place a image with the name of your stage (in .png format)
 
-# Skins and Characters
+# Character
+To add a character:
+1. Paste .xml and .png to the "mods/characters/{your character name}/" folder
+2. create a config.yml with:
+```
+animations:
+ xmlDownAnimationName:
+  name: singDOWN
+ xmlUpAnimationName:
+  name: singUP
+ xmlIdleAnimationName:
+  name: idle
+  isIdle: true
+ xmlRightAnimationName:
+  name: singRIGHT
+ xmlLeftAnimationName:
+  name: singLEFT
+```
+If animations positions go off set them in Character Editor (press 8 in any song to go into it)
+"name" key: is very important for engine to get which animation is for: left, right, down, up, idle
+
+# Skins
 To add a skin:
 1. Download skin from gamebanana or just make one yourself
 2. Copy the .xml and .png file and paste in ex. "mods/skins/< bf/gf/dad >/< your skin name >/" folder
@@ -75,7 +96,7 @@ If you wanna to make it easier to set the x and y values:
 #### Skin config file: (config.yml) <br>
 ```
 #Default boyfriend offset values
-offset:
+animations:
   scared:
     x: -4
     y: 0

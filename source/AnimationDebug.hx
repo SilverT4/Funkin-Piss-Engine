@@ -113,7 +113,9 @@ class AnimationDebug extends FlxState {
 		"V - Make a transparent clone of current animation\n" +
 		"IJKL - Move the camera\n" +
 		"QE - Decrease / Increase the camera zoom\n" +
-		"R - To reload the character\n"
+		"CTRL + S - Save the Config\n" +
+		"R - To reload the Character Config\n" +
+		"C - To change the Character\n"
 		;
 		//flx text is bugged with \n
 		info.scrollFactor.set();
@@ -191,6 +193,10 @@ class AnimationDebug extends FlxState {
 			FlxG.switchState(new AnimationDebug(daAnim, true, char.flipX));
 		}
 
+		if (FlxG.keys.justPressed.C) {
+			FlxG.switchState(new AnimationDebugCharacterSelector());
+		}
+
 		if (FlxG.keys.justPressed.W) {
 			curAnim -= 1;
 		}
@@ -265,21 +271,33 @@ class AnimationDebug extends FlxState {
 		super.update(elapsed);
 	}
 
+	function getAnimNameFromKey(config, key) {
+		if (config.get('animations').get(key).get('name') != null) {
+			return config.get('animations').get(key).get('name');
+		} else {
+			return key;
+		}
+	}
+
 	function saveConfig() {
 		if (char.config != null) {
-			var map:AnyObjectMap = char.config.get('animations');
-			for (anim in map.keys()) {
-				var values = char.config.get('animations').get(anim);
-				if (values != null) {
-					values.set('x', char.animOffsets.get(animList[anim])[0]);
-					values.set('y', char.animOffsets.get(animList[anim])[1]);
-				}
+			char.config.set('flipX', char.flipX);
+			if (char.config.get('animations') == null) {
+				char.config.set('animations', new AnyObjectMap());
 			}
-
+			var map:AnyObjectMap = char.config.get('animations');
+			for (key in map.keys()) {
+				char.config.get('animations').get(key).set('x', char.animOffsets.get(getAnimNameFromKey(char.config, key))[0]);
+				char.config.get('animations').get(key).set('y', char.animOffsets.get(getAnimNameFromKey(char.config, key))[1]);
+			}
+			var renderedYaml = new YamlRender(char.config);
+			SysFile.writeToFile(char.configPath, renderedYaml.daFinalYAML);
+			
+			/*
 			var receipt = {assistant:"Chris", items:[{rice:2.34}], teststst: true};
 			trace(Type.typeof(receipt));
 			trace(Yaml.render(receipt));
-			/*
+			
 			#if cpp
 			var parserOptions = new ParserOptions();
 			parserOptions.maps = false;

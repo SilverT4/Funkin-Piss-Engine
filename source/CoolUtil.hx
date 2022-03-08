@@ -1,5 +1,6 @@
 package;
 
+import yaml.util.ObjectMap.AnyObjectMap;
 import haxe.io.Path;
 import lime.utils.Assets;
 import yaml.Yaml;

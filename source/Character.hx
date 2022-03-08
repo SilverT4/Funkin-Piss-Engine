@@ -24,6 +24,7 @@ class Character extends FlxSprite {
 	var animationsFromAlt:List<String>;
 
 	public var config:AnyObjectMap = new AnyObjectMap();
+	public var configPath:String = "";
 
 	public function addPrefixAlternative(name, prefix, frames, looped) {
 		animationsFromAlt.add(name);
@@ -80,40 +81,29 @@ class Character extends FlxSprite {
 				addOffset('deathConfirm', 37, 69);
 				addOffset('scared', -4);
 
-				var data = null;
-				#if sys
-				try {
-					/*
-					var parserOptions = new ParserOptions();
-					parserOptions.maps = false;
-					*/
-					data = Yaml.read(Options.customBfPath + "config.yml");
-				} catch (exc) {
-					data = null;
-				}
-				#end
+				setConfig(Options.customBfPath + "config.yml");
 
 				flipX = true;
 
-				if (data != null) {
-					if (data.get('offset') != null) {
+				if (config != null) {
+					if (config.get('animations') != null) {
 						for (name in animationsFromAlt) {
-							if (data.get('offset').get(name) != null) {
+							if (config.get('animations').get(name) != null) {
 								var x = 0;
 								var y = 0;
-								if (Std.string(data.get('offset').get(name).get('x')) != "null") {
-									x = data.get('offset').get(name).get('x');
+								if (Std.string(config.get('animations').get(name).get('X')) != "null") {
+									x = config.get('animations').get(name).get('X');
 								}
-								if (Std.string(data.get('offset').get(name).get('y')) != "null") {
-									y = data.get('offset').get(name).get('y');
+								if (Std.string(config.get('animations').get(name).get('Y')) != "null") {
+									y = config.get('animations').get(name).get('Y');
 								}
 								addOffset(name, x, y);
 							}
 						}
 					}
 
-					if (Std.string(data.get("flipX")) != "null") {
-						flipX = CoolUtil.strToBool(Std.string(data.get("flipX")));
+					if (Std.string(config.get("flipX")) != "null") {
+						flipX = CoolUtil.strToBool(Std.string(config.get("flipX")));
 					}
 				}
 
@@ -152,33 +142,27 @@ class Character extends FlxSprite {
 
 				addOffset('scared', -2, -17);
 
-				var data = null;
-				#if sys
-				try {
-					data = Yaml.read(Options.customGfPath + "config.yml");
-				} catch (exc) {
-					data = null;
-				}
-				#end
-				if (data != null) {
-					if (data.get('offset') != null) {
+				setConfig(Options.customGfPath + "config.yml");
+
+				if (config != null) {
+					if (config.get('animations') != null) {
 						for (name in animationsFromAlt) {
-							if (data.get('offset').get(name) != null) {
+							if (config.get('animations').get(name) != null) {
 								var x = 0;
 								var y = 0;
-								if (Std.string(data.get('offset').get(name).get('x')) != "null") {
-									x = data.get('offset').get(name).get('x');
+								if (Std.string(config.get('animations').get(name).get('X')) != "null") {
+									x = config.get('animations').get(name).get('X');
 								}
-								if (Std.string(data.get('offset').get(name).get('y')) != "null") {
-									y = data.get('offset').get(name).get('y');
+								if (Std.string(config.get('animations').get(name).get('Y')) != "null") {
+									y = config.get('animations').get(name).get('Y');
 								}
 								addOffset(name, x, y);
 							}
 						}
 					}
 
-					if (Std.string(data.get("flipX")) != "null") {
-						flipX = CoolUtil.strToBool(Std.string(data.get("flipX")));
+					if (Std.string(config.get("flipX")) != "null") {
+						flipX = CoolUtil.strToBool(Std.string(config.get("flipX")));
 					}
 				}
 
@@ -213,33 +197,27 @@ class Character extends FlxSprite {
 				addOffset("singLEFT-alt");
 				addOffset("singRIGHT-alt");
 
-				var data = null;
-				#if sys
-				try {
-					data = Yaml.read(Options.customDadPath + "config.yml");
-				} catch (exc) {
-					data = null;
-				}
-				#end
-				if (data != null) {
-					if (data.get('offset') != null) {
+				setConfig(Options.customDadPath + "config.yml");
+
+				if (config != null) {
+					if (config.get('animations') != null) {
 						for (name in animationsFromAlt) {
-							if (data.get('offset').get(name) != null) {
+							if (config.get('animations').get(name) != null) {
 								var x = 0;
 								var y = 0;
-								if (Std.string(data.get('offset').get(name).get('x')) != "null") {
-									x = data.get('offset').get(name).get('x');
+								if (Std.string(config.get('animations').get(name).get('X')) != "null") {
+									x = config.get('animations').get(name).get('X');
 								}
-								if (Std.string(data.get('offset').get(name).get('y')) != "null") {
-									y = data.get('offset').get(name).get('y');
+								if (Std.string(config.get('animations').get(name).get('Y')) != "null") {
+									y = config.get('animations').get(name).get('Y');
 								}
 								addOffset(name, x, y);
 							}
 						}
 					}
 
-					if (Std.string(data.get("flipX")) != "null") {
-						flipX = CoolUtil.strToBool(Std.string(data.get("flipX")));
+					if (Std.string(config.get("flipX")) != "null") {
+						flipX = CoolUtil.strToBool(Std.string(config.get("flipX")));
 					}
 				}
 
@@ -793,36 +771,38 @@ class Character extends FlxSprite {
 
 				var idleAnim = null;
 
-				config = CoolUtil.readYAML('mods/characters/$curCharacter/config.yml');
+				setConfig('mods/characters/$curCharacter/config.yml');
 
 				if (config != null) {
 					// take a shot everytime you see != null here
 					var map:AnyObjectMap = config.get('animations');
-					for (anim in map.keys()) {
-						var values:AnyObjectMap = config.get('animations').get(anim);
-						//trace(anim, values.get('x'), values.get('y'), values.get('frames'), values.get('looped'), values.get('name'), values.get('isIdle'));
-						var _name = anim;
-						var _frames = 24;
-						var _looped = false;
-						var _x = 0;
-						var _y = 0;
-						if (values != null) {
-							if (values.get('x') != null)
-								_x = values.get('x');
-							if (values.get('y') != null)
-								_y = values.get('y');
-							if (values.get('frames') != null)
-								_frames = values.get('frames');
-							if (values.get('looped') != null)
-								_looped = values.get('looped');
-							if (values.get('name') != null)
-								_name = values.get('name');
-							if (values.get('isIdle') == true)
-								idleAnim = _name;
+					if (config.exists('animations')) {
+						for (anim in map.keys()) {
+							var values:AnyObjectMap = config.get('animations').get(anim);
+							//trace(anim, values.get('x'), values.get('y'), values.get('frames'), values.get('looped'), values.get('name'), values.get('isIdle'));
+							var _name = anim;
+							var _frames = 24;
+							var _looped = false;
+							var _x = 0;
+							var _y = 0;
+							if (values != null) {
+								if (values.get('x') != null)
+									_x = values.get('x');
+								if (values.get('y') != null)
+									_y = values.get('y');
+								if (values.get('frames') != null)
+									_frames = values.get('frames');
+								if (values.get('looped') != null)
+									_looped = values.get('looped');
+								if (values.get('name') != null)
+									_name = values.get('name');
+								if (values.get('isIdle') == true)
+									idleAnim = _name;
+							}
+							
+							animation.addByPrefix(_name, anim, _frames, _looped);
+							addOffset(_name, _x, _y);
 						}
-						
-						animation.addByPrefix(_name, anim, _frames, _looped);
-						addOffset(_name, _x, _y);
 					}
 					if (idleAnim != null) {
 						playAnim(idleAnim);
@@ -987,6 +967,13 @@ class Character extends FlxSprite {
 			if (AnimName == 'singUP' || AnimName == 'singDOWN') {
 				danced = !danced;
 			}
+		}
+	}
+
+	public function setConfig(path:String) {
+		configPath = path;
+		if (SysFile.exists(configPath)) {
+			config = CoolUtil.readYAML(configPath);
 		}
 	}
 

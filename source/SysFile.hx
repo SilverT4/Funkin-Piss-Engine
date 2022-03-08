@@ -46,4 +46,13 @@ class SysFile {
 
         return false;
 	}
+
+    public static function writeToFile(path:String, content:String, ?binary:Bool = false):Void {
+        #if sys
+        if (!exists(path)) {
+            File.write(path, binary);
+        }
+        File.saveContent(path, content);
+        #end
+    }
 }

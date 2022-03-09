@@ -42,7 +42,7 @@ class YamlRender {
 					iterateYAMLObjectMap(value, 1);
 				
 				default:
-					trace("NOT RENDERING UNSUPPORTED TYPE: " + Std.string(Type.typeof(value)) + ' IN KEY: $key');
+					trace("NOT RENDERING UNSUPPORTED TYPE: " + Std.string(Type.typeof(value)) + ' IN KEY: $key FOR VALUE: $value');
 			}
 		}
 	}
@@ -85,7 +85,7 @@ class YamlRender {
 					*/
 				
 				default:
-					trace("NOT RENDERING UNSUPPORTED TYPE: " + Std.string(Type.typeof(value)) + ' IN KEY: $key');
+					trace("NOT RENDERING UNSUPPORTED TYPE: " + Std.string(Type.typeof(value)) + ' IN KEY: $key FOR VALUE: $value');
 			}
 		}
 	}

@@ -16,7 +16,7 @@ class YamlRender {
 			var value = data.get(key);
 			var valueSpace = 0;
 			switch (Std.string(Type.typeof(value))) {
-				case "TInt":
+				case "TInt", "TFloat":
 					//trace(key, "found integer");
 					daFinalYAML += space(valueSpace) + '$key: $value\n';
 
@@ -52,8 +52,8 @@ class YamlRender {
 			var value = data.get(key);
 			var valueSpace = spaces;
 			switch (Std.string(Type.typeof(value))) {
-				case "TInt":
-					//trace(key, "found integer");
+				case "TInt", "TFloat":
+					//trace(key, "found integer / float");
 					daFinalYAML += space(valueSpace) + '$key: $value\n';
 
 				case "TBool":

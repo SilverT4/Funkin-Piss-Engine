@@ -15,14 +15,14 @@ haxelib install linc_luajit
 ```
 3. And to compile just type ```lime test windows -debug``` or ```lime test windows``` in current folder command line
 
-*Message to motherfuckers from gamaverse: this engine doesn't fully support html5, fuck y'all*
+*Message to motherfuckers from gamaverse: this engine supports html5 partially, have fun on trying to ~~port~~ steal someone's mod to your garbage site <3*
 ## Nice Stuff / Features
 * 6K Mania Support
 * Action Notes
 * Make mods without touching code
 * Week 7 Ported with Week 7 and Note Splashes
 * Custom Skins
-* Configs are in YAML so it is cleaner to read them
+* Configs are in YAML instead of JSON so it is easier to read them
 * Dialogue Cutscenes
 * Lua Support
 * And some fixes to Vanilla

@@ -66,7 +66,7 @@ class Note extends FlxSprite {
 		this.strumTime = strumTime;
 
 		this.noteData = noteData;
-
+		
 		daStage = PlayState.stage.stage;
 
 		switch (action.toLowerCase()) {

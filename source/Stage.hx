@@ -270,6 +270,8 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 evilSnow.antialiasing = true;
                 add(evilSnow);
 			case 'school':
+                camZoom = 1.05;
+
                 if (!Options.customBf) {
 					bfX += 200;
 					bfY += 220;
@@ -342,6 +344,8 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 bgGirls.updateHitbox();
                 add(bgGirls);
 			case 'schoolEvil':
+                camZoom = 1.05;
+
                 if (!Options.customBf) {
 					bfX += 200;
 					bfY += 220;
@@ -516,7 +520,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 				bgTank5.scrollFactor.set(1.1, 1);
             default:
                 if (SysFile.exists('mods/stages/$stage/')) {
-                    config = CoolUtil.readYAML('mods/stages/$stage/config.yml');
+                    setConfig('mods/stages/$stage/config.yml');
                     
                     if (config != null) {
 
@@ -550,7 +554,15 @@ class Stage extends FlxTypedGroup<Dynamic> {
 		}
 	}
 
-	public var config = null;
+    public function setConfig(path:String) {
+		configPath = path;
+		if (SysFile.exists(configPath)) {
+			config = CoolUtil.readYAML(configPath);
+		}
+	}
+
+	public var config:AnyObjectMap = new AnyObjectMap();
+	public var configPath:String = "";
 }
 
 class StageAsset extends FlxSprite {

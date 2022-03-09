@@ -1,5 +1,6 @@
 package;
 
+import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.group.FlxGroup;
 import flixel.FlxSprite;
 import flixel.FlxCamera;
@@ -150,7 +151,8 @@ class StageDebug extends FlxState {
         "CTRL + DRAG MOUSE WHEEL - Change the size of current Sprite\n" +
         "WS - Change the Sprite\n" +
         "AD - Change the tab (Images / Characters)\n" +
-		"IJKL - Move the camera (Shift to 2x faster)\n"
+		"IJKL - Move the camera (Shift to 2x faster)\n" +
+        "CTRL + S - Save the Config\n"
 		;
 		info.scrollFactor.set();
 		info.y = (FlxG.height - info.height) + (info.size * 2);
@@ -310,12 +312,39 @@ class StageDebug extends FlxState {
             }
         }
 
+        if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) {
+			saveConfig();
+		}
+
         if (FlxG.keys.justPressed.ESCAPE) {
 			FlxG.switchState(new MainMenuState());
 		}
 
         super.update(elapsed);
     }
+
+    function saveConfig() {
+		if (stage.config != null) {
+			if (!stage.config.exists('images')) {
+				stage.config.set('images', new AnyObjectMap());
+			}
+            stage.config.set('zoom', stage.camZoom);
+
+			var map:AnyObjectMap = stage.config.get('images');
+            trace(stage.config);
+            for (image in stage) {
+                if (!map.exists(image.name)) {
+                    stage.config.get('images').set(image.name);
+                }
+                stage.config.get('images').get(image.name).set('x', image.x);
+				stage.config.get('images').get(image.name).set('y', image.y);
+                stage.config.get('images').get(image.name).set('size', image.sizeMultiplier);
+            }
+            trace(stage.config);
+			var renderedYaml = new YamlRender(stage.config);
+			SysFile.writeToFile(stage.configPath, renderedYaml.daFinalYAML);
+		}
+	}
 
 	var curTab:Int = 0;
 

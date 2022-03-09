@@ -85,9 +85,16 @@ class AnimationDebug extends FlxState {
 
 			charO = bfO;
 		}
+
+		if (char.config.exists("flipX")) {
+			char.flipX = char.config.get("flipX");
+			charO.flipX = char.config.get("flipX");
+		}
 		
-		char.flipX = reloadFlipX;
-		charO.flipX = reloadFlipX;
+		if (reload) {
+			char.flipX = reloadFlipX;
+			charO.flipX = reloadFlipX;
+		}
 		
 		charO.alpha = 0.0;
 
@@ -282,7 +289,7 @@ class AnimationDebug extends FlxState {
 	function saveConfig() {
 		if (char.config != null) {
 			char.config.set('flipX', char.flipX);
-			if (char.config.get('animations') == null) {
+			if (!char.config.exists('animations')) {
 				char.config.set('animations', new AnyObjectMap());
 			}
 			var map:AnyObjectMap = char.config.get('animations');

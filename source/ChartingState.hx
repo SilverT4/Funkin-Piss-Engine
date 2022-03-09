@@ -146,11 +146,9 @@ class ChartingState extends MusicBeatState {
 			_song = PlayState.SONG;
 		} else {
 			_song = song;
+			this.daSongName = daSongName;
 		}
-		this.daSongName = daSongName;
-	}
-
-	override function create() {
+		
 		if (_song == null) {
 			_song = {
 				song: 'Test',
@@ -167,8 +165,15 @@ class ChartingState extends MusicBeatState {
 			if (daSongName != null) {
 				_song.song = daSongName;
 			}
+			Paths.setCurrentLevel("week-1");
+			PlayState.stage = new Stage(_song.stage);
+			PlayState.SONG = _song;
 		}
+		
+		trace(_song);
+	}
 
+	override function create() {
 		curSection = lastSection;
 
 		bg = new FlxSprite().loadGraphic(Paths.image('menuDesat'));
@@ -923,25 +928,30 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function updateHeads():Void {
-		if (_song.notes[curSection].mustHitSection) {
-			leftIcon.setChar(_song.player1);
-			rightIcon.setChar(_song.player2);
-			bg.color = FlxColor.fromString("#31B0D1");
+		if (_song.notes[curSection] != null) {
+			if (_song.notes[curSection].mustHitSection) {
+				leftIcon.setChar(_song.player1);
+				rightIcon.setChar(_song.player2);
+				bg.color = FlxColor.fromString("#31B0D1");
+			}
+			else {
+				leftIcon.setChar(_song.player2);
+				rightIcon.setChar(_song.player1);
+				bg.color = FlxColor.fromString("#AF66CE");
+			}
+	
+			leftIcon.scrollFactor.set(1, 1);
+			rightIcon.scrollFactor.set(1, 1);
+	
+			leftIcon.setGraphicSize(0, 45);
+			rightIcon.setGraphicSize(0, 45);
+	
+			leftIcon.setPosition(gridBG.x + GRID_SIZE, -100);
+			rightIcon.setPosition((gridBG.width / 2) + gridBG.x + (GRID_SIZE / 2), -100);
+		} else {
+			leftIcon.visible = false;
+			rightIcon.visible = false;
 		}
-		else {
-			leftIcon.setChar(_song.player2);
-			rightIcon.setChar(_song.player1);
-			bg.color = FlxColor.fromString("#AF66CE");
-		}
-
-		leftIcon.scrollFactor.set(1, 1);
-		rightIcon.scrollFactor.set(1, 1);
-
-		leftIcon.setGraphicSize(0, 45);
-		rightIcon.setGraphicSize(0, 45);
-
-		leftIcon.setPosition(gridBG.x + GRID_SIZE, -100);
-		rightIcon.setPosition((gridBG.width / 2) + gridBG.x + (GRID_SIZE / 2), -100);
 	}
 
 	function updateNoteUI():Void {

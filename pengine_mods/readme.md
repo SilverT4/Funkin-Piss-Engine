@@ -6,7 +6,7 @@ You can add custom songs to the game!
 To add a song: 
 1. Create a folder in a songs folder with a name of your song.
 2. Add Inst.ogg and Voices.ogg (optionally) to this folder.
-3. When you finish go to freeplay menu and select your song,
+3. When you finish go to freeplay menu and select your song, it will send you to chart editor if there's no data
 
 To create a data for the song:
 1. Go to your song select the difficulty and it will send you to the chart editor

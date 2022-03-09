@@ -1,5 +1,6 @@
 package;
 
+import flixel.tweens.FlxTween;
 import flixel.FlxObject;
 import flixel.FlxSprite;
 import flixel.math.FlxMath;
@@ -11,6 +12,9 @@ import llua.LuaL;
 import llua.State;
 
 class LuaShit {
+
+    // lua is currently not finished but it works good for camera zooming and other simple stuff
+
     var lua:State;
     public function new(luaPath:String) {
         lua = LuaL.newstate();
@@ -72,9 +76,14 @@ class LuaShit {
             return Reflect.field(PlayState, object);
         });
 
-        // Sets the health
-        Lua_helper.add_callback(lua, "setHealth", function(object:String, value:Dynamic) {
-            Reflect.setField(PlayState, object, value);
+        // Sets the player's health
+        Lua_helper.add_callback(lua, "setHealth", function(value:Float) {
+            Reflect.setField(PlayState, "health", value);
+        });
+
+        // Returns player's health
+        Lua_helper.add_callback(lua, "getHealth", function() {
+            return Reflect.field(PlayState, "health");
         });
 
         // Sets the camera position
@@ -86,6 +95,48 @@ class LuaShit {
             }
 		});
 
+        // Tweens the variable
+        Lua_helper.add_callback(lua, "tweenVariable", function(object:String, value:Float = 0, duration:Float = 1) {
+            FlxTween.num(Reflect.field(PlayState, object), value, duration, null, f -> Reflect.setField(PlayState, object, f));
+        });
+
+        // Tweens the cam angle
+        Lua_helper.add_callback(lua, "tweenCamAngle", function(cam:String, value:Float = 0, duration:Float = 1) {
+            if (cam == "hud") {
+                FlxTween.num(PlayState.camHUD.angle, value, duration, null, f -> PlayState.camHUD.angle = f);
+            } else if (cam == "game") {
+                FlxTween.num(PlayState.camGame.angle, value, duration, null, f -> PlayState.camGame.angle = f);
+            }
+        });
+
+        // Tweens the cam zoom
+        Lua_helper.add_callback(lua, "tweenCamZoom", function(cam:String, value:Float = 0, duration:Float = 1) {
+            if (cam == "hud") {
+                FlxTween.num(PlayState.camHUD.zoom, value, duration, null, f -> PlayState.camHUD.zoom = f);
+            } else if (cam == "game") {
+                FlxTween.num(PlayState.camZoom, value, duration, null, f -> PlayState.camZoom = f);
+            }
+        });
+
+        // Sets the camera angle
+        Lua_helper.add_callback(lua, "setCamAngle", function(cam:String, angle:Float = 0) {
+            if (cam == "hud") {
+                PlayState.camHUD.angle = angle;
+            } else if (cam == "game") {
+                PlayState.camGame.angle = angle;
+            }
+        });
+
+        // Returns the camera angle
+        Lua_helper.add_callback(lua, "getCamAngle", function(cam:String) {
+            if (cam == "hud") {
+                return PlayState.camHUD.angle;
+            } else if (cam == "game") {
+                return PlayState.camGame.angle;
+            }
+            return 0;
+        });
+
         // Sets the camera zoom
         Lua_helper.add_callback(lua, "setCamZoom", function(cam:String, zoom:Float = 0) {
             if (cam == "hud") {
@@ -94,6 +145,16 @@ class LuaShit {
                 PlayState.tweenCamZoom(zoom);
             }
 		});
+
+        // Return the camera zoom
+        Lua_helper.add_callback(lua, "getCamZoom", function(cam:String) {
+            if (cam == "hud") {
+                return PlayState.camHUD.zoom;
+            } else if (cam == "game") {
+                return PlayState.camZoom;
+            }
+            return 0;
+        });
 
         // Makes camera do very epic effect (i killed 20 children in africa)
         Lua_helper.add_callback(lua, "shakeCamera", function(cam:String, intensity:Float = 0, duration:Float = 0) {

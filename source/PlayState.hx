@@ -63,8 +63,7 @@ class PlayState extends MusicBeatState {
 
 	public var gfSpeed:Int = 1;
 
-	//why this variable breaks when you change it to static lmao
-	public var health:Float = 1;
+	public static var health:Float = 1;
 	public var combo:Int = 0;
 
 	private var bgDimness:FlxSprite;
@@ -126,6 +125,8 @@ class PlayState extends MusicBeatState {
 	#end
 
 	override public function create() {
+		health = 1;
+
 		if (FlxG.sound.music != null)
 			FlxG.sound.music.stop();
 
@@ -463,10 +464,8 @@ class PlayState extends MusicBeatState {
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
 
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this,
-			'health', 0, 2);
+		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), PlayState, "health", 0, 2);
 		healthBar.scrollFactor.set();
-		// TODO this shit
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		// healthBar
 		add(healthBar);

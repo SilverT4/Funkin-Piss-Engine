@@ -62,12 +62,12 @@ class LuaShit {
             daSprite.setPosition(x, y);
         });
 
-        // Sets some variable in playstate
+        // Sets some variable from playstate
         Lua_helper.add_callback(lua, "setVariable", function(object:String, value:Dynamic) {
             Reflect.setField(PlayState, object, value);
         });
 
-        // Returns some variable in playstate
+        // Returns some variable from playstate
         Lua_helper.add_callback(lua, "getVariable", function(object:String) {
             return Reflect.field(PlayState, object);
         });

@@ -1,6 +1,5 @@
 package;
 
-import haxe.macro.Expr.Function;
 import flixel.FlxSprite;
 
 using StringTools;

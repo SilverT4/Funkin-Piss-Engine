@@ -774,6 +774,8 @@ class PlayState extends MusicBeatState {
 			gf.dance();
 			bf.playAnim('idle');
 
+			var curNoteAsset:String = "default";
+
 			var introAssets:Map<String, Array<String>> = new Map<String, Array<String>>();
 			introAssets.set('default', ['ready', "set", "go"]);
 			introAssets.set('school', ['pixelUI/ready-pixel', 'pixelUI/set-pixel', 'pixelUI/date-pixel']);
@@ -787,6 +789,13 @@ class PlayState extends MusicBeatState {
 					introAlts = introAssets.get(value);
 					altSuffix = '-pixel';
 				}
+			}
+
+			if (introAssets.exists(stage.stage)) {
+				curNoteAsset = stage.stage;
+			} 
+			else {
+				curNoteAsset = "default";
 			}
 
 			switch (swagCounter) {
@@ -833,22 +842,33 @@ class PlayState extends MusicBeatState {
 					FlxG.sound.play(Paths.sound('intro1'), 0.6);
 				case 3:
 					scoreTxt.alpha = 1;
-					var go:FlxSprite = new FlxSprite().loadGraphic(Paths.image(introAlts[2], "shared"));
+					var go:FlxSprite = new FlxSprite();
+					trace(curNoteAsset);
+					if (curNoteAsset == "default") {
+						go.loadGraphic(Paths.image(introAlts[2], "shared"), true, 558, 430);
+						go.animation.add("go", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 24, false);
+						go.animation.play("go");
+						go.animation.finishCallback = function(h) {go.kill();};
+					} else {
+						go.loadGraphic(Paths.image(introAlts[2], "shared"));
+					}
 					go.scrollFactor.set();
-
 					if (stage.stage.startsWith('school'))
 						go.setGraphicSize(Std.int(go.width * daPixelZoom));
 
 					go.updateHitbox();
-
 					go.screenCenter();
 					add(go);
-					FlxTween.tween(go, {y: go.y += 100, alpha: 0}, Conductor.crochet / 1000, {
-						ease: FlxEase.cubeInOut,
-						onComplete: function(twn:FlxTween) {
-							go.destroy();
-						}
-					});
+
+					if (curNoteAsset != "default") {
+						FlxTween.tween(go, {y: go.y += 100, alpha: 0}, Conductor.crochet / 1000, {
+							ease: FlxEase.cubeInOut,
+							onComplete: function(twn:FlxTween) {
+								go.destroy();
+							}
+						});
+					}
+					
 					FlxG.sound.play(Paths.sound('introGo'), 0.6);
 				case 4:
 					timeLeftText.alpha = 1;

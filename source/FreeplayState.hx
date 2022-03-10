@@ -61,7 +61,7 @@ class FreeplayState extends MusicBeatState {
 
 		#if desktop
 		// Updating Discord Rich Presence
-		DiscordClient.changePresence("In the Menus", null);
+		DiscordClient.changePresence("In Freeplay", null);
 		#end
 
 		var isDebug:Bool = false;

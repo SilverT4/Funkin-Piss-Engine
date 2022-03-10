@@ -13,7 +13,7 @@ import llua.State;
 
 class LuaShit {
 
-    // lua is currently not finished but it works good for camera zooming and other simple stuff
+    // lua is currently not finished
 
     var lua:State;
     public function new(luaPath:String) {

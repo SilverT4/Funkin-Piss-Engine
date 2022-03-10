@@ -26,7 +26,7 @@ haxelib install linc_luajit
 * Dialogue Cutscenes
 * Lua Support
 * And some fixes to Vanilla
-## Credits / Special Thanks
+## Credits
 ### PEngine
 - [Paidyy](https://paidyy.newgrounds.com/) - PEngine Programmer
 ### Special Thanks

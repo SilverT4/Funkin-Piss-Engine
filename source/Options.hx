@@ -5,11 +5,29 @@ import flixel.math.FlxPoint;
 import flixel.util.FlxSave;
 
 class Options {
+	//when adding new option place it here so it will load and save
+	private static var saveList = [
+		"masterVolume",
+		"ghostTapping",
+		"bgDimness",
+		"framerate",
+		"controls",
+		"discordRPC",
+		"customGf",
+		"customGfPath",
+		"customBf",
+		"customBfPath",
+		"customDad",
+		"customDadPath"
+	];
+
 	// MAIN
 	public static var masterVolume:Float = 1;
 	public static var ghostTapping = true;
 	public static var bgDimness:Float = 0.0;
 	public static var framerate:Int = 145;
+	public static var controls = "ASWD";
+	public static var discordRPC:Bool = true;
 
 	// SKINS
 	public static var customGf = false;
@@ -18,58 +36,61 @@ class Options {
 	public static var customBfPath = "";
 	public static var customDad = false;
 	public static var customDadPath = "";
-	public static var controls = "ASWD";
 
 	public static function startupSaveScript() {
 		optionsSave = new FlxSave();
 		optionsSave.bind("options");
+		saveAndLoadAll();
 		#if debug
 		trace("Options Data: " + optionsSave.data);
 		#end
-		if (optionsSave.data == "{ }") {
-			saveAll();
+	}
+
+	public static function exists(variable):Dynamic {
+		if (get(variable) != null) {
+			return true;
 		}
+		return false;
+	}
+
+	public static function get(variable):Dynamic {
+		return Reflect.field(optionsSave.data, variable);
+	}
+
+	public static function set(variable, value) {
+		Reflect.setField(optionsSave.data, variable, value);
+	}
+
+	public static function saveFile() {
+		optionsSave.flush();
+	}
+
+	public static function saveAndLoadAll() {
+		for (i in 0...saveList.length) {
+			if (!exists(saveList[i])) {
+				set(saveList[i], Reflect.field(Options, saveList[i]));
+			}
+		}
+		saveFile();
 		loadAll();
 	}
 
 	public static function saveAll() {
-		optionsSave.data.masterVolume = masterVolume;
-		optionsSave.data.ghostTapping = ghostTapping;
-		optionsSave.data.bgDimness = bgDimness;
-		optionsSave.data.framerate = framerate;
-
-		optionsSave.data.customGf = customGf;
-		optionsSave.data.customGfPath = customGfPath;
-		optionsSave.data.customBf = customBf;
-		optionsSave.data.customBfPath = customBfPath;
-		optionsSave.data.customDad = customDad;
-		optionsSave.data.customDadPath = customDadPath;
-		optionsSave.data.controls = controls;
-
-		optionsSave.flush();
+		for (i in 0...saveList.length) {
+			set(saveList[i], Reflect.field(Options, saveList[i]));
+		}
+		saveFile();
 	}
 
 	public static function loadAll() {
-		masterVolume = optionsSave.data.masterVolume;
-		ghostTapping = optionsSave.data.ghostTapping;
-		bgDimness = optionsSave.data.bgDimness;
-		framerate = optionsSave.data.framerate;
-
-		customGf = optionsSave.data.customGf;
-		customGfPath = optionsSave.data.customGfPath;
-		customBf = optionsSave.data.customBf;
-		customBfPath = optionsSave.data.customBfPath;
-		customDad = optionsSave.data.customDad;
-		customDadPath = optionsSave.data.customDadPath;
-		controls = optionsSave.data.controls;
+		for (i in 0...saveList.length) {
+			Reflect.setField(Options, saveList[i], get(saveList[i]));
+		}
 	}
 
 	public static function applyAll() {
 		FlxG.updateFramerate = framerate;
 		FlxG.drawFramerate = framerate;
-		Options.framerate = framerate;
-		Options.bgDimness = bgDimness;
-		Options.ghostTapping = ghostTapping;
 		PlayerSettings.player1.controls.bindFromSettings(true);
 	}
 

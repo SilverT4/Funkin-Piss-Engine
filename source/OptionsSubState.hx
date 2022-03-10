@@ -17,9 +17,10 @@ class OptionsSubState extends FlxSubState {
 		'Ghost Tapping: ' + Options.ghostTapping,
 		'FPS Limit: ' + Options.framerate,
 		'Background Dimness: ' + Options.bgDimness,
+		'Discord Rich Presence: ' + Options.discordRPC,
 		'BF Skin',
 		'GF Skin',
-		'Dad Skin'
+		'Dad Skin',
 	];
 
 	var selector:FlxSprite;
@@ -90,114 +91,107 @@ class OptionsSubState extends FlxSubState {
 			curSelected += 1;
 		}
 
-		if (controls.LEFT_P) {
-			if (textMenuItems[curSelected].startsWith("FPS Limit")) {
-				if (Options.framerate > 5) {
-					Options.framerate -= 5;
+		if (controls.RIGHT_P || controls.LEFT_P) {
+			if (controls.LEFT_P) {
+				if (textMenuItems[curSelected].startsWith("FPS Limit")) {
+					if (Options.framerate > 5) {
+						Options.framerate -= 5;
+					}
+					textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
 				}
-				textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
+				else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
+					switch (Options.bgDimness) {
+						case 0.1:
+							Options.bgDimness = 0.0;
+						case 0.2:
+							Options.bgDimness = 0.1;
+						case 0.3:
+							Options.bgDimness = 0.2;
+						case 0.4:
+							Options.bgDimness = 0.3;
+						case 0.5:
+							Options.bgDimness = 0.4;
+						case 0.6:
+							Options.bgDimness = 0.5;
+						case 0.7:
+							Options.bgDimness = 0.6;
+						case 0.8:
+							Options.bgDimness = 0.7;
+						case 0.9:
+							Options.bgDimness = 0.8;
+						case 1.0:
+							Options.bgDimness = 0.9;
+					}
+					textMenuItems[curSelected] = "Background Dimness: " + Options.bgDimness;
+				}
+	
+				else if (textMenuItems[curSelected].startsWith("Controls: ")) {
+					if (Options.controls == "ASWD") {
+						Options.controls = "DFJK";
+					}
+					else {
+						Options.controls = "ASWD";
+					}
+					textMenuItems[curSelected] = "Controls: " + Options.controls;
+				}
 			}
-			else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
-				switch (Options.bgDimness) {
-					case 0.1:
-						Options.bgDimness = 0.0;
-					case 0.2:
-						Options.bgDimness = 0.1;
-					case 0.3:
-						Options.bgDimness = 0.2;
-					case 0.4:
-						Options.bgDimness = 0.3;
-					case 0.5:
-						Options.bgDimness = 0.4;
-					case 0.6:
-						Options.bgDimness = 0.5;
-					case 0.7:
-						Options.bgDimness = 0.6;
-					case 0.8:
-						Options.bgDimness = 0.7;
-					case 0.9:
-						Options.bgDimness = 0.8;
-					case 1.0:
-						Options.bgDimness = 0.9;
+	
+			if (controls.RIGHT_P) {
+				if (textMenuItems[curSelected].startsWith("FPS Limit")) {
+					if (Options.framerate < 240)
+						Options.framerate += 5;
+					textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
 				}
-				textMenuItems[curSelected] = "Background Dimness: " + Options.bgDimness;
-			}
-			else if (textMenuItems[curSelected].startsWith("Ghost Tapping")) {
-				if (Options.ghostTapping == true) {
-					Options.ghostTapping = false;
+				else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
+					switch (Options.bgDimness) {
+						case 0.0:
+							Options.bgDimness = 0.1;
+						case 0.1:
+							Options.bgDimness = 0.2;
+						case 0.2:
+							Options.bgDimness = 0.3;
+						case 0.3:
+							Options.bgDimness = 0.4;
+						case 0.4:
+							Options.bgDimness = 0.5;
+						case 0.5:
+							Options.bgDimness = 0.6;
+						case 0.6:
+							Options.bgDimness = 0.7;
+						case 0.7:
+							Options.bgDimness = 0.8;
+						case 0.8:
+							Options.bgDimness = 0.9;
+						case 0.9:
+							Options.bgDimness = 1.0;
+					}
+					textMenuItems[curSelected] = "Background Dimness: " + Options.bgDimness;
 				}
-				else {
-					Options.ghostTapping = true;
+				
+				else if (textMenuItems[curSelected].startsWith("Controls: ")) {
+					if (Options.controls == "ASWD") {
+						Options.controls = "DFJK";
+					}
+					else {
+						Options.controls = "ASWD";
+					}
+					textMenuItems[curSelected] = "Controls: " + Options.controls;
 				}
-				textMenuItems[curSelected] = "Ghost Tapping: " + Options.ghostTapping;
 			}
 
-			else if (textMenuItems[curSelected].startsWith("Controls: ")) {
-				if (Options.controls == "ASWD") {
-					Options.controls = "DFJK";
-				}
-				else {
-					Options.controls = "ASWD";
-				}
-				textMenuItems[curSelected] = "Controls: " + Options.controls;
+			if (textMenuItems[curSelected].startsWith("Ghost Tapping")) {
+				Options.ghostTapping = !Options.ghostTapping;
+				textMenuItems[curSelected] = "Ghost Tapping: " + Options.ghostTapping;
 			}
+			else if (textMenuItems[curSelected].startsWith("Discord Rich Presence: ")) {
+				Options.discordRPC = !Options.discordRPC;
+				textMenuItems[curSelected] = "Discord Rich Presence: " + Options.discordRPC;
+			}
+
 			Options.saveAll();
 			updateMenu();
 		}
 
-		if (controls.RIGHT_P) {
-			if (textMenuItems[curSelected].startsWith("FPS Limit")) {
-				if (Options.framerate < 240)
-					Options.framerate += 5;
-				textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
-			}
-			else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
-				switch (Options.bgDimness) {
-					case 0.0:
-						Options.bgDimness = 0.1;
-					case 0.1:
-						Options.bgDimness = 0.2;
-					case 0.2:
-						Options.bgDimness = 0.3;
-					case 0.3:
-						Options.bgDimness = 0.4;
-					case 0.4:
-						Options.bgDimness = 0.5;
-					case 0.5:
-						Options.bgDimness = 0.6;
-					case 0.6:
-						Options.bgDimness = 0.7;
-					case 0.7:
-						Options.bgDimness = 0.8;
-					case 0.8:
-						Options.bgDimness = 0.9;
-					case 0.9:
-						Options.bgDimness = 1.0;
-				}
-				textMenuItems[curSelected] = "Background Dimness: " + Options.bgDimness;
-			}
-			else if (textMenuItems[curSelected].startsWith("Ghost Tapping")) {
-				if (Options.ghostTapping == true) {
-					Options.ghostTapping = false;
-				}
-				else {
-					Options.ghostTapping = true;
-				}
-				textMenuItems[curSelected] = "Ghost Tapping: " + Options.ghostTapping;
-			}
-			
-			else if (textMenuItems[curSelected].startsWith("Controls: ")) {
-				if (Options.controls == "ASWD") {
-					Options.controls = "DFJK";
-				}
-				else {
-					Options.controls = "ASWD";
-				}
-				textMenuItems[curSelected] = "Controls: " + Options.controls;
-			}
-			Options.saveAll();
-			updateMenu();
-		}
 		if (FlxG.keys.justPressed.ESCAPE) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MainMenuState.selectedSomethin = false;

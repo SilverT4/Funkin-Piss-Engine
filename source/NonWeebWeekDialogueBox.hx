@@ -74,6 +74,9 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 		box.updateHitbox();
 		box.y = FlxG.height - box.frameHeight;
 		box.scrollFactor.set();
+		if (dialogueList[0].contains(":dad:")) {
+			box.flipX = true;
+		}
 		add(box);
 
 		box.screenCenter(X);
@@ -145,6 +148,7 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 			remove(theDialog);
 
 		// this adds breaks to text so you dont have to lazy bitch
+		// also needs to be rewritten
 		var textLength = 0;
 		var num = -1;
 		var dialogueWords = dialogueList[0].split(" ");
@@ -159,7 +163,11 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 		}
 		dialogueList[0] = "";
 		for (s in dialogueWords) {
-			dialogueList[0] += s + " ";
+			if (s.endsWith("\n")) {
+				dialogueList[0] += s;
+			} else {
+				dialogueList[0] += s + " ";
+			}
 		}
 
 		theDialog = new Alphabet(box.x - 20, 420, dialogueList[0], false, true, 0.7);

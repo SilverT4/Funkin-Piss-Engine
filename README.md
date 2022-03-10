@@ -23,7 +23,7 @@ haxelib install linc_luajit
 * Week 7 Ported with Week 7 and Note Splashes
 * Custom Skins
 * Configs are in YAML instead of JSON so it is easier to read them
-* Dialogue Cutscenes
+* Dialogue Cutscenes (not finished)
 * Lua Support
 * And some fixes to Vanilla
 ## Credits

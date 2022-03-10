@@ -48,6 +48,7 @@ class CoolUtil {
 
 		for (i in 0...daList.length) {
 			daList[i] = daList[i].trim();
+			daList[i] = daList[i].replace('\\n', '\n');
 		}
 
 		return daList;

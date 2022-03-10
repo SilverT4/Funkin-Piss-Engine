@@ -169,8 +169,6 @@ class ChartingState extends MusicBeatState {
 			PlayState.stage = new Stage(_song.stage);
 			PlayState.SONG = _song;
 		}
-		
-		trace(_song);
 	}
 
 	override function create() {

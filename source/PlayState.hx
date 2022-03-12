@@ -409,7 +409,7 @@ class PlayState extends MusicBeatState {
 		doof.scrollFactor.set();
 		doof.finishThing = startCountdown;
 
-		var db:NonWeebWeekDialogueBox = new NonWeebWeekDialogueBox(dialogue);
+		var db = new NonWeebWeekDialogueBox(dialogue);
 		// db.x += 70;
 		// db.y = FlxG.height * 0.5;
 		db.scrollFactor.set();
@@ -452,19 +452,30 @@ class PlayState extends MusicBeatState {
 		FlxG.fixedTimestep = false;
 
 		timeLeftText = new FlxText(0, FlxG.height * 0.03, 0, "0:00", 69);
-		timeLeftText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE);
-		timeLeftText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		if (stage.stage.startsWith('school')) {
+			timeLeftText.setFormat(Paths.font("pixel.otf"), 32 - 6, FlxColor.WHITE);
+			timeLeftText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.fromString("#404047"), 3);
+		}
+		else {
+			timeLeftText.setFormat(Paths.font("vcr.ttf"), 32, FlxColor.WHITE);
+			timeLeftText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 3);
+		}
 		timeLeftText.antialiasing = true;
 		timeLeftText.screenCenter(X);
 		timeLeftText.scrollFactor.set();
 		add(timeLeftText);
-
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9 - 5).loadGraphic(Paths.image('healthBar'));
+		if (stage.stage.startsWith('school'))
+			healthBarBG = new FlxSprite(0, FlxG.height * 0.9 - 5).loadGraphic(Paths.image('pixelUI/healthBar-pixel'));
+		else
+			healthBarBG = new FlxSprite(0, FlxG.height * 0.9 - 5).loadGraphic(Paths.image('healthBar'));
 		healthBarBG.screenCenter(X);
 		healthBarBG.scrollFactor.set();
 		add(healthBarBG);
 
-		healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), PlayState, "health", 0, 2);
+		if (stage.stage.startsWith('school'))
+			healthBar = new FlxBar(healthBarBG.x + 8, healthBarBG.y + 8, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 16), Std.int(healthBarBG.height - 16), PlayState, "health", 0, 2);
+		else
+			healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), PlayState, "health", 0, 2);
 		healthBar.scrollFactor.set();
 		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		// healthBar
@@ -478,8 +489,14 @@ class PlayState extends MusicBeatState {
 		add(sub);
 
 		scoreTxt = new FlxText(0, FlxG.height * 0.9 + 40, 0, "", 20);
-		scoreTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE);
-		scoreTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		if (stage.stage.startsWith('school')) {
+			scoreTxt.setFormat(Paths.font("pixel.otf"), 24 - 6, FlxColor.WHITE);
+			scoreTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.fromString("#404047"), 3);
+		}
+		else {
+			scoreTxt.setFormat(Paths.font("vcr.ttf"), 24, FlxColor.WHITE);
+			scoreTxt.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+		}
 		scoreTxt.antialiasing = true;
 		scoreTxt.scrollFactor.set();
 		scoreTxt.screenCenter(X);
@@ -846,7 +863,7 @@ class PlayState extends MusicBeatState {
 					trace(curNoteAsset);
 					if (curNoteAsset == "default") {
 						go.loadGraphic(Paths.image(introAlts[2], "shared"), true, 558, 430);
-						go.animation.add("go", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 24, false);
+						go.animation.add("go", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13], 48, false);
 						go.animation.play("go");
 						go.animation.finishCallback = function(h) {go.kill();};
 					} else {
@@ -1443,6 +1460,9 @@ class PlayState extends MusicBeatState {
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
 		super.update(elapsed);
+
+		if (curBeat == 25 && curSong.toLowerCase() == "winter-horrorland")
+			iconP2.alpha = 1;
 
 		//TIME LEFT!
 		timeLeftText.text = FlxStringUtil.formatTime(Math.round(FlxG.sound.music.length / 1000) - Math.round(FlxG.sound.music.time / 1000));

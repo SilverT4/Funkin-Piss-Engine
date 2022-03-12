@@ -34,61 +34,63 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 	public function new(?dialogueList:Array<String>) {
 		super();
 
-		box = new FlxSprite(0, 45);
+		if (dialogueList != null) {
+			box = new FlxSprite(0, 45);
 
-		var hasDialog = false;
-
-		hasDialog = true;
-		box.frames = Paths.getSparrowAtlas('dialogue/speech_bubble_talking');
-		box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
-		box.animation.addByIndices('normal', 'speech bubble normal', [0, 5, 10, 15], "", 6);
-		box.setGraphicSize(Std.int(box.width * 0.9));
-
-		this.dialogueList = dialogueList;
-
-		if (!hasDialog)
-			return;
-
-		/*
-			portraitLeft = new FlxSprite(-20, 40);
-			portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait');
-			portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
-			portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
-			portraitLeft.updateHitbox();
-			portraitLeft.scrollFactor.set();
-			add(portraitLeft);
-			portraitLeft.visible = false;
-
-			portraitRight = new FlxSprite(0, 40);
-			portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait');
-			portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
-			portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
-			portraitRight.updateHitbox();
-			portraitRight.scrollFactor.set();
-			add(portraitRight);
-			portraitRight.visible = false;
-		 */
-
-		box.animation.play('normalOpen');
-		// box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
-		box.updateHitbox();
-		box.y = FlxG.height - box.frameHeight;
-		box.scrollFactor.set();
-		if (dialogueList[0].contains(":dad:")) {
-			box.flipX = true;
+			var hasDialog = false;
+	
+			hasDialog = true;
+			box.frames = Paths.getSparrowAtlas('dialogue/speech_bubble_talking');
+			box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
+			box.animation.addByIndices('normal', 'speech bubble normal', [0, 5, 10, 15], "", 6);
+			box.setGraphicSize(Std.int(box.width * 0.9));
+	
+			this.dialogueList = dialogueList;
+	
+			if (!hasDialog)
+				return;
+	
+			/*
+				portraitLeft = new FlxSprite(-20, 40);
+				portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait');
+				portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
+				portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+				portraitLeft.updateHitbox();
+				portraitLeft.scrollFactor.set();
+				add(portraitLeft);
+				portraitLeft.visible = false;
+	
+				portraitRight = new FlxSprite(0, 40);
+				portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait');
+				portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
+				portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
+				portraitRight.updateHitbox();
+				portraitRight.scrollFactor.set();
+				add(portraitRight);
+				portraitRight.visible = false;
+			 */
+	
+			box.animation.play('normalOpen');
+			// box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
+			box.updateHitbox();
+			box.y = FlxG.height - box.frameHeight;
+			box.scrollFactor.set();
+			if (dialogueList[0].contains(":dad:")) {
+				box.flipX = true;
+			}
+			add(box);
+	
+			box.screenCenter(X);
+			box.x += 40;
+			// portraitLeft.screenCenter(X);
+	
+			dialogue = new Alphabet(0, 80, "", false, true);
+			// dialogue.x = 90;
+			// add(dialogue);
+	
+			// set this state camera to camStatic
+			cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 		}
-		add(box);
-
-		box.screenCenter(X);
-		box.x += 40;
-		// portraitLeft.screenCenter(X);
-
-		dialogue = new Alphabet(0, 80, "", false, true);
-		// dialogue.x = 90;
-		// add(dialogue);
-
-		// set this state camera to camStatic
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
 	}
 
 	var dialogueOpened:Bool = false;

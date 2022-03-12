@@ -497,10 +497,10 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function onNewStep() {
-		if (curStep % 4 == 0) {
+		if (curStep % 16 == 0) {
 			FlxG.sound.play(Paths.sound('Metronome1'));
 		}
-		else if (curStep % 2 == 0) {
+		else if (curStep % 4 == 0) {
 			FlxG.sound.play(Paths.sound('Metronome2'));
 		}
 	}

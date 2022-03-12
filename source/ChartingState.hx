@@ -496,6 +496,15 @@ class ChartingState extends MusicBeatState {
 		UI_box.addGroup(tab_group_note);
 	}
 
+	function onNewStep() {
+		if (curStep % 4 == 0) {
+			FlxG.sound.play(Paths.sound('Metronome1'));
+		}
+		else if (curStep % 2 == 0) {
+			FlxG.sound.play(Paths.sound('Metronome2'));
+		}
+	}
+
 	function loadSong(daSong:String):Void {
 		if (FlxG.sound.music != null) {
 			FlxG.sound.music.stop();
@@ -842,7 +851,10 @@ class ChartingState extends MusicBeatState {
 				lastChange = Conductor.bpmChangeMap[i];
 		}
 
-		curStep = lastChange.stepTime + Math.floor((FlxG.sound.music.time - lastChange.songTime) / Conductor.stepCrochet);
+		if (curStep != lastChange.stepTime + Math.floor((FlxG.sound.music.time - lastChange.songTime) / Conductor.stepCrochet)) {
+			curStep = lastChange.stepTime + Math.floor((FlxG.sound.music.time - lastChange.songTime) / Conductor.stepCrochet);
+			onNewStep();
+		}
 		updateBeat();
 
 		return curStep;

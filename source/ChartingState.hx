@@ -227,6 +227,7 @@ class ChartingState extends MusicBeatState {
 
 		var tabs = [
 			{name: "Song", label: 'Song'},
+			{name: "Editor", label: 'Editor'},
 			{name: "Section", label: 'Section'},
 			{name: "Note", label: 'Note'}
 		];
@@ -239,6 +240,7 @@ class ChartingState extends MusicBeatState {
 		add(UI_box);
 
 		addSongUI();
+		addEditorUI();
 		addSectionUI();
 		addNoteUI();
 
@@ -336,17 +338,6 @@ class ChartingState extends MusicBeatState {
 
 		var opponentText = new FlxText(player2DropDown.x - 5, player2DropDown.y - 15, 0, "Opponent:");
 
-		var check_mute_inst = new FlxUICheckBox(player1DropDown.x, player1DropDown.y + 120, null, null, "Mute Instrumental (in editor)", 100);
-		check_mute_inst.checked = false;
-		check_mute_inst.callback = function() {
-			var vol:Float = 1;
-
-			if (check_mute_inst.checked)
-				vol = 0;
-
-			FlxG.sound.music.volume = vol;
-		};
-
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
 
@@ -359,7 +350,6 @@ class ChartingState extends MusicBeatState {
 
 		tab_group_song.add(UI_songTitle);
 		tab_group_song.add(check_voices);
-		tab_group_song.add(check_mute_inst);
 		tab_group_song.add(saveButton);
 		tab_group_song.add(reloadSong);
 		tab_group_song.add(reloadSongJson);
@@ -496,12 +486,47 @@ class ChartingState extends MusicBeatState {
 		UI_box.addGroup(tab_group_note);
 	}
 
+	var instVolume:FlxUINumericStepper;
+	var voicesVolume:FlxUINumericStepper;
+	var isMetronome = false;
+
+	function addEditorUI() {
+		var tab_group_editor = new FlxUI(null, UI_box);
+		tab_group_editor.name = 'Editor';
+
+		var metronome = new FlxUICheckBox(10, 10, null, null, "Metronome", 100);
+		metronome.checked = false;
+		metronome.callback = function() {
+			isMetronome = metronome.checked;
+		};
+
+		instVolume = new FlxUINumericStepper(10, metronome.height + metronome.y + 20, 0.1, FlxG.sound.music.volume, 0, 1.0, 1);
+		instVolume.value = FlxG.sound.music.volume;
+		instVolume.name = 'inst_volume';
+		var text1 = new FlxText(instVolume.x - 5, instVolume.y - 16, 0, "Instrumental Volume:");
+
+		voicesVolume = new FlxUINumericStepper(instVolume.x + instVolume.width + 70, instVolume.y, 0.1, vocals.volume, 0, 1.0, 1);
+		voicesVolume.value = vocals.volume;
+		voicesVolume.name = 'voices_volume';
+		var text2 = new FlxText(voicesVolume.x - 5, voicesVolume.y - 16, 0, "Voices Volume:");
+
+		tab_group_editor.add(instVolume);
+		tab_group_editor.add(voicesVolume);
+		tab_group_editor.add(text1);
+		tab_group_editor.add(text2);
+		tab_group_editor.add(metronome);
+
+		UI_box.addGroup(tab_group_editor);
+	}
+
 	function onNewStep() {
-		if (curStep % 16 == 0) {
-			FlxG.sound.play(Paths.sound('Metronome1'));
-		}
-		else if (curStep % 4 == 0) {
-			FlxG.sound.play(Paths.sound('Metronome2'));
+		if (isMetronome) {
+			if (curStep % 16 == 0) {
+				FlxG.sound.play(Paths.sound('Metronome1'));
+			}
+			else if (curStep % 4 == 0) {
+				FlxG.sound.play(Paths.sound('Metronome2'));
+			}
 		}
 	}
 
@@ -572,25 +597,26 @@ class ChartingState extends MusicBeatState {
 			var nums:FlxUINumericStepper = cast sender;
 			var wname = nums.name;
 			FlxG.log.add(wname);
-			if (wname == 'section_length') {
-				_song.notes[curSection].lengthInSteps = Std.int(nums.value);
-				updateGrid();
-			}
-			else if (wname == 'song_speed') {
-				_song.speed = nums.value;
-			}
-			else if (wname == 'song_bpm') {
-				tempBpm = Std.int(nums.value);
-				Conductor.mapBPMChanges(_song);
-				Conductor.changeBPM(Std.int(nums.value));
-			}
-			else if (wname == 'note_susLength') {
-				curSelectedNote[2] = nums.value;
-				updateGrid();
-			}
-			else if (wname == 'section_bpm') {
-				_song.notes[curSection].bpm = Std.int(nums.value);
-				updateGrid();
+			switch(wname) {
+				case 'section_length':
+					_song.notes[curSection].lengthInSteps = Std.int(nums.value);
+					updateGrid();
+				case 'song_speed':
+					_song.speed = nums.value;
+				case 'song_bpm':
+					tempBpm = Std.int(nums.value);
+					Conductor.mapBPMChanges(_song);
+					Conductor.changeBPM(Std.int(nums.value));
+				case 'note_susLength':
+					curSelectedNote[2] = nums.value;
+					updateGrid();
+				case 'section_bpm':
+					_song.notes[curSection].bpm = Std.int(nums.value);
+					updateGrid();
+				case 'inst_volume':
+					FlxG.sound.music.volume = instVolume.value;
+				case 'voices_volume':
+					vocals.volume = voicesVolume.value;
 			}
 		}
 

@@ -44,7 +44,7 @@ class HealthIcon extends FlxSprite {
 			case 'bf-christmas': curChar = "bf";
 			case 'bf-car': curChar = "bf";
 			case 'bf-holding-gf': curChar = "bf";
-			case 'bf-pixel': curChar = "bf";
+			case 'bf-pixel': curChar = "bf-pixel";
 			case 'senpai-angry': curChar = "senpai";
 			case 'parents-christmas': curChar = "parents";
 			case "pico-speaker": curChar = "pico";

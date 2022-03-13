@@ -1,5 +1,6 @@
 package;
 
+import multiplayer.Lobby.LobbySelectorState;
 #if desktop
 import Discord.DiscordClient;
 #end
@@ -26,7 +27,7 @@ class MainMenuState extends MusicBeatState {
 	#if !switch
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
 	#else
-	var optionShit:Array<String> = ['story mode', 'freeplay'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 	#end
 
 	var magenta:FlxSprite;
@@ -116,7 +117,11 @@ class MainMenuState extends MusicBeatState {
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 
-		if (!selectedSomethin) {			
+		if (!selectedSomethin) {
+			if (FlxG.keys.justPressed.M) {
+				FlxG.switchState(new LobbySelectorState());
+			}
+
 			if (controls.UP_P) {
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);

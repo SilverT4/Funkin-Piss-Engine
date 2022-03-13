@@ -1,6 +1,6 @@
 package;
 
-import yaml.util.ObjectMap.AnyObjectMap;
+import multiplayer.Server;
 import haxe.io.Path;
 import lime.utils.Assets;
 import yaml.Yaml;
@@ -35,6 +35,11 @@ class CoolUtil {
 			default:
 				return null;
 		}
+	}
+	
+	public static function clearMPlayers() {
+		Player1.clear();
+		Player2.clear();
 	}
 
 	public static function coolTextFile(path:String, ?modsFolder = false):Array<String> {

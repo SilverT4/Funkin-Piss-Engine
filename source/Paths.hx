@@ -1,15 +1,15 @@
 package;
 
-import flixel.graphics.tile.FlxGraphicsShader;
-import flixel.util.FlxColor;
-import flixel.FlxSprite;
-import openfl.display.BitmapData;
-import flixel.system.FlxAssets.FlxGraphicSource;
-import flixel.graphics.FlxGraphic;
-import lime.utils.Assets;
-import haxe.io.Path;
 import flixel.FlxG;
+import flixel.FlxSprite;
+import flixel.graphics.FlxGraphic;
 import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.graphics.tile.FlxGraphicsShader;
+import flixel.system.FlxAssets.FlxGraphicSource;
+import flixel.util.FlxColor;
+import haxe.io.Path;
+import lime.utils.Assets;
+import openfl.display.BitmapData;
 import openfl.utils.AssetType;
 import openfl.utils.Assets as OpenFlAssets;
 

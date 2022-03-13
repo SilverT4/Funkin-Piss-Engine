@@ -20,9 +20,6 @@
 	<!--These window settings apply to all targets-->
 	<window width="1280" height="720" fps="" background="#000000" hardware="true" vsync="false" antialiasing="4"/>
 
-	<!--HTML5-specific-->
-	<window if="html5" resizable="true" />
-
 	<!--Desktop-specific-->
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" vsync="false"/>
 
@@ -129,11 +126,13 @@
 
 	<!--In case you want to use the ui package-->
 	<haxelib name="flixel-ui" />
+
 	<haxelib name="faxe" if='switch'/>
 	<haxelib name="discord_rpc" if="desktop"/>
 	<haxelib name="openfl-webm" if="desktop"/>
 	<haxelib name="yaml"/>
 	<haxelib name="linc_luajit"/>
+	<haxelib name="udprotean" />
 	
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 

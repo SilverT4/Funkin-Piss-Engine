@@ -61,6 +61,11 @@ class Options {
 		Reflect.setField(optionsSave.data, variable, value);
 	}
 
+	public static function setAndSave(variable, value) {
+		Reflect.setField(optionsSave.data, variable, value);
+		saveFile();
+	}
+
 	public static function saveFile() {
 		optionsSave.flush();
 	}

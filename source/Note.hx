@@ -4,11 +4,12 @@ import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.math.FlxMath;
 import flixel.util.FlxColor;
+
+using StringTools;
 #if polymod
 import polymod.format.ParseRules.TargetSignatureElement;
 #end
 
-using StringTools;
 
 class Note extends FlxSprite {
 	public var strumTime:Float = 0;
@@ -199,7 +200,7 @@ class Note extends FlxSprite {
 	function noteAsset(?custom:Bool = false, ?name:String) {
 		if (custom == true && name != null) {
 			frames = Paths.getSparrowAtlas(name);
-		
+
 			animation.addByPrefix('greenScroll', 'green0');
 			animation.addByPrefix('redScroll', 'red0');
 			animation.addByPrefix('blueScroll', 'blue0');

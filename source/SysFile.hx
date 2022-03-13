@@ -6,6 +6,9 @@ import sys.FileSystem;
 import sys.io.File;
 #end
 
+// UNUSED BECAUSE NO MORE HTML5 
+// KEEPING IT BECAUSE YES
+
 class SysFile {
     public static function exists(path:String):Bool {
         #if sys

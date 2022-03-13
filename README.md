@@ -12,6 +12,7 @@ haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 haxelib install openfl-webm
 haxelib install yaml
 haxelib install linc_luajit
+haxelib install udprotean
 ```
 3. And to compile just type ```lime test windows -debug``` or ```lime test windows``` in current folder command line
 

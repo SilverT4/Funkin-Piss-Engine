@@ -1,6 +1,6 @@
 package;
 
-import multiplayer.Server;
+import multiplayer.Lobby;
 import haxe.io.Path;
 import lime.utils.Assets;
 import yaml.Yaml;
@@ -12,6 +12,38 @@ class CoolUtil {
 
 	public static function difficultyString():String {
 		return difficultyArray[PlayState.storyDifficulty];
+	}
+
+	public static function isStringInt(s:String) {
+		var splittedString = s.split("");
+		switch (splittedString[0]) {
+			case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0":
+				return true;
+		}
+		return false;
+	}
+
+	public static function stringToOgType(s:String):Dynamic {
+		//if is integer or float
+		if (isStringInt(s)) {
+			if (s.contains(".")) {
+				return Std.parseFloat(s);
+			} else {
+				return Std.parseInt(s);
+			}
+		}
+		//if is a bool
+		if (s == "true")
+			return true;
+		if (s == "false")
+			return false;
+
+		//if it is null
+		if (s == "null")
+			return null;
+
+		//else return the original string
+		return s;
 	}
 
 	public static function strToBool(s:String):Dynamic {

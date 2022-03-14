@@ -27,7 +27,9 @@ class Note extends FlxSprite {
 	public var action:String = "";
 	public var actionValue:String = "";
 
-	public var sickHitBot:Bool = false;
+	//DONT USE THAT I WAS STUPID
+	public var wasGoodHitButt:Bool = false;
+
 	public var canBeMissed:Bool = false;
 	public var isGoodNote:Bool = true;
 
@@ -282,23 +284,26 @@ class Note extends FlxSprite {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (mustPress) {
-			// The * 0.5 is so that it's easier to hit them too late, instead of too early
-			if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-				&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
-				canBeHit = true;
-			else
-				canBeHit = false;
-
-			if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
-				tooLate = true;
-		}
-		else {
+		// The * 0.5 is so that it's easier to hit them too late, instead of too early
+		if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
+			&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+			canBeHit = true;
+		else
 			canBeHit = false;
 
-			if (strumTime <= Conductor.songPosition)
-				wasGoodHit = true;
+		if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
+			tooLate = true;
+
+		if (!mustPress) {
+			if (PlayState.playAs == "bf") {
+				canBeHit = false;
+				if (strumTime <= Conductor.songPosition)
+					wasGoodHit = true;
+			}
 		}
+
+		if (strumTime <= Conductor.songPosition)
+			wasGoodHitButt = true;
 
 		if (tooLate) {
 			if (alpha > 0.3)

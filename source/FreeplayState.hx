@@ -330,7 +330,6 @@ class FreeplayState extends MusicBeatState {
 		trace(poop);
 
 		var customSong = false;
-
 		
 		if (SysFile.exists(Paths.instNoLib(songs[curSelected].songName))) {
 			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());

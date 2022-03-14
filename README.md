@@ -20,6 +20,7 @@ haxelib install udprotean
 ## Nice Stuff / Features
 * 6K Mania Support
 * Action Notes
+* Multiplayer (in very early phase)
 * Make mods without touching code
 * Week 7 Ported with Week 7 and Note Splashes
 * Custom Skins

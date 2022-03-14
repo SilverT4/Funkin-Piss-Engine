@@ -1,27 +1,12 @@
 package multiplayer;
 
+import multiplayer.Lobby;
 import flixel.FlxG;
 import haxe.io.Bytes;
 import udprotean.server.UDProteanClientBehavior;
 import udprotean.server.UDProteanServer;
 
 using StringTools;
-
-class Player1 {
-	public static var nick = "(unknown)";
-
-	public static function clear() {
-		nick = "(unknown)";
-	}
-}
-
-class Player2 {
-	public static var nick = "(unknown)";
-
-	public static function clear() {
-		nick = "(unknown)";
-	}
-}
 
 class Server extends UDProteanServer {
 
@@ -39,12 +24,13 @@ class Server extends UDProteanServer {
 
 				Lobby.player2.alpha = 1;
 				client.send(Bytes.ofString("P1::nick::" + Player1.nick));
+				client.send(Bytes.ofString("P1::ready::" + Player1.ready));
 			});
 			onClientDisconnected(client -> {
 				trace("Some Client Disconnected");
 
 				Lobby.player2.alpha = 0.4;
-				Player2.nick = "(unknown)";
+				Player2.clear();
 			});
 
 			while (true) {
@@ -55,6 +41,17 @@ class Server extends UDProteanServer {
 		});
 		#end
 	}
+
+	public function sendStringToCurClient(s:String) {
+		for (client in peers)
+			client.send(Bytes.ofString(s));
+    }
+
+	public function hasClients() {
+		if (peers.length > 0)
+			return true;
+		return false;
+    }
 }
 
 class ServerBehavior extends UDProteanClientBehavior {
@@ -69,37 +66,19 @@ class ServerBehavior extends UDProteanClientBehavior {
 
 		if (strMsg.contains("::")) {
 			var msgSplitted = strMsg.split("::");
+
+			var value = CoolUtil.stringToOgType(msgSplitted[2]);
 			
 			switch (msgSplitted[0]) {
 				case "P1":
-					Reflect.setField(Player1, msgSplitted[1], msgSplitted[2]);
+					Reflect.setField(Player1, msgSplitted[1], value);
 				case "P2":
-					Reflect.setField(Player2, msgSplitted[1], msgSplitted[2]);
+					Reflect.setField(Player2, msgSplitted[1], value);
+				case "NP":
+					PlayState.currentPlaystate.goodNoteHit(new Note( CoolUtil.stringToOgType(msgSplitted[1]), CoolUtil.stringToOgType(msgSplitted[2]) ), true);
 			}
 		}
-		switch (strMsg) {
-			/*
-			case "PW":
-				ServerState.upA.animation.play("upConfirm");
-			case "RW":
-				ServerState.upA.animation.play("greenScroll");
-			
-			case "PA":
-				ServerState.leftA.animation.play("leftConfirm");
-			case "RA":
-				ServerState.leftA.animation.play("purpleScroll");
-
-			case "PS":
-				ServerState.downA.animation.play("downConfirm");
-			case "RS":
-				ServerState.downA.animation.play("blueScroll");
-				
-			case "PD":
-				ServerState.rightA.animation.play("rightConfirm");
-			case "RD":
-				ServerState.rightA.animation.play("redScroll");
-			*/
-		}
+		trace(Player2.ready);
 	}
 
 	// Called after the connection handshake.

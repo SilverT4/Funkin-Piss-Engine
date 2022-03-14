@@ -1,8 +1,7 @@
 package multiplayer;
 
+import multiplayer.Lobby;
 import multiplayer.Lobby.LobbySelectorState;
-import multiplayer.Server.Player2;
-import multiplayer.Server.Player1;
 import flixel.FlxG;
 import haxe.io.Bytes;
 import udprotean.client.UDProteanClient;
@@ -22,6 +21,8 @@ class Client {
 
 			trace("Connected to a Server with IP: " + ip + " Port: " + port);
 
+			sendString('P2::nick::' + Player2.nick);
+
 			try {
 				while (true) {
 					client.update();
@@ -36,7 +37,6 @@ class Client {
     }
 
 	public function sendString(s:String) {
-		trace(s);
         client.send(Bytes.ofString(s));
     }
 }
@@ -54,12 +54,14 @@ class ProteanClient extends UDProteanClient {
 
 		if (strMsg.contains("::")) {
 			var msgSplitted = strMsg.split("::");
+
+			var value = CoolUtil.stringToOgType(msgSplitted[2]);
 			
 			switch (msgSplitted[0]) {
 				case "P1":
-					Reflect.setField(Player1, msgSplitted[1], msgSplitted[2]);
+					Reflect.setField(Player1, msgSplitted[1], value);
 				case "P2":
-					Reflect.setField(Player2, msgSplitted[1], msgSplitted[2]);
+					Reflect.setField(Player2, msgSplitted[1], value);
 			}
 		}
     }

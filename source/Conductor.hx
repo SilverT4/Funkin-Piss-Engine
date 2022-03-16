@@ -16,11 +16,17 @@ class Conductor {
 	public static var bpm:Int = 100;
 	public static var crochet:Float = ((60 / bpm) * 1000); // beats in milliseconds
 	public static var stepCrochet:Float = crochet / 4; // steps in milliseconds
+	/**
+	 * current Song Position in miliseconds
+	 */
 	public static var songPosition:Float;
 	public static var lastSongPos:Float;
 	public static var offset:Float = 0;
 
 	public static var safeFrames:Int = 10;
+	/**
+	 * miliseconds that should be "removed" from song position
+	 */
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];

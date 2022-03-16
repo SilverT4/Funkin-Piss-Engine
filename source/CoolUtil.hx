@@ -1,5 +1,7 @@
 package;
 
+import sys.FileSystem;
+import sys.io.File;
 import multiplayer.Lobby;
 import haxe.io.Path;
 import lime.utils.Assets;
@@ -15,8 +17,13 @@ class CoolUtil {
 	}
 
 	public static function isStringInt(s:String) {
+		var index = 0;
+		if (s.startsWith("-")) {
+			index = 1;
+		}
+
 		var splittedString = s.split("");
-		switch (splittedString[0]) {
+		switch (splittedString[index]) {
 			case "1", "2", "3", "4", "5", "6", "7", "8", "9", "0":
 				return true;
 		}
@@ -118,6 +125,25 @@ class CoolUtil {
 			var path = Path.join([mods_characters_path, char]);
 			if (SysFile.isDirectory(path)) {
 				list.push(char);
+			}
+		}
+		return list;
+	}
+
+	public static function getSongs():Array<String> {
+		var list = [];
+		var assets_song_path = "assets/songs/";
+		for (file in SysFile.readDirectory(assets_song_path)) {
+			var path = haxe.io.Path.join([assets_song_path, file]);
+			if (FileSystem.isDirectory(path)) {
+				list.push(file);
+			}
+		}
+		var pengine_song_path = "mods/songs/";
+		for (file in SysFile.readDirectory(pengine_song_path)) {
+			var path = haxe.io.Path.join([pengine_song_path, file]);
+			if (FileSystem.isDirectory(path)) {
+				list.push(file);
 			}
 		}
 		return list;

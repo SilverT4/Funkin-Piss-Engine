@@ -947,26 +947,32 @@ class Character extends FlxSprite {
 	}
 
 	public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void {
-		animation.play(AnimName, Force, Reversed, Frame);
+		if (animation.exists(AnimName)) {
+			animation.play(AnimName, Force, Reversed, Frame);
 
-		var daOffset = animOffsets.get(AnimName);
-		if (animOffsets.exists(AnimName)) {
-			offset.set(daOffset[0], daOffset[1]);
-		}
-		else
-			offset.set(0, 0);
-
-		if (curCharacter == 'gf') {
-			if (AnimName == 'singLEFT') {
-				danced = true;
+			var daOffset = animOffsets.get(AnimName);
+			if (animOffsets.exists(AnimName)) {
+				offset.set(daOffset[0], daOffset[1]);
 			}
-			else if (AnimName == 'singRIGHT') {
-				danced = false;
+			else
+				offset.set(0, 0);
+	
+			if (curCharacter == 'gf') {
+				if (AnimName == 'singLEFT') {
+					danced = true;
+				}
+				else if (AnimName == 'singRIGHT') {
+					danced = false;
+				}
+	
+				if (AnimName == 'singUP' || AnimName == 'singDOWN') {
+					danced = !danced;
+				}
 			}
-
-			if (AnimName == 'singUP' || AnimName == 'singDOWN') {
-				danced = !danced;
-			}
+		} else {
+			#if debug
+			trace("animation " + AnimName + " doesn't exist");
+			#end
 		}
 	}
 

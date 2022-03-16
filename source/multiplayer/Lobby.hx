@@ -1,5 +1,8 @@
 package multiplayer;
 
+import flixel.addons.ui.FlxUIDropDownMenu;
+import flixel.addons.ui.FlxUI;
+import flixel.addons.ui.FlxUITabMenu;
 import sys.io.File;
 import sys.FileSystem;
 import Song.SwagSong;
@@ -61,9 +64,20 @@ class Lobby extends MusicBeatState {
     public static var port:Int;
 
     var starting:Bool = false;
+    public static var inGame:Bool = false;
+
+    public static var curSong:String = "bopeebo";
+    public static var curDifficulty:Int = 2;
+
+    public static var songsDropDown:ScrollUIDropDownMenu;
+	public static var difficultyDropDown:FlxUIDropDownMenu;
+
+    var uiBox:FlxUITabMenu;
 
     public function new(?host:String, ?port:Int, ?isHost:Bool, ?nick:String) {
         super();
+
+        inGame = false;
 
         Player1.ready = false;
         Player2.ready = false;
@@ -74,6 +88,9 @@ class Lobby extends MusicBeatState {
             ip = host;
             Lobby.port = port;
             Lobby.isHost = isHost;
+
+            curSong = "bopeebo";
+            curDifficulty = 2;
     
             if (isHost) {
                 Player1.nick = nick;
@@ -111,7 +128,7 @@ class Lobby extends MusicBeatState {
             add(hostMode);
         }
 
-        var PLAYERSPACE = 300;
+        var PLAYERSPACE = 250;
 
         Paths.setCurrentLevel("week-1");
         Paths.setCurrentStage("stage");
@@ -120,11 +137,13 @@ class Lobby extends MusicBeatState {
         player1.flipX = !player1.flipX;
         player1.screenCenter(XY);
         player1.x += PLAYERSPACE;
+        player1.x -= 170;
         add(player1);
 
         player2 = new Character(0, 0, "bf");
         player2.screenCenter(XY);
         player2.x -= PLAYERSPACE;
+        player2.x -= 170;
         if (isHost && !server.hasClients())
             player2.alpha = 0.4;
         add(player2);
@@ -148,9 +167,55 @@ class Lobby extends MusicBeatState {
         player2DisplayReady.color = FlxColor.YELLOW;
         player2DisplayReady.visible = true;
         add(player2DisplayReady);
+
+        var tabs = [
+			{name: "General", label: 'General'}
+		];
+
+		uiBox = new FlxUITabMenu(null, tabs, true);
+
+		uiBox.resize(300, 400);
+		uiBox.x = FlxG.width - uiBox.width - 20;
+		uiBox.y = 20;
+		add(uiBox);
+
+        addGeneralUI();
     }
 
+    function addGeneralUI():Void {
+		var tab_group_note = new FlxUI(null, uiBox);
+		tab_group_note.name = 'General';
+
+        songsDropDown = new ScrollUIDropDownMenu(10, 20, CoolUtil.getSongs(), function(song:String, i) {
+            curSong = song;
+            sendMessage('SONG::$curSong');
+		});
+		songsDropDown.selectLabel(curSong);
+		var songsText = new FlxText(songsDropDown.x - 5, songsDropDown.y - 15, 0, "Song:");
+
+        var diffs:Array<String> = [
+            "Easy",
+            "Normal",
+            "Hard"
+        ];
+        difficultyDropDown = new FlxUIDropDownMenu(songsDropDown.x + songsDropDown.width + 10, songsDropDown.y, FlxUIDropDownMenu.makeStrIdLabelArray(diffs, true), function(difficulty) {
+            curDifficulty = CoolUtil.stringToOgType(difficulty);
+            sendMessage('DIFF::$curDifficulty');
+		});
+		difficultyDropDown.selectedLabel = "Hard";
+		var difficultyText = new FlxText(difficultyDropDown.x - 5, difficultyDropDown.y - 15, 0, "Difficulty:");
+
+        tab_group_note.add(songsText);
+        tab_group_note.add(songsDropDown);
+
+        tab_group_note.add(difficultyText);
+        tab_group_note.add(difficultyDropDown);
+
+		uiBox.addGroup(tab_group_note);
+	}
+
     function goToSong(song:String, diff:Int) {
+        inGame = true;
 		if (SysFile.exists(Paths.instNoLib(song))) {
 			PlayState.SONG = Song.loadFromJson(song, song);
 		} else {
@@ -187,7 +252,7 @@ class Lobby extends MusicBeatState {
             new FlxTimer().start(1, function(swagTimer:FlxTimer) {
                 funnyNumbers.text = "1";
                 new FlxTimer().start(1, function(swagTimer:FlxTimer) {
-                    goToSong("fresh", 2);
+                    goToSong(curSong, curDifficulty);
                 });
             });
         });
@@ -195,6 +260,8 @@ class Lobby extends MusicBeatState {
  
     override function update(elapsed) {
         super.update(elapsed);
+
+        animationKeys();
 
         if (Player1.ready && Player2.ready && !starting) {
             startCountDown();
@@ -223,23 +290,34 @@ class Lobby extends MusicBeatState {
         if (FlxG.keys.justPressed.SPACE) {
             if (isHost) {
                 Player1.ready = !Player1.ready;
-                server.sendStringToCurClient('P1::ready::' + Player1.ready);
+                sendMessage('P1::ready::' + Player1.ready);
             }
             else {
                 Player2.ready = !Player2.ready;
-                client.sendString('P2::ready::' + Player2.ready);
+                sendMessage('P2::ready::' + Player2.ready);
             }
         }
         
         Conductor.songPosition = FlxG.sound.music.time;
     }
 
+    public function sendMessage(s:String) {
+        if (isHost)
+            server.sendStringToCurClient(s);
+        else
+            client.sendString(s);
+    }
+
 	override public function beatHit() {
 		super.beatHit();
 
-        player1.playAnim('idle', true);
-        if (player2.alpha == 1) {
-            player2.playAnim('idle', true);
+        if (player1.animation.curAnim.name == 'idle') {
+            player1.playAnim('idle', true);
+        }
+        if (player2.animation.curAnim.name == 'idle') {
+            if (player2.alpha == 1) {
+                player2.playAnim('idle', true);
+            }
         }
     }
 
@@ -251,6 +329,54 @@ class Lobby extends MusicBeatState {
     override public function onFocusLost() {
         FlxG.autoPause = false;
         FlxG.sound.music.fadeOut(0.2, 0.1);
+    }
+
+    function animationKeys() {
+        if (controls.UP_P) {
+            if (isHost)
+                player1.playAnim("singUP");
+            else
+                player2.playAnim("singUP");
+            sendMessage("LKP::UP");
+        }
+
+        if (controls.DOWN_P) {
+            if (isHost)
+                player1.playAnim("singDOWN");
+            else
+                player2.playAnim("singDOWN");
+            sendMessage("LKP::DOWN");
+        }
+
+        if (controls.LEFT_P) {
+            if (isHost)
+                player1.playAnim("singLEFT");
+            else
+                player2.playAnim("singLEFT");
+            sendMessage("LKP::LEFT");
+        }
+        
+        if (controls.RIGHT_P) {
+            if (isHost)
+                player1.playAnim("singRIGHT");
+            else
+                player2.playAnim("singRIGHT");
+            sendMessage("LKP::RIGHT");
+        }
+
+        if (!controls.UP && !controls.DOWN && !controls.LEFT && !controls.RIGHT) {
+            // player.animation.curAnim.name != "idle" so it doesnt spam
+            if (isHost) {
+                if (player1.animation.curAnim.name != "idle")
+                    sendMessage("LKR");
+                player1.playAnim("idle");
+            }
+            else {
+                if (player2.animation.curAnim.name != "idle")
+                    sendMessage("LKR");
+                player2.playAnim("idle");
+            }
+        }
     }
 }
 

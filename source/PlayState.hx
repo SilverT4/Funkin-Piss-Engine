@@ -134,7 +134,7 @@ class PlayState extends MusicBeatState {
 
 	public static var currentPlaystate:PlayState;
 
-	public function new(?playAs = "dad", ?isMultiplayer = true) {
+	public function new(?playAs = "bf", ?isMultiplayer = false) {
 		super();
 		PlayState.playAs = playAs;
 		PlayState.isMultiplayer = isMultiplayer;
@@ -144,6 +144,45 @@ class PlayState extends MusicBeatState {
 			} else {
 				whichCharacterToBotFC = "dad";
 			}
+		}
+	}
+
+	/**
+	 * Plays Animation on strum line
+	 * 
+	 * list of animations: 
+	 * `pressed` - pressed key
+	 * `static` - idle animation
+	 * `confirm` - on pressed note
+	 */
+	public function strumPlayAnim(noteData:Int, as:String, animation:String = "static") {
+		if (as == "dad") {
+			dadStrums.forEach(function(spr:FlxSprite) {
+				if (Math.abs(noteData) == spr.ID) {
+					spr.animation.play(animation, true);
+
+					spr.centerOffsets();
+					if (spr.animation.curAnim.name == "confirm" && !stage.stage.startsWith('school')) {
+						spr.offset.x -= 13;
+						spr.offset.y -= 13;
+					}
+					return;
+				}
+			});
+		} 
+		else {
+			playerStrums.forEach(function(spr:FlxSprite) {
+				if (Math.abs(noteData) == spr.ID) {
+					spr.animation.play(animation, true);
+
+					spr.centerOffsets();
+					if (spr.animation.curAnim.name == "confirm" && !stage.stage.startsWith('school')) {
+						spr.offset.x -= 13;
+						spr.offset.y -= 13;
+					}
+					return;
+				}
+			});
 		}
 	}
 
@@ -562,6 +601,13 @@ class PlayState extends MusicBeatState {
 
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
+
+		if (Lobby.isHost) {
+            var hostMode = new FlxText(10, 20, 0, 'HOST MODE', 16);
+            hostMode.color = FlxColor.YELLOW;
+            add(hostMode);
+			hostMode.cameras = [camHUD];
+        }
 
 		timeLeftText.alpha = 0;
 		healthBar.alpha = 0;
@@ -1066,11 +1112,16 @@ class PlayState extends MusicBeatState {
 
 					sustainNote.mustPress = gottaHitNote;
 
-					if (sustainNote.mustPress) {
-						if (swagNote.isGoodNote) {
+					if (sustainNote.isGoodNote) {
+						if (sustainNote.mustPress) {
+							sustainNote.x += FlxG.width / 2; // general offset
+							if (playAs == "bf") {
+								accuracy.addNote();
+							}
+						}
+						else if (!sustainNote.mustPress && playAs == "dad") {
 							accuracy.addNote();
 						}
-						sustainNote.x += FlxG.width / 2; // general offset
 					}
 				}
 
@@ -1081,13 +1132,18 @@ class PlayState extends MusicBeatState {
 					cacheCharacter(splicedValue[0], splicedValue[1]);
 				}
 
-				if (swagNote.mustPress) {
-					if (swagNote.isGoodNote) {
+				if (swagNote.isGoodNote) {
+					if (swagNote.mustPress) {
+						swagNote.x += FlxG.width / 2; // general offset
+						if (playAs == "bf") {
+							accuracy.addNote();
+						}
+					}
+					else if (!swagNote.mustPress && playAs == "dad") {
 						accuracy.addNote();
 					}
-					swagNote.x += FlxG.width / 2; // general offset
 				}
-				else {}
+
 			}
 			daBeats += 1;
 		}
@@ -1542,9 +1598,14 @@ class PlayState extends MusicBeatState {
 		else {
 			scoreTxt.text = "Score:" + FlxStringUtil.formatMoney(songScore, false) + " | Accuracy:" + accuracy.getAccuracyPercent() + " | Misses:" + misses;
 		}
-		scoreTxt.screenCenter(X);
+		try {
+			scoreTxt.screenCenter(X);
+		} catch (exc) {
+			trace(exc);
+			//how the fuck it throws exceptions
+		}
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause) {
+		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause && !isMultiplayer) {
 			persistentUpdate = false;
 			persistentDraw = true;
 			paused = true;
@@ -1888,9 +1949,7 @@ class PlayState extends MusicBeatState {
 						vocals.volume = 1;
 
 					luaCall("onNotePress", ["dad", daNote.noteData]);
-					daNote.kill();
-					notes.remove(daNote, true);
-					daNote.destroy();
+					removeNote(daNote);
 				}
 
 				if (daNote.mustPress && daNote.wasGoodHitButt && whichCharacterToBotFC == "bf") {
@@ -1938,9 +1997,7 @@ class PlayState extends MusicBeatState {
 						vocals.volume = 1;
 
 					luaCall("onNotePress", ["bf", daNote.noteData]);
-					daNote.kill();
-					notes.remove(daNote, true);
-					daNote.destroy();
+					removeNote(daNote);
 				}
 
 				// WIP interpolation shit? Need to fix the pause issue
@@ -1959,23 +2016,20 @@ class PlayState extends MusicBeatState {
 					daNote.active = false;
 					daNote.visible = false;
 
-					daNote.kill();
-					notes.remove(daNote, true);
-					daNote.destroy();
+					removeNote(daNote);
 				}
 
 				if (daNote.noteData == -1) {
 					daNote.alpha = 0;
 				}
-				if (Std.int(songTime / 10) == Std.int(daNote.strumTime / 10)) {
-					//convert daNote to table
-					
-					ActionNoteonPressedButActuallyNotPressed(daNote);
-				}
-				if (SONG.song == "Stress") {
-					if (daNote.wasGoodHitButt == false) {
-						//rewrite this (i will not rewrite this)
-						peecoStressOnArrowShoot( daNote );
+
+				if (daNote.wasGoodHitButt) {
+					if (SONG.song == "Stress") {
+						peecoStressOnArrowShoot(daNote);
+					}
+					if (daNote.action != null && daNote.noteData == -1 && daNote.noteData == -1) {
+						ActionNoteOnGhostPressed(daNote);
+						removeNote(daNote);
 					}
 				}
 			});
@@ -2001,6 +2055,12 @@ class PlayState extends MusicBeatState {
 
 		//causes crashes not using it
 		//luaCall("update", [elapsed]);
+	}
+
+	public function removeNote(daNote:Note) {
+		daNote.kill();
+		notes.remove(daNote, true);
+		daNote.destroy();
 	}
 	public static function addSubtitle(text:String) {
 		if (text != "") {
@@ -2148,17 +2208,14 @@ class PlayState extends MusicBeatState {
 			}
 		}
 		splash.x = (Note.getSwagWidth(SONG.whichK) * whaNote.noteData) - (whaNote.width / divider);
-		if (playAs == "bf") {
+		if (whaNote.mustPress) {
 			splash.x += ((FlxG.width / 2) * 1);
-		}
-		if (playAs == "dad") {
+		} else {
 			splash.x += ((FlxG.width / 2) * 0);
 		}
 	}
 
 	private function popUpScore(daNote:Note):Void {
-		ActionNoteonPressed(daNote);
-		luaCall("onNotePress", ["bf", daNote.noteData]);
 		if (daNote.isGoodNote) {
 			var strumtime = daNote.strumTime;
 
@@ -2196,15 +2253,6 @@ class PlayState extends MusicBeatState {
 				daRating = 'sick';
 				score = 350;
 				spawnSplashNote(daNote);
-			}
-
-			if (isMultiplayer) {
-				var daString = "NP::" + daNote.strumTime + "::" + daNote.noteData;
-				if (!Lobby.isHost) {
-					Lobby.client.sendString(daString);
-				} else {
-					Lobby.server.sendStringToCurClient(daString);
-				}
 			}
 
 			accuracy.judge(daRating);
@@ -2555,42 +2603,34 @@ class PlayState extends MusicBeatState {
 		if (playAs == "bf") {
 			playerStrums.forEach(function(spr:FlxSprite) {
 				if (isKeyPressedForNoteData(spr.ID, "P") && spr.animation.curAnim.name != 'confirm') {
-					spr.animation.play('pressed');
+					strumPlayAnim(spr.ID, "bf", "pressed");
+					sendMultiplayerMessage("SNP::" + spr.ID);
 				}
 				if (isKeyPressedForNoteData(spr.ID, "R")) {
-					spr.animation.play('static');
+					strumPlayAnim(spr.ID, "bf", "static");
+					sendMultiplayerMessage("SNR::" + spr.ID);
 				}
-	
-				if (spr.animation.curAnim.name == 'confirm' && !stage.stage.startsWith('school')) {
-					spr.centerOffsets();
-					spr.offset.x -= 13;
-					spr.offset.y -= 13;
-				}
-				else
-					spr.centerOffsets();
 			});
 		} else {
 			dadStrums.forEach(function(spr:FlxSprite) {
 				if (isKeyPressedForNoteData(spr.ID, "P") && spr.animation.curAnim.name != 'confirm') {
-					spr.animation.play('pressed');
+					strumPlayAnim(spr.ID, "dad", "pressed");
+					sendMultiplayerMessage("SNP::" + spr.ID);
 				}
 				if (isKeyPressedForNoteData(spr.ID, "R")) {
-					spr.animation.play('static');
+					strumPlayAnim(spr.ID, "dad", "static");
+					sendMultiplayerMessage("SNR::" + spr.ID);
 				}
-	
-				if (spr.animation.curAnim.name == 'confirm' && !stage.stage.startsWith('school')) {
-					spr.centerOffsets();
-					spr.offset.x -= 13;
-					spr.offset.y -= 13;
-				}
-				else
-					spr.centerOffsets();
 			});
 		}
 	}
 
-	function canNoteBeHit(note:Note) {
-		
+	function sendMultiplayerMessage(s:String) {
+		if (isMultiplayer)
+			if (!Lobby.isHost)
+				Lobby.client.sendString(s);
+			else
+				Lobby.server.sendStringToCurClient(s);
 	}
 
 	function noteMiss(direction:Int = 1, tooLate:Bool = false, daNote:Note = null):Void {
@@ -2745,95 +2785,99 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function goodNoteHit(note:Note, ?noteHitAsDad:Bool = null):Void {
-		if (noteHitAsDad == null) {
-			if (playAs == "bf") {
-				noteHitAsDad = false;
-			} else {
-				noteHitAsDad = true;
+	public function goodNoteHit(noteDatas:Note, ?noteHitAsDad:Bool = false):Void {
+		try {
+			var note:Note = null;
+			notes.forEachAlive(function(daNote:Note) {
+				if (daNote.strumTime == noteDatas.strumTime && daNote.noteData == noteDatas.noteData && daNote.mustPress == (!noteHitAsDad)) {
+					note = daNote;
+				}
+			});
+	
+			if (noteHitAsDad == null) {
+				if (playAs == "bf") {
+					noteHitAsDad = false;
+				} else {
+					noteHitAsDad = true;
+				}
+			}
+	
+			if (!note.wasGoodHit) {
+				if (!note.isSustainNote) {
+					popUpScore(note);
+				}
+	
+				if (note.noteData >= 0) {
+					if (note.isSustainNote) {
+						health += 0.0065;
+					}
+					else {
+						health += 0.023;
+					}
+				}
+				else {
+					health += 0.004;
+				}
+	
+				var whichAnimationToPlay = null;
+	
+				if (SONG.whichK == 6) {
+					switch (note.noteData) {
+						case 0:
+							whichAnimationToPlay = 'singLEFT';
+						case 1:
+							whichAnimationToPlay = 'singUP';
+						case 2:
+							whichAnimationToPlay = 'singRIGHT';
+						case 3:
+							whichAnimationToPlay = 'singLEFT';
+						case 4:
+							whichAnimationToPlay = 'singDOWN';
+						case 5:
+							whichAnimationToPlay = 'singRIGHT';
+					}
+				} else {
+					switch (note.noteData) {
+						case 0:
+							whichAnimationToPlay = 'singLEFT';
+						case 1:
+							whichAnimationToPlay = 'singDOWN';
+						case 2:
+							whichAnimationToPlay = 'singUP';
+						case 3:
+							whichAnimationToPlay = 'singRIGHT';
+					}
+				}
+	
+				if (whichAnimationToPlay != null) {
+					if (noteHitAsDad) {
+						dad.playAnim(whichAnimationToPlay, true);
+						
+						strumPlayAnim(note.noteData, "dad", 'confirm');
+					}
+					else {
+						bf.playAnim(whichAnimationToPlay, true);
+						
+						strumPlayAnim(note.noteData, "bf", 'confirm');
+					}
+				}
+	
+				note.wasGoodHit = true;
+				vocals.volume = 1;
+	
+				if (!note.isSustainNote) {
+					notes.forEachAlive(function(daNote:Note) {
+						if (daNote.strumTime == note.strumTime && daNote.noteData == note.noteData) {
+							sendMultiplayerMessage("NP::" + daNote.strumTime + "::" + daNote.noteData);
+							ActionNoteonPressed(daNote);
+							removeNote(daNote);
+						}
+					});
+				}
 			}
 		}
-
-		if (!note.wasGoodHit) {
-			if (!note.isSustainNote) {
-				popUpScore(note);
-			}
-
-			if (note.noteData >= 0) {
-				if (note.isSustainNote) {
-					health += 0.0065;
-				}
-				else {
-					health += 0.023;
-				}
-			}
-			else {
-				health += 0.004;
-			}
-
-			var whichAnimationToPlay = null;
-
-			if (SONG.whichK == 6) {
-				switch (note.noteData) {
-					case 0:
-						whichAnimationToPlay = 'singLEFT';
-					case 1:
-						whichAnimationToPlay = 'singUP';
-					case 2:
-						whichAnimationToPlay = 'singRIGHT';
-					case 3:
-						whichAnimationToPlay = 'singLEFT';
-					case 4:
-						whichAnimationToPlay = 'singDOWN';
-					case 5:
-						whichAnimationToPlay = 'singRIGHT';
-				}
-			} else {
-				switch (note.noteData) {
-					case 0:
-						whichAnimationToPlay = 'singLEFT';
-					case 1:
-						whichAnimationToPlay = 'singDOWN';
-					case 2:
-						whichAnimationToPlay = 'singUP';
-					case 3:
-						whichAnimationToPlay = 'singRIGHT';
-				}
-			}
-
-			if (whichAnimationToPlay != null) {
-				if (noteHitAsDad) {
-					dad.playAnim(whichAnimationToPlay, true);
-	
-					dadStrums.forEach(function(spr:FlxSprite) {
-						if (Math.abs(note.noteData) == spr.ID) {
-							spr.animation.play('confirm', true);
-						}
-					});
-				}
-				else {
-					bf.playAnim(whichAnimationToPlay, true);
-					
-					playerStrums.forEach(function(spr:FlxSprite) {
-						if (Math.abs(note.noteData) == spr.ID) {
-							spr.animation.play('confirm', true);
-						}
-					});
-				}
-			}
-
-			note.wasGoodHit = true;
-			vocals.volume = 1;
-
-			if (!note.isSustainNote) {
-				notes.forEachAlive(function(daNote:Note) {
-					if (daNote.strumTime == note.strumTime && daNote.noteData == note.noteData) {
-						daNote.kill();
-						notes.remove(daNote, true);
-						daNote.destroy();
-					}
-				});
-			}
+		catch (exc) {
+			trace(exc);
 		}
 	}
 
@@ -3167,32 +3211,38 @@ class PlayState extends MusicBeatState {
 	*/
 
     function ActionNoteonPressed(daNote:Note) {
-		switch (daNote.action.toLowerCase()) {
-			case "ebola":
-				new FlxTimer().start(0.01, function(timer:FlxTimer) {
-					health -= 0.001;
-				}, 0);	
-			case "damage":
-                health -= Std.parseFloat(daNote.actionValue);
+		if (!daNote.blockActions) {
+			switch (daNote.action.toLowerCase()) {
+				case "ebola":
+					new FlxTimer().start(0.01, function(timer:FlxTimer) {
+						health -= 0.001;
+					}, 0);	
+				case "damage":
+					health -= Std.parseFloat(daNote.actionValue);
+			}
 		}
+		daNote.blockActions = true;
     }
 
-    function ActionNoteonPressedButActuallyNotPressed(daNote:Note) {
-        switch (daNote.action.toLowerCase()) {
-            case "subtitle", "sub":
-                addSubtitle(daNote.actionValue);
-            case "p1 icon alpha":
-                iconP1.alpha = Std.parseFloat(daNote.actionValue);
-            case "p2 icon alpha":
-                iconP2.alpha = Std.parseFloat(daNote.actionValue);
-            case "picos":
-                if (gf.curCharacter == "pico-speaker") {
-                    gf.playAnim("picoShoot" + daNote.actionValue);
-                }
-			case "change character":
-				var splicedValue = daNote.actionValue.split(", ");
-				changeCharacter(splicedValue[0], splicedValue[1]);
-        }
+    function ActionNoteOnGhostPressed(daNote:Note) {
+		if (!daNote.blockActions) {
+			switch (daNote.action.toLowerCase()) {
+				case "subtitle", "sub":
+					addSubtitle(daNote.actionValue);
+				case "p1 icon alpha":
+					iconP1.alpha = Std.parseFloat(daNote.actionValue);
+				case "p2 icon alpha":
+					iconP2.alpha = Std.parseFloat(daNote.actionValue);
+				case "picos":
+					if (gf.curCharacter == "pico-speaker") {
+						gf.playAnim("picoShoot" + daNote.actionValue);
+					}
+				case "change character":
+					var splicedValue = daNote.actionValue.split(", ");
+					changeCharacter(splicedValue[0], splicedValue[1]);
+			}
+		}
+		daNote.blockActions = true;
     }
 
 	var curLight:Int = 0;

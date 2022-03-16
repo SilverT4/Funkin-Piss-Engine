@@ -23,21 +23,33 @@ class Server extends UDProteanServer {
 				trace("Some Client Connected");
 
 				Lobby.player2.alpha = 1;
-				client.send(Bytes.ofString("P1::nick::" + Player1.nick));
-				client.send(Bytes.ofString("P1::ready::" + Player1.ready));
+				sendStringToCurClient("P1::nick::" + Player1.nick);
+				sendStringToCurClient("P1::ready::" + Player1.ready);
+				sendStringToCurClient("SONG::" + Lobby.curSong);
+				sendStringToCurClient("DIFF::" + Lobby.curDifficulty);
 			});
 			onClientDisconnected(client -> {
 				trace("Some Client Disconnected");
 
 				Lobby.player2.alpha = 0.4;
 				Player2.clear();
+
+				if (Lobby.inGame) {
+					FlxG.switchState(new LobbySelectorState());
+				}
 			});
 
-			while (true) {
-				update();
+			try {
+				while (true) {
+					update();
+				}
+	
+				stop();
+			} catch (exc) {
+				trace("Exception // Stopped the server");
+				trace(exc.details());
+				FlxG.switchState(new LobbySelectorState());
 			}
-
-			stop();
 		});
 		#end
 	}
@@ -59,14 +71,13 @@ class ServerBehavior extends UDProteanClientBehavior {
 	override function initialize() { }
 
 	override function onMessage(msg:Bytes) {
-		send(msg);
-
 		var strMsg = msg.toString();
 		trace("Server got a message: " + strMsg);
 
 		if (strMsg.contains("::")) {
 			var msgSplitted = strMsg.split("::");
 
+			var splited1:Dynamic = CoolUtil.stringToOgType(msgSplitted[1]);
 			var value = CoolUtil.stringToOgType(msgSplitted[2]);
 			
 			switch (msgSplitted[0]) {
@@ -74,11 +85,22 @@ class ServerBehavior extends UDProteanClientBehavior {
 					Reflect.setField(Player1, msgSplitted[1], value);
 				case "P2":
 					Reflect.setField(Player2, msgSplitted[1], value);
+				case "LKP":
+					Lobby.player2.playAnim('sing$splited1', true);
+				case "LKR":
+					Lobby.player2.playAnim('idle', true);
 				case "NP":
-					PlayState.currentPlaystate.goodNoteHit(new Note( CoolUtil.stringToOgType(msgSplitted[1]), CoolUtil.stringToOgType(msgSplitted[2]) ), true);
+					try {
+						PlayState.currentPlaystate.goodNoteHit(new Note( splited1, CoolUtil.stringToOgType(msgSplitted[2]) ), true);
+					} catch (exc) {
+						trace(exc.details());
+					}
+				case "SNP":
+					PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "pressed");
+				case "SNR":
+					PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "static");
 			}
 		}
-		trace(Player2.ready);
 	}
 
 	// Called after the connection handshake.

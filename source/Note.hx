@@ -12,26 +12,42 @@ import polymod.format.ParseRules.TargetSignatureElement;
 
 
 class Note extends FlxSprite {
-	public var strumTime:Float = 0;
 	var daStage:String;
 
-	public var mustPress:Bool = false;
+	//NOTE DATA
 	public var noteData:Int = 0;
-	public var canBeHit:Bool = false;
-	public var tooLate:Bool = false;
-	public var wasGoodHit:Bool = false;
-	public var prevNote:Note;
-
-	public var sustainLength:Float = 0;
-	public var isSustainNote:Bool = false;
 	public var action:String = "";
 	public var actionValue:String = "";
+	public var sustainLength:Float = 0;
+	public var isSustainNote:Bool = false;
+	public var isGoodNote:Bool = true;
+	public var canBeMissed:Bool = false;
 
-	//DONT USE THAT I WAS STUPID
+	//INPUT SHIT
+
+	/** blocks action notes from doing anything */
+	public var blockActions:Bool = false;
+
+	/** the position of note in song */
+	public var strumTime:Float = 0;
+
+	/** `true` if the note is for boyfriend */
+	public var mustPress:Bool = false;
+
+	/** `true` when the note is on the song position that can be hit */
+	public var canBeHit:Bool = false;
+
+	/** `true` when it missed the strum line */
+	public var tooLate:Bool = false;
+
+	/** `true` if the note `strumTime` equals or is higher than current song position. works only for dad note */
+	public var wasGoodHit:Bool = false;
+
+	/** `true` if the note `strumTime` equals or is higher than current song position */
 	public var wasGoodHitButt:Bool = false;
 
-	public var canBeMissed:Bool = false;
-	public var isGoodNote:Bool = true;
+	//OTHER
+	public var prevNote:Note;
 
 	public var noteScore:Float = 1;
 	public static var PURP_NOTE:Int = 0;
@@ -285,8 +301,7 @@ class Note extends FlxSprite {
 		super.update(elapsed);
 
 		// The * 0.5 is so that it's easier to hit them too late, instead of too early
-		if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset
-			&& strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
+		if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset && strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 			canBeHit = true;
 		else
 			canBeHit = false;

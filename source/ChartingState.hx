@@ -21,7 +21,6 @@ import flixel.addons.ui.FlxUI9SliceSprite;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUICheckBox;
 import flixel.addons.ui.FlxUIDropDownMenu;
-import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.ui.FlxUINumericStepper;
 import flixel.addons.ui.FlxUITabMenu;
 import flixel.addons.ui.FlxUITooltip.FlxUITooltipStyle;
@@ -122,7 +121,7 @@ class ChartingState extends MusicBeatState {
 	**/
 	var curSelectedNote:Array<Dynamic>;
 	var actionMenu:ScrollUIDropDownMenu;
-	var actionValue:FlxUIInputText;
+	var actionValue:UIInputText;
 
 	var tempBpm:Int = 0;
 
@@ -269,7 +268,7 @@ class ChartingState extends MusicBeatState {
 	}
 
 	function addSongUI():Void {
-		var UI_songTitle = new FlxUIInputText(10, 10, 70, _song.song, 8);
+		var UI_songTitle = new UIInputText(10, 10, 70, _song.song, 8);
 		typingShit = UI_songTitle;
 
 		var check_voices = new FlxUICheckBox(10, 25, null, null, "Has voice track", 100);
@@ -444,7 +443,7 @@ class ChartingState extends MusicBeatState {
 
 		var applyLength:FlxButton = new FlxButton(100, 10, 'Apply');
 
-		actionValue = new FlxUIInputText(10, 90, 85 * 2, "", 8);
+		actionValue = new UIInputText(10, 90, 85 * 2, "", 8);
 		actionValue.callback = function onType(s, enter) {
 			if (curSelectedNote != null) {
 				if (!CoolUtil.isEmpty(s) && curSelectedNote.length < 4) {

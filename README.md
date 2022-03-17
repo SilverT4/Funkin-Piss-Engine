@@ -21,7 +21,7 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 ## Nice Stuff / Features
 * 6K Mania Support
 * Action Notes
-* Multiplayer (in very early phase)
+* Multiplayer (in very early phase, access it by pressing M in main menu)
 * Make mods without touching code
 * Week 7 Ported with Week 7 and Note Splashes
 * Custom Skins

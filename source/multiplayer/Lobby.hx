@@ -12,7 +12,6 @@ import sys.net.Host;
 import sys.net.UdpSocket;
 import flixel.math.FlxRandom;
 import flixel.util.FlxColor;
-import flixel.addons.ui.FlxUIInputText;
 import flixel.addons.text.FlxTextField;
 import flixel.text.FlxText;
 import flixel.FlxG;
@@ -21,16 +20,13 @@ import flixel.FlxState;
 
 class MultiPlayer {
 
-	public var nick = "(unknown)";
-    public var ready = false;
+	public var nick:String;
+    public var ready:Bool;
 
     public function new() {
         clear();
     }
-
-	/**
-	* Sets every Player1 variable to their default value 
-	*/
+	/** Sets every `this` variable to their default value */
 	public function clear() {
 		nick = "(unknown)";
         ready = false;
@@ -45,7 +41,7 @@ class Lobby extends MusicBeatState {
 
     public static var player1:MultiPlayer;
     public static var player2:MultiPlayer;
-    
+
 
     public static var lobbyPlayer1:Character;
     public static var lobbyPlayer2:Character;
@@ -403,7 +399,7 @@ class LobbySelectorState extends FlxState {
 
         var BUTTONSPACE = 50;
 
-        var clientIP = new FlxUIInputText(0, 0, 100, "127.0.0.1", 10);
+        var clientIP = new UIInputText(0, 0, 100, "127.0.0.1", 10);
         clientIP.screenCenter(XY);
         clientIP.y += 50;
         clientIP.x += 20;
@@ -413,7 +409,7 @@ class LobbySelectorState extends FlxState {
         add(clientIPInfo);
 
 
-        var clientPort = new FlxUIInputText(0, 0, 100, "9000", 10);
+        var clientPort = new UIInputText(0, 0, 100, "9000", 10);
         clientPort.screenCenter(XY);
         clientPort.y = clientIP.y + 20;
         clientPort.x = clientIP.x;
@@ -429,7 +425,7 @@ class LobbySelectorState extends FlxState {
             nick = "Player" + new FlxRandom().int(1, 99);
         }
 
-        var clientNick = new FlxUIInputText(0, 0, 100, nick, 10);
+        var clientNick = new UIInputText(0, 0, 100, nick, 10);
         clientNick.screenCenter(XY);
         clientNick.y = clientPort.y + 20;
         clientNick.x = clientPort.x;

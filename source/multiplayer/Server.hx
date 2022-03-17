@@ -22,17 +22,17 @@ class Server extends UDProteanServer {
 			onClientConnected(client -> {
 				trace("Some Client Connected");
 
-				Lobby.player2.alpha = 1;
-				sendStringToCurClient("P1::nick::" + Player1.nick);
-				sendStringToCurClient("P1::ready::" + Player1.ready);
+				Lobby.lobbyPlayer2.alpha = 1;
+				sendStringToCurClient("P1::nick::" + Lobby.player1.nick);
+				sendStringToCurClient("P1::ready::" + Lobby.player1.ready);
 				sendStringToCurClient("SONG::" + Lobby.curSong);
 				sendStringToCurClient("DIFF::" + Lobby.curDifficulty);
 			});
 			onClientDisconnected(client -> {
 				trace("Some Client Disconnected");
 
-				Lobby.player2.alpha = 0.4;
-				Player2.clear();
+				Lobby.lobbyPlayer2.alpha = 0.4;
+				Lobby.player2.clear();
 
 				if (Lobby.inGame) {
 					FlxG.switchState(new LobbySelectorState());
@@ -71,36 +71,37 @@ class ServerBehavior extends UDProteanClientBehavior {
 	override function initialize() { }
 
 	override function onMessage(msg:Bytes) {
-		var strMsg = msg.toString();
-		trace("Server got a message: " + strMsg);
-
-		if (strMsg.contains("::")) {
-			var msgSplitted = strMsg.split("::");
-
-			var splited1:Dynamic = CoolUtil.stringToOgType(msgSplitted[1]);
-			var value = CoolUtil.stringToOgType(msgSplitted[2]);
-			
-			switch (msgSplitted[0]) {
-				case "P1":
-					Reflect.setField(Player1, msgSplitted[1], value);
-				case "P2":
-					Reflect.setField(Player2, msgSplitted[1], value);
-				case "LKP":
-					Lobby.player2.playAnim('sing$splited1', true);
-				case "LKR":
-					Lobby.player2.playAnim('idle', true);
-				case "NP":
-					try {
-						PlayState.currentPlaystate.goodNoteHit(new Note( splited1, CoolUtil.stringToOgType(msgSplitted[2]) ), true);
-					} catch (exc) {
-						trace(exc.details());
-					}
-				case "SNP":
-					PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "pressed");
-				case "SNR":
-					PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "static");
+		try {
+			var strMsg = msg.toString();
+			trace("Server got a message: " + strMsg);
+	
+			if (strMsg.contains("::")) {
+				var msgSplitted = strMsg.split("::");
+	
+				var splited1:Dynamic = CoolUtil.stringToOgType(msgSplitted[1]);
+				var value = CoolUtil.stringToOgType(msgSplitted[2]);
+				
+				switch (msgSplitted[0]) {
+					case "P1":
+						Reflect.setField(Lobby.player1, msgSplitted[1], value);
+					case "P2":
+						Reflect.setField(Lobby.player2, msgSplitted[1], value);
+					case "LKP":
+						Lobby.lobbyPlayer2.playAnim('sing$splited1', true);
+					case "LKR":
+						Lobby.lobbyPlayer2.playAnim('idle', true);
+					case "NP":
+						PlayState.currentPlaystate.multiplayerNoteHit(new Note( splited1, CoolUtil.stringToOgType(msgSplitted[2]) ), true);
+					case "SNP":
+						PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "pressed");
+					case "SNR":
+						PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "static");
+				}
 			}
 		}
+		catch (exc) {
+			trace(exc.details());
+ 		}
 	}
 
 	// Called after the connection handshake.

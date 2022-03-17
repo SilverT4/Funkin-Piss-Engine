@@ -21,7 +21,7 @@ class Client {
 
 			trace("Connected to a Server with IP: " + ip + " Port: " + port);
 
-			sendString('P2::nick::' + Player2.nick);
+			sendString('P2::nick::' + Lobby.player2.nick);
 
 			try {
 				while (true) {
@@ -50,45 +50,50 @@ class ProteanClient extends UDProteanClient {
     }
 
 	override function onMessage(msg:Bytes) {
-		var strMsg = msg.toString();
+		try {
+			var strMsg = msg.toString();
 
-		trace("Client got a message: " + strMsg);
-
-		if (strMsg.contains("::")) {
-			var msgSplitted = strMsg.split("::");
-
-			var splited1:Dynamic = CoolUtil.stringToOgType(msgSplitted[1]);
-			var value = CoolUtil.stringToOgType(msgSplitted[2]);
-			
-			switch (msgSplitted[0]) {
-				case "P1":
-					Reflect.setField(Player1, msgSplitted[1], value);
-				case "P2":
-					Reflect.setField(Player2, msgSplitted[1], value);
-				case "LKP":
-					Lobby.player1.playAnim('sing$splited1', true);
-				case "LKR":
-					Lobby.player1.playAnim('idle', true);
-				case "NP":
-					PlayState.currentPlaystate.goodNoteHit(new Note( splited1, CoolUtil.stringToOgType(msgSplitted[2]) ), false);
-				case "SNP":
-					PlayState.currentPlaystate.strumPlayAnim(splited1, "bf", "pressed");
-				case "SNR":
-					PlayState.currentPlaystate.strumPlayAnim(splited1, "bf", "static");
-				case "SONG":
-					Lobby.curSong = splited1;
-					Lobby.songsDropDown.selectLabel(Lobby.curSong);
-				case "DIFF":
-					Lobby.curDifficulty = splited1;
-					switch (Lobby.curDifficulty) {
-						case 0:
-							Lobby.difficultyDropDown.selectedLabel = "Easy";
-						case 1:
-							Lobby.difficultyDropDown.selectedLabel = "Normal";
-						case 2:
-							Lobby.difficultyDropDown.selectedLabel = "Hard";
-					}
+			trace("Client got a message: " + strMsg);
+	
+			if (strMsg.contains("::")) {
+				var msgSplitted = strMsg.split("::");
+	
+				var splited1:Dynamic = CoolUtil.stringToOgType(msgSplitted[1]);
+				var value = CoolUtil.stringToOgType(msgSplitted[2]);
+				
+				switch (msgSplitted[0]) {
+					case "P1":
+						Reflect.setField(Lobby.player1, msgSplitted[1], value);
+					case "P2":
+						Reflect.setField(Lobby.player2, msgSplitted[1], value);
+					case "LKP":
+						Lobby.lobbyPlayer1.playAnim('sing$splited1', true);
+					case "LKR":
+						Lobby.lobbyPlayer1.playAnim('idle', true);
+					case "NP":
+						PlayState.currentPlaystate.multiplayerNoteHit(new Note( splited1, CoolUtil.stringToOgType(msgSplitted[2]) ), false);
+					case "SNP":
+						PlayState.currentPlaystate.strumPlayAnim(splited1, "bf", "pressed");
+					case "SNR":
+						PlayState.currentPlaystate.strumPlayAnim(splited1, "bf", "static");
+					case "SONG":
+						Lobby.curSong = splited1;
+						Lobby.songsDropDown.selectLabel(Lobby.curSong);
+					case "DIFF":
+						Lobby.curDifficulty = splited1;
+						switch (Lobby.curDifficulty) {
+							case 0:
+								Lobby.difficultyDropDown.selectedLabel = "Easy";
+							case 1:
+								Lobby.difficultyDropDown.selectedLabel = "Normal";
+							case 2:
+								Lobby.difficultyDropDown.selectedLabel = "Hard";
+						}
+				}
 			}
+		}
+		catch (exc) {
+			trace(exc.details());
 		}
     }
 

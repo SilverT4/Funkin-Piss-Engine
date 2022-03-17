@@ -1,5 +1,6 @@
 package multiplayer;
 
+import Discord.DiscordClient;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.addons.ui.FlxUI;
 import flixel.addons.ui.FlxUITabMenu;
@@ -18,29 +19,19 @@ import flixel.FlxG;
 import flixel.ui.FlxButton;
 import flixel.FlxState;
 
-class Player1 {
+class MultiPlayer {
 
-	public static var nick = "(unknown)";
-    public static var ready = false;
+	public var nick = "(unknown)";
+    public var ready = false;
+
+    public function new() {
+        clear();
+    }
 
 	/**
 	* Sets every Player1 variable to their default value 
 	*/
-	public static function clear() {
-		nick = "(unknown)";
-        ready = false;
-	}
-}
-
-class Player2 {
-
-	public static var nick = "(unknown)";
-    public static var ready = false;
-
-	/**
-	* Sets every Player2 variable to their default value 
-	*/
-	public static function clear() {
+	public function clear() {
 		nick = "(unknown)";
         ready = false;
 	}
@@ -52,8 +43,12 @@ class Lobby extends MusicBeatState {
     public static var client:Client;
     public static var isHost:Bool;
 
-    public static var player1:Character;
-    public static var player2:Character;
+    public static var player1:MultiPlayer;
+    public static var player2:MultiPlayer;
+    
+
+    public static var lobbyPlayer1:Character;
+    public static var lobbyPlayer2:Character;
 
     public static var player1DisplayName:FlxText;
 	public static var player2DisplayName:FlxText;
@@ -79,11 +74,11 @@ class Lobby extends MusicBeatState {
 
         inGame = false;
 
-        Player1.ready = false;
-        Player2.ready = false;
-
         if (host != null) {
-            CoolUtil.clearMPlayers();
+            //CoolUtil.clearMPlayers();
+
+            player1 = new MultiPlayer();
+            player2 = new MultiPlayer();
 
             ip = host;
             Lobby.port = port;
@@ -93,14 +88,17 @@ class Lobby extends MusicBeatState {
             curDifficulty = 2;
     
             if (isHost) {
-                Player1.nick = nick;
+                player1.nick = nick;
                 server = new Server(host, port);
             }
             else {
-                Player2.nick = nick;
+                player2.nick = nick;
                 client = new Client(host, port);
             }
         }
+
+        player1.ready = false;
+        player2.ready = false;
     }
 
     override function create() {
@@ -117,9 +115,9 @@ class Lobby extends MusicBeatState {
 
         var nickInfo = new FlxText(10, portInfo.y + portInfo.height, 0, '', 16);
         if (isHost)
-            nickInfo.text = 'Nick: ' + Player1.nick;
+            nickInfo.text = 'Nick: ' + player1.nick;
         else
-            nickInfo.text = 'Nick: ' + Player2.nick;
+            nickInfo.text = 'Nick: ' + player2.nick;
         add(nickInfo);
 
         if (isHost) {
@@ -133,37 +131,37 @@ class Lobby extends MusicBeatState {
         Paths.setCurrentLevel("week-1");
         Paths.setCurrentStage("stage");
 
-        player1 = new Character(0, 0, "bf");
-        player1.flipX = !player1.flipX;
-        player1.screenCenter(XY);
-        player1.x += PLAYERSPACE;
-        player1.x -= 170;
-        add(player1);
+        lobbyPlayer1 = new Character(0, 0, "bf");
+        lobbyPlayer1.flipX = !lobbyPlayer1.flipX;
+        lobbyPlayer1.screenCenter(XY);
+        lobbyPlayer1.x += PLAYERSPACE;
+        lobbyPlayer1.x -= 170;
+        add(lobbyPlayer1);
 
-        player2 = new Character(0, 0, "bf");
-        player2.screenCenter(XY);
-        player2.x -= PLAYERSPACE;
-        player2.x -= 170;
+        lobbyPlayer2 = new Character(0, 0, "bf");
+        lobbyPlayer2.screenCenter(XY);
+        lobbyPlayer2.x -= PLAYERSPACE;
+        lobbyPlayer2.x -= 170;
         if (isHost && !server.hasClients())
-            player2.alpha = 0.4;
-        add(player2);
+            lobbyPlayer2.alpha = 0.4;
+        add(lobbyPlayer2);
 
-        player1DisplayName = new FlxText(0, player1.y - 40, 0, Player1.nick, 24);
-        player1DisplayName.x = (player1.x + (player1.width / 2)) - (player1DisplayName.width / 2);
+        player1DisplayName = new FlxText(0, lobbyPlayer1.y - 40, 0, player1.nick, 24);
+        player1DisplayName.x = (lobbyPlayer1.x + (lobbyPlayer1.width / 2)) - (player1DisplayName.width / 2);
         add(player1DisplayName);
 
-        player2DisplayName = new FlxText(0, player2.y - 40, 0, Player2.nick, 24);
-        player2DisplayName.x = (player2.x + (player2.width / 2)) - (player2DisplayName.width / 2);
+        player2DisplayName = new FlxText(0, lobbyPlayer2.y - 40, 0, player2.nick, 24);
+        player2DisplayName.x = (lobbyPlayer2.x + (lobbyPlayer2.width / 2)) - (player2DisplayName.width / 2);
         add(player2DisplayName);
 
-        player1DisplayReady = new FlxText(0, player1.y + player1.height + 40, 0, "READY", 24);
-        player1DisplayReady.x = (player1.x + (player1.width / 2)) - (player1DisplayReady.width / 2);
+        player1DisplayReady = new FlxText(0, lobbyPlayer1.y + lobbyPlayer1.height + 40, 0, "READY", 24);
+        player1DisplayReady.x = (lobbyPlayer1.x + (lobbyPlayer1.width / 2)) - (player1DisplayReady.width / 2);
         player1DisplayReady.color = FlxColor.YELLOW;
         player1DisplayReady.visible = false;
         add(player1DisplayReady);
 
-        player2DisplayReady = new FlxText(0, player2.y + player2.height + 40, 0, "READY", 24);
-        player2DisplayReady.x = (player2.x + (player2.width / 2)) - (player2DisplayReady.width / 2);
+        player2DisplayReady = new FlxText(0, lobbyPlayer2.y + lobbyPlayer2.height + 40, 0, "READY", 24);
+        player2DisplayReady.x = (lobbyPlayer2.x + (lobbyPlayer2.width / 2)) - (player2DisplayReady.width / 2);
         player2DisplayReady.color = FlxColor.YELLOW;
         player2DisplayReady.visible = true;
         add(player2DisplayReady);
@@ -216,11 +214,6 @@ class Lobby extends MusicBeatState {
 
     function goToSong(song:String, diff:Int) {
         inGame = true;
-		if (SysFile.exists(Paths.instNoLib(song))) {
-			PlayState.SONG = Song.loadFromJson(song, song);
-		} else {
-			PlayState.SONG = Song.PEloadFromJson(song, song);
-		}
 
 		PlayState.isStoryMode = false;
 		PlayState.storyDifficulty = diff;
@@ -234,6 +227,13 @@ class Lobby extends MusicBeatState {
 		}
 		PlayState.storyWeek = -1;
 		trace('CUR WEEK ' + PlayState.storyWeek);
+
+        if (SysFile.exists(Paths.instNoLib(song))) {
+			PlayState.SONG = Song.loadFromJson(song + PlayState.dataFileDifficulty, song);
+		}
+        else if (SysFile.exists(Paths.PEinst(song))) {
+			PlayState.SONG = Song.PEloadFromJson(song + PlayState.dataFileDifficulty, song);
+		}
 
 		if (isHost) {
             FlxG.switchState(new PlayState("bf", true));
@@ -261,20 +261,30 @@ class Lobby extends MusicBeatState {
     override function update(elapsed) {
         super.update(elapsed);
 
+        var playerCount = 1;
+        if (lobbyPlayer2.alpha == 1) {
+            playerCount = 2;
+        }
+
+        DiscordClient.changePresence(
+            "Multiplayer",
+            'In Lobby ($playerCount/2)'
+        );
+
         animationKeys();
 
-        if (Player1.ready && Player2.ready && !starting) {
+        if (player1.ready && player2.ready && !starting) {
             startCountDown();
         }
 
-        if (Player1.ready && Player2.ready)
+        if (player1.ready && player2.ready)
             starting = true;
 
-        player1DisplayName.text = Player1.nick;
-        player2DisplayName.text = Player2.nick;
+        player1DisplayName.text = player1.nick;
+        player2DisplayName.text = player2.nick;
 
-        player1DisplayReady.visible = Player1.ready;
-        player2DisplayReady.visible = Player2.ready;
+        player1DisplayReady.visible = player1.ready;
+        player2DisplayReady.visible = player2.ready;
 
         if (FlxG.keys.justPressed.ESCAPE) {
             if (isHost) {
@@ -289,12 +299,12 @@ class Lobby extends MusicBeatState {
 
         if (FlxG.keys.justPressed.SPACE) {
             if (isHost) {
-                Player1.ready = !Player1.ready;
-                sendMessage('P1::ready::' + Player1.ready);
+                player1.ready = !player1.ready;
+                sendMessage('P1::ready::' + player1.ready);
             }
             else {
-                Player2.ready = !Player2.ready;
-                sendMessage('P2::ready::' + Player2.ready);
+                player2.ready = !player2.ready;
+                sendMessage('P2::ready::' + player2.ready);
             }
         }
         
@@ -311,12 +321,12 @@ class Lobby extends MusicBeatState {
 	override public function beatHit() {
 		super.beatHit();
 
-        if (player1.animation.curAnim.name == 'idle') {
-            player1.playAnim('idle', true);
+        if (lobbyPlayer1.animation.curAnim.name == 'idle') {
+            lobbyPlayer1.playAnim('idle', true);
         }
-        if (player2.animation.curAnim.name == 'idle') {
-            if (player2.alpha == 1) {
-                player2.playAnim('idle', true);
+        if (lobbyPlayer2.animation.curAnim.name == 'idle') {
+            if (lobbyPlayer2.alpha == 1) {
+                lobbyPlayer2.playAnim('idle', true);
             }
         }
     }
@@ -334,47 +344,47 @@ class Lobby extends MusicBeatState {
     function animationKeys() {
         if (controls.UP_P) {
             if (isHost)
-                player1.playAnim("singUP");
+                lobbyPlayer1.playAnim("singUP");
             else
-                player2.playAnim("singUP");
+                lobbyPlayer2.playAnim("singUP");
             sendMessage("LKP::UP");
         }
 
         if (controls.DOWN_P) {
             if (isHost)
-                player1.playAnim("singDOWN");
+                lobbyPlayer1.playAnim("singDOWN");
             else
-                player2.playAnim("singDOWN");
+                lobbyPlayer2.playAnim("singDOWN");
             sendMessage("LKP::DOWN");
         }
 
         if (controls.LEFT_P) {
             if (isHost)
-                player1.playAnim("singLEFT");
+                lobbyPlayer1.playAnim("singLEFT");
             else
-                player2.playAnim("singLEFT");
+                lobbyPlayer2.playAnim("singLEFT");
             sendMessage("LKP::LEFT");
         }
         
         if (controls.RIGHT_P) {
             if (isHost)
-                player1.playAnim("singRIGHT");
+                lobbyPlayer1.playAnim("singRIGHT");
             else
-                player2.playAnim("singRIGHT");
+                lobbyPlayer2.playAnim("singRIGHT");
             sendMessage("LKP::RIGHT");
         }
 
         if (!controls.UP && !controls.DOWN && !controls.LEFT && !controls.RIGHT) {
             // player.animation.curAnim.name != "idle" so it doesnt spam
             if (isHost) {
-                if (player1.animation.curAnim.name != "idle")
+                if (lobbyPlayer1.animation.curAnim.name != "idle")
                     sendMessage("LKR");
-                player1.playAnim("idle");
+                lobbyPlayer1.playAnim("idle");
             }
             else {
-                if (player2.animation.curAnim.name != "idle")
+                if (lobbyPlayer2.animation.curAnim.name != "idle")
                     sendMessage("LKR");
-                player2.playAnim("idle");
+                lobbyPlayer2.playAnim("idle");
             }
         }
     }
@@ -383,6 +393,11 @@ class Lobby extends MusicBeatState {
 class LobbySelectorState extends FlxState {
     public function new() {
         super();
+
+        DiscordClient.changePresence(
+            "Multiplayer",
+            "In Connect Menu"
+        );
 
         FlxG.mouse.visible = true;
 

@@ -144,6 +144,8 @@ class PlayState extends MusicBeatState {
 			} else {
 				whichCharacterToBotFC = "dad";
 			}
+		} else {
+			whichCharacterToBotFC = "";
 		}
 	}
 
@@ -304,6 +306,9 @@ class PlayState extends MusicBeatState {
 		// String that contains the mode defined here so it isn't necessary to call changePresence for each mode
 		if (isStoryMode) {
 			detailsText = "Story Mode: Week " + storyWeek;
+		}
+		if (isMultiplayer) {
+			detailsText = "Multiplayer";
 		}
 		else {
 			detailsText = "Freeplay";
@@ -602,7 +607,7 @@ class PlayState extends MusicBeatState {
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
 
-		if (Lobby.isHost) {
+		if (Lobby.isHost && isMultiplayer) {
             var hostMode = new FlxText(10, 20, 0, 'HOST MODE', 16);
             hostMode.color = FlxColor.YELLOW;
             add(hostMode);
@@ -2633,7 +2638,7 @@ class PlayState extends MusicBeatState {
 				Lobby.server.sendStringToCurClient(s);
 	}
 
-	function noteMiss(direction:Int = 1, tooLate:Bool = false, daNote:Note = null):Void {
+	function noteMiss(direction:Int = 1, tooLate:Bool = false, ?daNote:Note = null):Void {
 		var ignore = false;
 
 		if (daNote == null) {
@@ -2648,11 +2653,14 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (!ignore) {
-			if (!daNote.isSustainNote) {
-				accuracy.judge("miss");
-			} else {
-				accuracy.judge("missSus");
+			if (daNote != null) {
+				if (!daNote.isSustainNote) {
+					accuracy.judge("miss");
+				} else {
+					accuracy.judge("missSus");
+				}
 			}
+
 			misses += 1;
 			combo = 0;
 			songScore -= 10;
@@ -2785,14 +2793,83 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	public function goodNoteHit(noteDatas:Note, ?noteHitAsDad:Bool = false):Void {
+	public function multiplayerNoteHit(noteDatas:Note, ?noteHitAsDad:Bool = null) {
+		var note:Note = null;
+		notes.forEachAlive(function(daNote:Note) {
+			if (daNote.strumTime == noteDatas.strumTime && daNote.noteData == noteDatas.noteData && daNote.mustPress == !noteHitAsDad) {
+				note = daNote;
+			}
+		});
+
+		if (note != null) {
+			var whichAnimationToPlay = null;
+	
+			if (SONG.whichK == 6) {
+				switch (note.noteData) {
+					case 0:
+						whichAnimationToPlay = 'singLEFT';
+					case 1:
+						whichAnimationToPlay = 'singUP';
+					case 2:
+						whichAnimationToPlay = 'singRIGHT';
+					case 3:
+						whichAnimationToPlay = 'singLEFT';
+					case 4:
+						whichAnimationToPlay = 'singDOWN';
+					case 5:
+						whichAnimationToPlay = 'singRIGHT';
+				}
+			} else {
+				switch (note.noteData) {
+					case 0:
+						whichAnimationToPlay = 'singLEFT';
+					case 1:
+						whichAnimationToPlay = 'singDOWN';
+					case 2:
+						whichAnimationToPlay = 'singUP';
+					case 3:
+						whichAnimationToPlay = 'singRIGHT';
+				}
+			}
+	
+			if (whichAnimationToPlay != null) {
+				if (noteHitAsDad) {
+					dad.playAnim(whichAnimationToPlay, true);
+					
+					strumPlayAnim(note.noteData, "dad", 'confirm');
+				}
+				else {
+					bf.playAnim(whichAnimationToPlay, true);
+					
+					strumPlayAnim(note.noteData, "bf", 'confirm');
+				}
+			}
+
+			note.wasGoodHit = true;
+			vocals.volume = 1;
+
+			removeNote(note);
+		}
+	}
+
+	public function goodNoteHit(noteDatas:Note, ?noteHitAsDad:Bool = null):Void {
 		try {
+			if (noteHitAsDad == null) {
+				if (playAs == "dad") {
+					noteHitAsDad = true;
+				} else {
+					noteHitAsDad = false;
+				}
+			}
 			var note:Note = null;
 			notes.forEachAlive(function(daNote:Note) {
-				if (daNote.strumTime == noteDatas.strumTime && daNote.noteData == noteDatas.noteData && daNote.mustPress == (!noteHitAsDad)) {
+				if (daNote.strumTime == noteDatas.strumTime && daNote.noteData == noteDatas.noteData && daNote.mustPress == !noteHitAsDad) {
 					note = daNote;
 				}
 			});
+			if (note == null) {
+				trace("note is null");
+			}
 	
 			if (noteHitAsDad == null) {
 				if (playAs == "bf") {
@@ -2866,18 +2943,14 @@ class PlayState extends MusicBeatState {
 				vocals.volume = 1;
 	
 				if (!note.isSustainNote) {
-					notes.forEachAlive(function(daNote:Note) {
-						if (daNote.strumTime == note.strumTime && daNote.noteData == note.noteData) {
-							sendMultiplayerMessage("NP::" + daNote.strumTime + "::" + daNote.noteData);
-							ActionNoteonPressed(daNote);
-							removeNote(daNote);
-						}
-					});
+					sendMultiplayerMessage("NP::" + note.strumTime + "::" + note.noteData);
+					ActionNoteonPressed(note);
+					removeNote(note);
 				}
 			}
 		}
 		catch (exc) {
-			trace(exc);
+			trace(exc.details());
 		}
 	}
 
@@ -2885,8 +2958,9 @@ class PlayState extends MusicBeatState {
 		new FlxTimer().start(5, function(timer:FlxTimer) {
 			#if cpp
 			if (health > 0 && !paused) {
-				DiscordClient.changePresence(detailsText
-					+ " " + SONG.song + " (" + storyDifficultyText + ")", 
+				DiscordClient.changePresence(
+					detailsText + " " + SONG.song + " (" + storyDifficultyText + ")", 
+
 					"Score: " + songScore + " | Misses: " + misses,
 					iconRPC, true,
 					songLength - Conductor.songPosition);

@@ -1,7 +1,6 @@
 package;
 
 import sys.FileSystem;
-import sys.io.File;
 import multiplayer.Lobby;
 import haxe.io.Path;
 import lime.utils.Assets;
@@ -77,8 +76,8 @@ class CoolUtil {
 	}
 	
 	public static function clearMPlayers() {
-		Player1.clear();
-		Player2.clear();
+		Lobby.player1.clear();
+		Lobby.player2.clear();
 	}
 
 	public static function coolTextFile(path:String, ?modsFolder = false):Array<String> {

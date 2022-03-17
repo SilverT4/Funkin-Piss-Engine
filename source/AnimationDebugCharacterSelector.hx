@@ -1,6 +1,5 @@
 package;
 
-import flixel.addons.ui.FlxUIInputText;
 import flixel.FlxG;
 import flixel.text.FlxText;
 import flixel.FlxState;

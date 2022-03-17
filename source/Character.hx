@@ -971,7 +971,7 @@ class Character extends FlxSprite {
 			}
 		} else {
 			#if debug
-			trace("animation " + AnimName + " doesn't exist");
+			//trace("animation " + AnimName + " doesn't exist");
 			#end
 		}
 	}

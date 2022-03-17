@@ -13,6 +13,7 @@ haxelib install openfl-webm
 haxelib install yaml
 haxelib install linc_luajit
 haxelib install udprotean
+haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 ```
 3. And to compile just type ```lime test windows -debug``` or ```lime test windows``` in current folder command line
 

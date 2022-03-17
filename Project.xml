@@ -133,6 +133,7 @@
 	<haxelib name="yaml"/>
 	<haxelib name="linc_luajit"/>
 	<haxelib name="udprotean" />
+	<haxelib name="linc_clipboard" />
 	
 	<!-- <haxelib name="hxcpp-debug-server" if="desktop"/> -->
 

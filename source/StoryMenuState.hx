@@ -28,7 +28,7 @@ class StoryMenuState extends MusicBeatState {
 
 	var weekIDs:Array<String> = ['week0', 'week1', 'week2', 'week3', 'week4', 'week5', 'week6', 'week7'];
 
-	public static var weekUnlocked:Array<Bool> = [true, false, false, false, false, false, false, false];
+	public static var weekUnlocked:Array<Bool> = [true, true, true, true, true, true, true, true];
 	var weekSongs:Array<Dynamic> = [
 		['Tutorial'],
 		['Bopeebo', 'Fresh', 'Dadbattle'],

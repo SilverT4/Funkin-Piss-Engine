@@ -1117,9 +1117,10 @@ class PlayState extends MusicBeatState {
 
 					sustainNote.mustPress = gottaHitNote;
 
+					if (sustainNote.mustPress) sustainNote.x += FlxG.width / 2; // general offset
+
 					if (sustainNote.isGoodNote) {
 						if (sustainNote.mustPress) {
-							sustainNote.x += FlxG.width / 2; // general offset
 							if (playAs == "bf") {
 								accuracy.addNote();
 							}
@@ -1137,9 +1138,10 @@ class PlayState extends MusicBeatState {
 					cacheCharacter(splicedValue[0], splicedValue[1]);
 				}
 
+				if (swagNote.mustPress) swagNote.x += FlxG.width / 2; // general offset
+
 				if (swagNote.isGoodNote) {
 					if (swagNote.mustPress) {
-						swagNote.x += FlxG.width / 2; // general offset
 						if (playAs == "bf") {
 							accuracy.addNote();
 						}

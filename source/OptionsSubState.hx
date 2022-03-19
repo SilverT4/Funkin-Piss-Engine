@@ -100,29 +100,9 @@ class OptionsSubState extends FlxSubState {
 					textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
 				}
 				else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
-					switch (Options.bgDimness) {
-						case 0.1:
-							Options.bgDimness = 0.0;
-						case 0.2:
-							Options.bgDimness = 0.1;
-						case 0.3:
-							Options.bgDimness = 0.2;
-						case 0.4:
-							Options.bgDimness = 0.3;
-						case 0.5:
-							Options.bgDimness = 0.4;
-						case 0.6:
-							Options.bgDimness = 0.5;
-						case 0.7:
-							Options.bgDimness = 0.6;
-						case 0.8:
-							Options.bgDimness = 0.7;
-						case 0.9:
-							Options.bgDimness = 0.8;
-						case 1.0:
-							Options.bgDimness = 0.9;
-					}
-					textMenuItems[curSelected] = "Background Dimness: " + Options.bgDimness;
+					if (Options.bgDimness > 0.0)
+						Options.bgDimness -= 0.05;
+					textMenuItems[curSelected] = "Background Dimness: " + Std.string(Options.bgDimness);
 				}
 	
 				else if (textMenuItems[curSelected].startsWith("Controls: ")) {
@@ -143,29 +123,8 @@ class OptionsSubState extends FlxSubState {
 					textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
 				}
 				else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
-					switch (Options.bgDimness) {
-						case 0.0:
-							Options.bgDimness = 0.1;
-						case 0.1:
-							Options.bgDimness = 0.2;
-						case 0.2:
-							Options.bgDimness = 0.3;
-						case 0.3:
-							Options.bgDimness = 0.4;
-						case 0.4:
-							Options.bgDimness = 0.5;
-						case 0.5:
-							Options.bgDimness = 0.6;
-						case 0.6:
-							Options.bgDimness = 0.7;
-						case 0.7:
-							Options.bgDimness = 0.8;
-						case 0.8:
-							Options.bgDimness = 0.9;
-						case 0.9:
-							Options.bgDimness = 1.0;
-					}
-					textMenuItems[curSelected] = "Background Dimness: " + Options.bgDimness;
+					if (Options.bgDimness < 1.0) Options.bgDimness += 0.05;
+					textMenuItems[curSelected] = "Background Dimness: " + Std.string(Options.bgDimness);
 				}
 				
 				else if (textMenuItems[curSelected].startsWith("Controls: ")) {

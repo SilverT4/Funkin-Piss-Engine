@@ -25,7 +25,7 @@ class AnimationDebugCharacterSelector extends FlxState {
         characters.push("dad-custom");
         characters.push("gf-custom");
         
-        charDropDown = new ScrollUIDropDownMenu(0, 0, characters, function(character:String, i) {
+        charDropDown = new UIDropDownMenu(0, 0, characters, function(character:String, i) {
 			FlxG.switchState(new AnimationDebug(character));
 		});
         charDropDown.scrollFactor.set();
@@ -39,5 +39,5 @@ class AnimationDebugCharacterSelector extends FlxState {
         FlxG.mouse.visible = true;
     }
 
-	var charDropDown:ScrollUIDropDownMenu;
+	var charDropDown:UIDropDownMenu;
 }

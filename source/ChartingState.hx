@@ -120,7 +120,7 @@ class ChartingState extends MusicBeatState {
 	 * WILL BE THE CURRENT / LAST PLACED NOTE
 	**/
 	var curSelectedNote:Array<Dynamic>;
-	var actionMenu:ScrollUIDropDownMenu;
+	var actionMenu:UIDropDownMenu;
 	var actionValue:UIInputText;
 
 	var tempBpm:Int = 0;
@@ -305,7 +305,7 @@ class ChartingState extends MusicBeatState {
 		stepperSpeed.name = 'song_speed';
 
 		var maniaList = ["4K", "6K"];
-		var whichKMenu = new ScrollUIDropDownMenu(stepperSpeed.x, stepperSpeed.y + stepperSpeed.width + 17, maniaList, function onSelect(s, i) {
+		var whichKMenu = new UIDropDownMenu(stepperSpeed.x, stepperSpeed.y + stepperSpeed.width + 17, maniaList, function onSelect(s, i) {
 			_song.whichK = Std.parseInt(s);
 			setBGgrid();
 			updateGrid();
@@ -314,7 +314,7 @@ class ChartingState extends MusicBeatState {
 		whichKMenu.selectLabel(_song.whichK + "K");
 		var maniaText = new FlxText(whichKMenu.x - 5, whichKMenu.y - 15, 0, "Mania:");
 
-		var stagesMenu = new ScrollUIDropDownMenu(whichKMenu.x + 130, whichKMenu.y, CoolUtil.getStages(), function onSelect(s, i) {
+		var stagesMenu = new UIDropDownMenu(whichKMenu.x + 130, whichKMenu.y, CoolUtil.getStages(), function onSelect(s, i) {
 			_song.stage = s;
 		}, 6);
 		stagesMenu.selectLabel(_song.stage);
@@ -322,14 +322,14 @@ class ChartingState extends MusicBeatState {
 
 		var characters:Array<String> = CoolUtil.getCharacters();
 
-		var player1DropDown = new ScrollUIDropDownMenu(10, whichKMenu.y + 50, characters, function(character:String, i) {
+		var player1DropDown = new UIDropDownMenu(10, whichKMenu.y + 50, characters, function(character:String, i) {
 			_song.player1 = character;
 			updateHeads();
 		});
 		player1DropDown.selectLabel(_song.player1);
 		var boyfriendText = new FlxText(player1DropDown.x - 5, player1DropDown.y - 15, 0, "Boyfriend:");
 
-		var player2DropDown = new ScrollUIDropDownMenu(player1DropDown.x + 130, player1DropDown.y, characters, function(character:String, i) {
+		var player2DropDown = new UIDropDownMenu(player1DropDown.x + 130, player1DropDown.y, characters, function(character:String, i) {
 			_song.player2 = character;
 			updateHeads();
 		});
@@ -456,7 +456,7 @@ class ChartingState extends MusicBeatState {
 		}
 		var text2 = new FlxText(actionValue.x, actionValue.y - 15, 0, "Value:");
 
-		actionMenu = new ScrollUIDropDownMenu(10, 50, actionNoteList, function onSelect(s, i) {
+		actionMenu = new UIDropDownMenu(10, 50, actionNoteList, function onSelect(s, i) {
 			if (curSelectedNote != null) {
 				if (!CoolUtil.isEmpty(s) && curSelectedNote.length < 4) {
 					curSelectedNote[3] = s;

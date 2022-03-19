@@ -18,7 +18,7 @@ class DebugStageSelector extends FlxState {
         
         var stages:Array<String> = CoolUtil.getStages();
         
-        charDropDown = new ScrollUIDropDownMenu(0, 0, stages, function(stage:String, i) {
+        charDropDown = new UIDropDownMenu(0, 0, stages, function(stage:String, i) {
 			FlxG.switchState(new StageDebug(stage));
 		});
         charDropDown.scrollFactor.set();
@@ -31,5 +31,5 @@ class DebugStageSelector extends FlxState {
         FlxG.mouse.visible = true;
     }
 
-	var charDropDown:ScrollUIDropDownMenu;
+	var charDropDown:UIDropDownMenu;
 }

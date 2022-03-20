@@ -20,13 +20,13 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 *Message to motherfuckers from gamaverse: this engine supports html5 partially, have fun on trying to ~~port~~ steal someone's mod to your garbage site <3*
 ## Nice Stuff / Features
 * 6K Mania Support
-* Action Notes
 * Multiplayer (in very early phase, access it by pressing M in main menu)
+* Action Notes
+* Custom Skins (no need to change character in chart editor!)
 * Make mods without touching code
-* Week 7 Ported with Week 7 and Note Splashes
-* Custom Skins
+* 0.2.8 Version stuff ported like: Week 7, Note Splashes etc.
 * Configs are in YAML instead of JSON so it is easier to read them
-* Dialogue Cutscenes (not finished)
+* Dialogue Cutscenes (not finished, still meh)
 * Lua Support
 * And some fixes to Vanilla
 ## Credits

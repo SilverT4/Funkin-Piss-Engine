@@ -1,5 +1,7 @@
 package;
 
+import flixel.graphics.frames.FlxAtlasFrames;
+import flixel.FlxState;
 import flixel.FlxSubState;
 import flixel.FlxCamera;
 import flixel.FlxGame;
@@ -12,70 +14,62 @@ import flixel.util.FlxColor;
 using StringTools;
 
 class OptionsSubState extends FlxSubState {
-	var textMenuItems:Array<String> = [
-		'Controls: ' + Options.controls,
-		'Ghost Tapping: ' + Options.ghostTapping,
-		'FPS Limit: ' + Options.framerate,
-		'Background Dimness: ' + Options.bgDimness,
-		'Discord Rich Presence: ' + Options.discordRPC,
-		'BF Skin',
-		'GF Skin',
-		'Dad Skin',
+
+	var options = [
+		'Gameplay',
+		'Preferences'
 	];
-
-	var selector:FlxSprite;
+	var optionsItems = new FlxTypedGroup<Alphabet>();
 	var curSelected:Int = 0;
-	var gameZoom = FlxG.camera.zoom;
-
-	var inGame = false;
-
-	var grpOptionsTexts:FlxTypedGroup<FlxText>;
+	var inGame:Bool;
 
 	private var controls(get, never):Controls;
 
 	inline function get_controls():Controls
 		return PlayerSettings.player1.controls;
-	public function new(inGame) {
+
+	public function new(?inGame = false) {
 		super();
 
 		this.inGame = inGame;
-		// FlxG.cameras.add(optionsCamera);
 
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0.5;
-		bg.scrollFactor.set();
+		if (inGame) {
+			var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
+			bg.alpha = 0.6;
+			bg.scrollFactor.set();
+			add(bg);
+		}
+		else {
+			var bg = new Background(FlxColor.ORANGE);
+			add(bg);
+		}
 
-		grpOptionsTexts = new FlxTypedGroup<FlxText>();
+		/*
+		var testBg = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.MAGENTA);
+		testBg.scrollFactor.set();
+		add(testBg);
+		*/
 
-		selector = new FlxSprite().makeGraphic(5, 5, FlxColor.TRANSPARENT);
-		selector.scrollFactor.set();
+		var curY = 0.0;
+		var curIndex = -1;
+		for (s in options) {
+			curIndex++;
+			var option = new Alphabet(0, 0, s, true);
+			option.ID = curIndex;
+			option.scrollFactor.set();
+			option.screenCenter(XY);
+			option.y += curY;
+			curY += option.height;
 
-		var applyInfo:FlxText = new FlxText(0, FlxG.height - 45, "PRESS ENTER TO APPLY", 32);
-		applyInfo.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
-		applyInfo.scrollFactor.set();
-		applyInfo.screenCenter(X);
-
-		add(bg);
-		add(grpOptionsTexts);
-		add(selector);
-		add(applyInfo);
-
-		updateMenu();
+			optionsItems.add(option);
+		}
+		for (item in optionsItems) {
+			item.y -= curY / 2;
+		}
+		add(optionsItems);
 
 		// sets this state camera to camStatic
 		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
-	}
-
-	function updateMenu() {
-		grpOptionsTexts.clear();
-		for (i in 0...textMenuItems.length) {
-			//not in Alphabet font for now because i dont want to fuck with it for 3 hours
-			var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, textMenuItems[i], 32);
-			optionText.scrollFactor.set();
-			optionText.ID = i;
-			optionText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
-			grpOptionsTexts.add(optionText);
-		}
 	}
 
 	override function update(elapsed:Float) {
@@ -91,92 +85,86 @@ class OptionsSubState extends FlxSubState {
 			curSelected += 1;
 		}
 
-		if (controls.RIGHT_P || controls.LEFT_P) {
-			if (controls.LEFT_P) {
-				if (textMenuItems[curSelected].startsWith("FPS Limit")) {
-					if (Options.framerate > 5) {
-						Options.framerate -= 5;
-					}
-					textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
-				}
-				else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
-					if (Options.bgDimness > 0.0)
-						Options.bgDimness -= 0.05;
-					textMenuItems[curSelected] = "Background Dimness: " + Std.string(Options.bgDimness);
-				}
-	
-				else if (textMenuItems[curSelected].startsWith("Controls: ")) {
-					if (Options.controls == "ASWD") {
-						Options.controls = "DFJK";
-					}
-					else {
-						Options.controls = "ASWD";
-					}
-					textMenuItems[curSelected] = "Controls: " + Options.controls;
-				}
-			}
-	
-			if (controls.RIGHT_P) {
-				if (textMenuItems[curSelected].startsWith("FPS Limit")) {
-					if (Options.framerate < 240)
-						Options.framerate += 5;
-					textMenuItems[curSelected] = "FPS Limit: " + Options.framerate;
-				}
-				else if (textMenuItems[curSelected].startsWith("Background Dimness")) {
-					if (Options.bgDimness < 1.0) Options.bgDimness += 0.05;
-					textMenuItems[curSelected] = "Background Dimness: " + Std.string(Options.bgDimness);
-				}
-				
-				else if (textMenuItems[curSelected].startsWith("Controls: ")) {
-					if (Options.controls == "ASWD") {
-						Options.controls = "DFJK";
-					}
-					else {
-						Options.controls = "ASWD";
-					}
-					textMenuItems[curSelected] = "Controls: " + Options.controls;
-				}
-			}
-
-			if (textMenuItems[curSelected].startsWith("Ghost Tapping")) {
-				Options.ghostTapping = !Options.ghostTapping;
-				textMenuItems[curSelected] = "Ghost Tapping: " + Options.ghostTapping;
-			}
-			else if (textMenuItems[curSelected].startsWith("Discord Rich Presence: ")) {
-				Options.discordRPC = !Options.discordRPC;
-				textMenuItems[curSelected] = "Discord Rich Presence: " + Options.discordRPC;
-			}
-
-			Options.saveAll();
-			updateMenu();
-		}
-
-		if (FlxG.keys.justPressed.ESCAPE) {
-			FlxG.sound.play(Paths.sound('cancelMenu'));
-			MainMenuState.selectedSomethin = false;
-			FlxG.camera.zoom = gameZoom;
-			PlayState.openSettings = false;
-			close();
-		}
-
 		if (curSelected < 0)
-			curSelected = textMenuItems.length - 1;
+			curSelected = optionsItems.length - 1;
 
-		if (curSelected >= textMenuItems.length)
+		if (curSelected >= optionsItems.length)
 			curSelected = 0;
 
-		grpOptionsTexts.forEach(function(txt:FlxText) {
-			txt.color = FlxColor.WHITE;
+		optionsItems.forEach(function(alphab:Alphabet) {
+			alphab.alpha = 0.6;
 
-			if (txt.ID == curSelected) {
-				txt.color = FlxColor.YELLOW;
+			if (alphab.ID == curSelected) {
+				alphab.alpha = 1;
 			}
 		});
 
 		if (FlxG.keys.justPressed.ENTER) {
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
-			Options.applyAll();
-			switch (textMenuItems[curSelected]) {
+			switch (options[curSelected]) {
+				case '${options[0]}', "Gameplay":
+					closeSubState();
+					FlxG.state.openSubState(new OptionsGameplaySubState(inGame));
+				case '${options[1]}', "Preferences":
+					closeSubState();
+					FlxG.state.openSubState(new OptionsPrefencesSubState(inGame));
+			}
+		}
+
+		if (FlxG.keys.justPressed.ESCAPE) {
+			FlxG.sound.play(Paths.sound('cancelMenu'));
+			MainMenuState.selectedSomethin = false;
+			PlayState.openSettings = false;
+			if (inGame) close();
+			else FlxG.switchState(new MainMenuState());
+		}
+	}
+}
+
+class OptionsPrefencesSubState extends OptionSubState {
+	public function new(inGame) {
+		var items = [
+			new OptionItem('FPS Limit: ' + Options.framerate),
+			new OptionItem('Background Dimness: ' + Options.bgDimness),
+			new OptionItem('Discord Rich Presence', true, Options.discordRPC, value -> Options.discordRPC = value),
+			new OptionItem('BF Skin'),
+			new OptionItem('GF Skin'),
+			new OptionItem('Dad Skin')
+		];
+		super(items, inGame);
+	}
+	
+	override public function update(elapsed) {
+		super.update(elapsed);
+
+		if (controls.RIGHT_P || controls.LEFT_P) {
+			if (controls.LEFT_P) {
+				if (itemList[curSelected].text.startsWith("FPS Limit")) {
+					if (Options.framerate > 5)
+						Options.framerate -= 5;
+					setOptionText(curSelected, "FPS Limit: " + Options.framerate);
+				}
+				else if (itemList[curSelected].text.startsWith("Background Dimness")) {
+					if (Options.bgDimness > 0.0)
+						Options.bgDimness -= 0.05;
+					setOptionText(curSelected, "Background Dimness: " + Options.bgDimness);
+				}
+			}
+			if (controls.RIGHT_P) {
+				if (itemList[curSelected].text.startsWith("FPS Limit")) {
+					if (Options.framerate < 240)
+						Options.framerate += 5;
+					setOptionText(curSelected, "FPS Limit: " + Options.framerate);
+				}
+				else if (itemList[curSelected].text.startsWith("Background Dimness")) {
+					if (Options.bgDimness < 1.0) Options.bgDimness += 0.05;
+					setOptionText(curSelected, "Background Dimness: " + Options.bgDimness);
+				}
+			}
+		}
+
+		if (controls.ACCEPT) {
+			switch (itemList[curSelected].text) {
 				case "BF Skin":
 					closeSubState();
 					FlxG.state.openSubState(new OptionsCharacterSubState("bf", inGame));
@@ -185,8 +173,225 @@ class OptionsSubState extends FlxSubState {
 					FlxG.state.openSubState(new OptionsCharacterSubState("gf", inGame));
 				case "Dad Skin":
 					closeSubState();
-					FlxG.state.openSubState(new OptionsCharacterSubState("dad", inGame));
+					FlxG.state.openSubState(new OptionsCharacterSubState("dad", inGame));	
 			}
 		}
+	}
+}
+
+class OptionsGameplaySubState extends OptionSubState {
+	public function new(inGame) {
+		var items = [
+			new OptionItem("Controls: " + Options.controls),
+			new OptionItem("Ghost Tapping", true, Options.ghostTapping, value -> Options.ghostTapping = value)
+		];
+		super(items, inGame);
+	}
+	
+	override public function update(elapsed) {
+		super.update(elapsed);
+
+		if (controls.RIGHT_P || controls.LEFT_P) {
+			if (itemList[curSelected].text.startsWith("Controls: ")) {
+				if (Options.controls == "ASWD") {
+					Options.controls = "DFJK";
+				}
+				else {
+					Options.controls = "ASWD";
+				}
+				setOptionText(curSelected, "Controls: " + Options.controls);
+			}
+		}
+	}
+}
+
+
+
+
+
+class OptionSubState extends FlxSubState {
+	private var itemList:Array<OptionItem>;
+
+	public var items = new FlxTypedGroup<OptionItem>();
+	public var checkboxes = new FlxTypedGroup<Checkbox>();
+
+	public var curSelected:Int = 0;
+	var inGame:Bool;
+
+	private var controls(get, never):Controls;
+
+	private inline function get_controls():Controls
+		return PlayerSettings.player1.controls;
+
+	public function new(itemList, inGame) {
+		super();
+		
+		this.inGame = inGame;
+		this.itemList = itemList;
+
+		var bg = new Background(FlxColor.MAGENTA);
+		if (inGame) bg.alpha = 0.8;
+		add(bg);
+
+		var curY = 0.0;
+		var curIndex = -1;
+		for (option in itemList) {
+			curIndex++;
+			option.ID = curIndex;
+			option.y += curY;
+			curY += option.height + 25;
+			items.add(option);
+
+			if (option.hasCheckBox) {
+				option.checkbox.x = option.x + option.width + 10;
+				option.checkbox.y = option.y;
+				option.checkbox.ID = curIndex;
+				checkboxes.add(option.checkbox);
+			}
+		}
+		add(items);
+		add(checkboxes);
+
+		// sets this state camera to camStatic
+		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		if (controls.UP_P) {
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+			curSelected -= 1;
+		}
+
+		if (controls.DOWN_P) {
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+			curSelected += 1;
+		}
+
+		if (curSelected < 0)
+			curSelected = items.length - 1;
+
+		if (curSelected >= items.length)
+			curSelected = 0;
+
+		items.forEach(function(alphab:Alphabet) {
+			alphab.alpha = 0.6;
+
+			if (alphab.ID == curSelected) {
+				alphab.alpha = 1;
+			}
+		});
+
+		if (controls.ACCEPT) {
+			for (checkbox in checkboxes) {
+				if (checkbox.ID == curSelected) {
+					checkOption(curSelected);
+					break;
+				}
+			}
+		}
+
+		if (FlxG.keys.justPressed.ESCAPE) {
+			Options.saveAll();
+			Options.applyAll();
+			closeSubState();
+			FlxG.state.openSubState(new OptionsSubState(inGame));
+		}
+	}
+
+	public function setOptionText(i:Int, s:String) {
+		for (alphab in items) {
+			if (alphab.ID == i) {
+				alphab.setText(s);
+				alphab.screenCenter(X);
+				break;
+			}
+		}
+	}
+
+	public function checkOption(i:Int) {
+		for (checkbox in checkboxes) {
+			if (checkbox.ID == i) {
+				checkbox.triggerChecked();
+				break;
+			}
+		}
+	}
+}
+
+class OptionItem extends Alphabet {
+	public var checkbox:Checkbox;
+	public var hasCheckBox:Bool;
+
+	public function new(text, ?hasCheckBox = false, ?checkBoxValue = false, ?checkBoxCallback:(value:Bool) -> Void) {
+		super(0, 0, text);
+
+		this.hasCheckBox = hasCheckBox;
+		scrollFactor.set();
+		screenCenter(X);
+		
+		if (hasCheckBox) {
+			checkbox = new Checkbox(x + width + 10, y, checkBoxValue);
+			checkbox.hitCallback = checkBoxCallback;
+			checkbox.scrollFactor.set();
+		}
+	}
+}
+
+class Checkbox extends AnimatedSprite {
+	private var checked = false;
+
+	public var hitCallback:(value:Bool) -> Void;
+
+	public function new(X, Y, ?checked:Bool = false) {
+		super(X, Y);
+
+		this.checked = checked;
+
+		frames = Paths.getSparrowAtlas('checkboxThingie');
+		antialiasing = true;
+		setGraphicSize(Std.int(frameWidth * 0.75));
+        updateHitbox();
+
+		animation.addByPrefix("unselected", "Check Box unselected", 24);
+		animation.addByPrefix("selecting", "Check Box selecting animation", 24, false);
+		animation.addByPrefix("selected", "Check Box Selected Static", 24);
+
+		setOffset("unselected", 0, -25);
+		setOffset("selecting", 19, 50);
+		setOffset("selected", 10, 28);
+
+		if (checked) playAnim("selected");
+		else playAnim("unselected");
+
+		animation.finishCallback = function(name:String) {
+			if (name == "selecting")
+				playAnim("selected");
+		};
+	}
+
+	public function triggerChecked() {
+		checked = !checked;
+		hitCallback(checked);
+		if (checked)
+			playAnim("selecting");
+		else
+			playAnim("unselected");
+	}
+}
+
+class Background extends FlxSprite {
+	public function new(Color:FlxColor) {
+		super(-80, 0);
+
+		loadGraphic(Paths.image('menuDesat'));
+		scrollFactor.x = 0;
+		scrollFactor.y = 0.15;
+		setGraphicSize(Std.int(width * 1.1));
+		updateHitbox();
+		screenCenter();
+		antialiasing = true;
+		color = Color;
 	}
 }

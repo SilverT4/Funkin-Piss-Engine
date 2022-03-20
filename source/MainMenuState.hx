@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxSubState;
 import multiplayer.Lobby.LobbySelectorState;
 #if desktop
 import Discord.DiscordClient;
@@ -93,10 +94,10 @@ class MainMenuState extends MusicBeatState {
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var pengineVer:FlxText = new FlxText(5, FlxG.height - (18 * 2), 0, "PEngine v1.0b (in beta)", 12);
-		pengineVer.scrollFactor.set();
-		pengineVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		add(pengineVer);
+		var engineVer:FlxText = new FlxText(5, FlxG.height - (18 * 2), 0, '${Main.ENGINE_NAME} v${Main.ENGINE_VER}', 12);
+		engineVer.scrollFactor.set();
+		engineVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		add(engineVer);
 
 		var versionShit:FlxText = new FlxText(5, FlxG.height - (18 * 1), 0, "v" + Application.current.meta.get('version'), 12);
 		versionShit.scrollFactor.set();
@@ -139,8 +140,6 @@ class MainMenuState extends MusicBeatState {
 
 			if (controls.ACCEPT) {
 				switch (optionShit[curSelected]) {
-					case 'options':
-						jumpToOptions();
 					case 'donate':
 						#if linux
 						Sys.command('/usr/bin/xdg-open', ["https://ninja-muffin24.itch.io/funkin", "&"]);
@@ -169,10 +168,10 @@ class MainMenuState extends MusicBeatState {
 									switch (daChoice) {
 										case 'story mode':
 											FlxG.switchState(new StoryMenuState());
-											trace("Story Menu Selected");
 										case 'freeplay':
 											FlxG.switchState(new FreeplayState());
-											trace("Freeplay Menu Selected");
+										case 'options':
+											openSubState(new OptionsSubState());
 									}
 								});
 							}
@@ -192,11 +191,6 @@ class MainMenuState extends MusicBeatState {
 		super.onFocusLost();
 		
 		FlxG.autoPause = false;
-	}
-
-	function jumpToOptions() {
-		selectedSomethin = true;
-		super.openSubState(new OptionsSubState(false));
 	}
 
 	function changeItem(huh:Int = 0) {

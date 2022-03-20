@@ -66,6 +66,7 @@ class Options {
 		saveFile();
 	}
 
+	/** Saves the save file */
 	public static function saveFile() {
 		optionsSave.flush();
 	}
@@ -80,6 +81,7 @@ class Options {
 		loadAll();
 	}
 
+	/** Saves settings and saves them to the save file */
 	public static function saveAll() {
 		for (i in 0...saveList.length) {
 			set(saveList[i], Reflect.field(Options, saveList[i]));
@@ -87,12 +89,14 @@ class Options {
 		saveFile();
 	}
 
+	/** Loads settings from save file */
 	public static function loadAll() {
 		for (i in 0...saveList.length) {
 			Reflect.setField(Options, saveList[i], get(saveList[i]));
 		}
 	}
 
+	/** Applies shit from settings to the game like: controls, fps */
 	public static function applyAll() {
 		FlxG.updateFramerate = framerate;
 		FlxG.drawFramerate = framerate;

@@ -1,5 +1,6 @@
 package;
 
+import flixel.util.FlxColor;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -59,24 +60,41 @@ class Alphabet extends FlxSpriteGroup {
 		}
 	}
 
+	public function setText(s:String) {
+		for (alphab in this) {
+			alphab.destroy();
+		}
+		clear();
+		_finalText = s;
+		text = s;
+
+		lastSprite = null;
+		lastWasSpace = false;
+
+		addText();
+	}
+
 	public function addText() {
 		doSplitWords();
 
 		var xPos:Float = 0;
 		for (character in splitWords) {
-			// if (character.fastCodeAt() == " ")
-			// {
-			// }
-
 			if (character == " " || character == "-") {
 				lastWasSpace = true;
 			}
+			
+			#if (haxe >= "4.0.0")
+			var isNumber:Bool = AlphaCharacter.numbers.contains(character);
+			var isSymbol:Bool = AlphaCharacter.symbols.contains(character);
+			#else
+			var isNumber:Bool = AlphaCharacter.numbers.indexOf(character) != -1;
+			var isSymbol:Bool = AlphaCharacter.symbols.indexOf(character) != -1;
+			#end
 
-			if (AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1)
-				// if (AlphaCharacter.alphabet.contains(character.toLowerCase()))
-			{
+			if (AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1 || (!isBold && (isNumber || isSymbol))) {
 				if (lastSprite != null) {
 					xPos = lastSprite.x + lastSprite.width;
+					xPos -= x;
 				}
 
 				if (lastWasSpace) {
@@ -90,15 +108,21 @@ class Alphabet extends FlxSpriteGroup {
 				if (isBold)
 					letter.createBold(character);
 				else {
-					letter.createLetter(character);
+					if (isNumber) {
+						letter.createNumber(character);
+					}
+					else if (isSymbol) {
+						letter.createSymbol(character);
+					}
+					else {
+						letter.createLetter(character);
+					}
 				}
 
 				add(letter);
 
 				lastSprite = letter;
 			}
-
-			// loopNum += 1;
 		}
 	}
 
@@ -107,7 +131,6 @@ class Alphabet extends FlxSpriteGroup {
 	}
 
 	public var personTalking:String = 'gf';
-
 	public function startTypedText():Void {
 		_finalText = text;
 		doSplitWords();
@@ -217,14 +240,17 @@ class AlphaCharacter extends FlxSprite {
 
 	public static var symbols:String = "|~#$%()*+-:;<=>@[]^_.,'!?";
 
+
+	public static var sparrow:FlxAtlasFrames;
+
 	public var row:Int = 0;
 
 	public var size:Float = 1;
 
 	public function new(x:Float, y:Float, size:Float) {
 		super(x, y);
-		var tex = Paths.getSparrowAtlas('alphabet');
-		frames = tex;
+		if (sparrow == null) sparrow = Paths.getSparrowAtlas('alphabet');
+		frames = sparrow;
 
 		setGraphicSize(Std.int(width * size));
 		this.size = size;
@@ -256,8 +282,9 @@ class AlphaCharacter extends FlxSprite {
 
 	public function createNumber(letter:String):Void {
 		animation.addByPrefix(letter, letter, 24);
-		animation.play(letter);
+		y += 60 * size;
 
+		animation.play(letter);
 		updateHitbox();
 	}
 
@@ -266,7 +293,8 @@ class AlphaCharacter extends FlxSprite {
 			case '.':
 				animation.addByPrefix(letter, 'period', 24);
 
-				y += 70 * size;
+				//the text will go a bit off, needs to be rewritten
+				y += Math.pow(100, size) / size / size;
 			case "'":
 				animation.addByPrefix(letter, 'apostraphie', 24);
 
@@ -281,6 +309,10 @@ class AlphaCharacter extends FlxSprite {
 				y += 20 * size;
 			case ",":
 				animation.addByPrefix(letter, 'comma', 24);
+
+				y += 70 * size;
+			case ":":
+				animation.addByPrefix(letter, letter, 24);
 
 				y += 70 * size;
 			default:

@@ -1,5 +1,6 @@
 package multiplayer;
 
+import OptionsSubState.Background;
 import Discord.DiscordClient;
 import flixel.addons.ui.FlxUIDropDownMenu;
 import flixel.addons.ui.FlxUI;
@@ -408,6 +409,10 @@ class LobbySelectorState extends FlxState {
         FlxG.mouse.visible = true;
 
         var BUTTONSPACE = 50;
+
+        var bg = new Background(FlxColor.WHITE);
+        bg.alpha = 0.4;
+        add(bg);
 
         var clientIP = new UIInputText(0, 0, 100, "127.0.0.1", 10);
         clientIP.screenCenter(XY);

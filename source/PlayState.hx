@@ -1,5 +1,6 @@
 package;
 
+import Stage.BackgroundDancer;
 import haxe.io.Bytes;
 import multiplayer.Lobby;
 import flixel.math.FlxRandom;

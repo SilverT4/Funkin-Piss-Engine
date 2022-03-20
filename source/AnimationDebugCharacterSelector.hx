@@ -9,7 +9,7 @@ class AnimationDebugCharacterSelector extends FlxState {
 		super();
 
         var info:FlxText = new FlxText();
-        info.text = 'Select Your Character here';
+        info.text = 'Select Your Asset here';
         info.size = 50;
         info.scrollFactor.set();
         info.screenCenter(XY);
@@ -18,7 +18,8 @@ class AnimationDebugCharacterSelector extends FlxState {
         var info2:FlxText = new FlxText();
         info2.text = 'If you want to select a skin choose "[character]-custom"';
         info2.size = Std.int(info.size / 2);
-        info2.setPosition(info.x, info.y + info.height);
+        info2.screenCenter(X);
+        info2.y = info.y + info.height;
         
         var characters:Array<String> = CoolUtil.getCharacters();
         characters.push("bf-custom");

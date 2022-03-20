@@ -12,6 +12,8 @@ import flixel.input.gamepad.FlxGamepadButton;
 import flixel.input.gamepad.FlxGamepadInputID;
 import flixel.input.keyboard.FlxKey;
 
+// kinda needs to be rewritten
+
 #if (haxe >= "4.0.0")
 enum abstract Action(String) to String from String {
 	var UP = "up";

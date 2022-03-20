@@ -73,7 +73,7 @@ class ServerBehavior extends UDProteanClientBehavior {
 	override function onMessage(msg:Bytes) {
 		try {
 			var strMsg = msg.toString();
-			trace("Server got a message: " + strMsg);
+			//trace("Server got a message: " + strMsg);
 	
 			if (strMsg.contains("::")) {
 				var msgSplitted = strMsg.split("::");
@@ -100,6 +100,7 @@ class ServerBehavior extends UDProteanClientBehavior {
 			}
 		}
 		catch (exc) {
+			trace("Server caught an exception!");
 			trace(exc.details());
  		}
 	}

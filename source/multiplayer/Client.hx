@@ -53,7 +53,7 @@ class ProteanClient extends UDProteanClient {
 		try {
 			var strMsg = msg.toString();
 
-			trace("Client got a message: " + strMsg);
+			//trace("Client got a message: " + strMsg);
 	
 			if (strMsg.contains("::")) {
 				var msgSplitted = strMsg.split("::");
@@ -93,6 +93,7 @@ class ProteanClient extends UDProteanClient {
 			}
 		}
 		catch (exc) {
+			trace("Client caught an exception!");
 			trace(exc.details());
 		}
     }

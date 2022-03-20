@@ -90,12 +90,12 @@ class AnimationDebug extends FlxState {
 			char.flipX = char.config.get("flipX");
 			charO.flipX = char.config.get("flipX");
 		}
-		
+
 		if (reload) {
 			char.flipX = reloadFlipX;
 			charO.flipX = reloadFlipX;
 		}
-		
+
 		charO.alpha = 0.0;
 
 		dumbTexts = new FlxTypedGroup<FlxText>();
@@ -114,17 +114,15 @@ class AnimationDebug extends FlxState {
 
 		var info:FlxText = new FlxText(0, 0, 0, "", 15);
 		info.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
-		info.text = 
-		"WS - Change the animation\n" +
-		"ARROWS - Move the current animation (shift to move it further)\n" +
-		"V - Make a transparent clone of current animation\n" +
-		"IJKL - Move the camera\n" +
-		"QE - Decrease / Increase the camera zoom\n" +
-		"CTRL + S - Save the Config\n" +
-		"R - To reload the Character Config\n" +
-		"C - To change the Character\n"
-		;
-		//flx text is bugged with \n
+		info.text = "WS - Change the animation\n"
+			+ "ARROWS - Move the current animation (shift to move it further)\n"
+			+ "V - Make a transparent clone of current animation\n"
+			+ "IJKL - Move the camera\n"
+			+ "QE - Decrease / Increase the camera zoom\n"
+			+ "CTRL + S - Save the Config\n"
+			+ "R - To reload the Character Config\n"
+			+ "C - To change the Character\n";
+		// flx text is bugged with \n
 		info.scrollFactor.set();
 		info.y = (FlxG.height - info.height) + (info.size * 2);
 		info.x = 10;
@@ -167,7 +165,8 @@ class AnimationDebug extends FlxState {
 		for (text in dumbTexts) {
 			if (text.text.split(" ")[0] == char.animation.curAnim.name) {
 				text.color = FlxColor.YELLOW;
-			} else {
+			}
+			else {
 				text.color = FlxColor.BLUE;
 			}
 		}
@@ -216,7 +215,8 @@ class AnimationDebug extends FlxState {
 			if (char.flipX == false) {
 				char.flipX = true;
 				charO.flipX = true;
-			} else {
+			}
+			else {
 				char.flipX = false;
 				charO.flipX = false;
 			}
@@ -281,7 +281,8 @@ class AnimationDebug extends FlxState {
 	function getAnimNameFromKey(config, key) {
 		if (config.get('animations').get(key).get('name') != null) {
 			return config.get('animations').get(key).get('name');
-		} else {
+		}
+		else {
 			return key;
 		}
 	}
@@ -299,20 +300,20 @@ class AnimationDebug extends FlxState {
 			}
 			var renderedYaml = new YamlRender(char.config);
 			SysFile.writeToFile(char.configPath, renderedYaml.daFinalYAML);
-			
+
 			/*
-			var receipt = {assistant:"Chris", items:[{rice:2.34}], teststst: true};
-			trace(Type.typeof(receipt));
-			trace(Yaml.render(receipt));
-			
-			#if cpp
-			var parserOptions = new ParserOptions();
-			parserOptions.maps = false;
-			var data = Yaml.read("test.yml", parserOptions);
-			trace(Type.typeof(data));
-			trace(Yaml.render(data));
-			#end
-			*/
+				var receipt = {assistant:"Chris", items:[{rice:2.34}], teststst: true};
+				trace(Type.typeof(receipt));
+				trace(Yaml.render(receipt));
+
+				#if cpp
+				var parserOptions = new ParserOptions();
+				parserOptions.maps = false;
+				var data = Yaml.read("test.yml", parserOptions);
+				trace(Type.typeof(data));
+				trace(Yaml.render(data));
+				#end
+			 */
 		}
 	}
 

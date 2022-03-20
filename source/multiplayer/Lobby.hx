@@ -23,14 +23,24 @@ class MultiPlayer {
 	public var nick:String;
     public var ready:Bool;
 
-    public function new() {
-        clear();
-    }
-	/** Sets every `this` variable to their default value */
+    //CURRENTLY UNUSED
+    public var score:Int;
+    public var accuracy:Float;
+    public var misses:Int;
+
+    /** Sets every `this` variable to their default value */
 	public function clear() {
 		nick = "(unknown)";
         ready = false;
+
+        score = 0;
+        accuracy = 0.0;
+        misses = 0;
 	}
+
+    public function new() {
+        clear();
+    }
 }
 
 class Lobby extends MusicBeatState {
@@ -60,7 +70,7 @@ class Lobby extends MusicBeatState {
     public static var curSong:String = "bopeebo";
     public static var curDifficulty:Int = 2;
 
-    public static var songsDropDown:ScrollUIDropDownMenu;
+    public static var songsDropDown:UIDropDownMenu;
 	public static var difficultyDropDown:FlxUIDropDownMenu;
 
     var uiBox:FlxUITabMenu;
@@ -180,7 +190,7 @@ class Lobby extends MusicBeatState {
 		var tab_group_note = new FlxUI(null, uiBox);
 		tab_group_note.name = 'General';
 
-        songsDropDown = new ScrollUIDropDownMenu(10, 20, CoolUtil.getSongs(), function(song:String, i) {
+        songsDropDown = new UIDropDownMenu(10, 20, CoolUtil.getSongs(), function(song:String, i) {
             curSong = song;
             sendMessage('SONG::$curSong');
 		});

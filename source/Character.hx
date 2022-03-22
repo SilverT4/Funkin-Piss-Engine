@@ -1,16 +1,8 @@
 package;
 
-import yaml.util.ObjectMap;
-import haxe.Json;
 import yaml.util.ObjectMap.AnyObjectMap;
-import yaml.Yaml;
-import haxe.io.Path;
-import flixel.FlxG;
 import flixel.FlxSprite;
-import flixel.animation.FlxBaseAnimation;
 import flixel.graphics.frames.FlxAtlasFrames;
-
-using StringTools;
 
 class Character extends FlxSprite {
 	public var animOffsets:Map<String, Array<Dynamic>>;

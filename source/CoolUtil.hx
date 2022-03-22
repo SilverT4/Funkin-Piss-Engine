@@ -6,8 +6,6 @@ import haxe.io.Path;
 import lime.utils.Assets;
 import yaml.Yaml;
 
-using StringTools;
-
 class CoolUtil {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
 

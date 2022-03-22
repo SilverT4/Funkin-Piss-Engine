@@ -97,8 +97,8 @@ class PauseSubState extends MusicBeatSubstate {
 
 		super.update(elapsed);
 
-		var upP = Controls.check(UP, JUST_PRESSED);
-		var downP = Controls.check(DOWN, JUST_PRESSED);
+		var upP = Controls.check(UI_UP, JUST_PRESSED);
+		var downP = Controls.check(UI_DOWN, JUST_PRESSED);
 		var accepted = Controls.check(ACCEPT, JUST_PRESSED);
 
 		if (upP) {

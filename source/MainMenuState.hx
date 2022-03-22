@@ -123,12 +123,12 @@ class MainMenuState extends MusicBeatState {
 				FlxG.switchState(new LobbySelectorState());
 			}
 
-			if (Controls.check(UP, JUST_PRESSED)) {
+			if (Controls.check(UI_UP, JUST_PRESSED)) {
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
 			}
 
-			if (Controls.check(DOWN, JUST_PRESSED)) {
+			if (Controls.check(UI_DOWN, JUST_PRESSED)) {
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
 			}

@@ -275,27 +275,27 @@ class StoryMenuState extends MusicBeatState {
 
 		if (!movedBack) {
 			if (!selectedWeek) {
-				if (Controls.check(UP, JUST_PRESSED)) {
+				if (Controls.check(UI_UP, JUST_PRESSED)) {
 					changeWeek(-1);
 				}
 
-				if (Controls.check(DOWN, JUST_PRESSED)) {
+				if (Controls.check(UI_DOWN, JUST_PRESSED)) {
 					changeWeek(1);
 				}
 
-				if (Controls.check(RIGHT, PRESSED))
+				if (Controls.check(UI_RIGHT, PRESSED))
 					rightArrow.animation.play('press')
 				else
 					rightArrow.animation.play('idle');
 
-				if (Controls.check(LEFT, PRESSED))
+				if (Controls.check(UI_LEFT, PRESSED))
 					leftArrow.animation.play('press');
 				else
 					leftArrow.animation.play('idle');
 
-				if (Controls.check(RIGHT, JUST_PRESSED))
+				if (Controls.check(UI_RIGHT, JUST_PRESSED))
 					changeDifficulty(1);
-				if (Controls.check(LEFT, JUST_PRESSED))
+				if (Controls.check(UI_LEFT, JUST_PRESSED))
 					changeDifficulty(-1);
 			}
 

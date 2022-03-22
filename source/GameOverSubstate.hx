@@ -62,11 +62,11 @@ class GameOverSubstate extends MusicBeatSubstate {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.ACCEPT) {
+		if (Controls.check(ACCEPT, JUST_PRESSED)) {
 			endBullshit();
 		}
 
-		if (controls.BACK) {
+		if (Controls.check(BACK, JUST_PRESSED)) {
 			FlxG.sound.music.stop();
 
 			if (PlayState.isStoryMode)

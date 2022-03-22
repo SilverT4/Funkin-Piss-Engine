@@ -100,7 +100,7 @@ class Options {
 	public static function applyAll() {
 		FlxG.updateFramerate = framerate;
 		FlxG.drawFramerate = framerate;
-		PlayerSettings.player1.controls.bindFromSettings(true);
+		// PlayerSettings.player1.controls.bindFromSettings(true);
 	}
 
 	public static var optionsSave:FlxSave;

@@ -123,22 +123,22 @@ class MainMenuState extends MusicBeatState {
 				FlxG.switchState(new LobbySelectorState());
 			}
 
-			if (controls.UP_P) {
+			if (Controls.check(UP, JUST_PRESSED)) {
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
 			}
 
-			if (controls.DOWN_P) {
+			if (Controls.check(DOWN, JUST_PRESSED)) {
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(1);
 			}
 
-			if (controls.BACK) {
+			if (Controls.check(BACK, JUST_PRESSED)) {
 				FlxG.sound.play(Paths.sound('cancelMenu'));
 				FlxG.switchState(new TitleState());
 			}
 
-			if (controls.ACCEPT) {
+			if (Controls.check(ACCEPT, JUST_PRESSED)) {
 				switch (optionShit[curSelected]) {
 					case 'donate':
 						#if linux

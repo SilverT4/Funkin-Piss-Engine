@@ -349,7 +349,7 @@ class Lobby extends MusicBeatState {
     }
 
     function animationKeys() {
-        if (controls.UP_P) {
+        if (Controls.check(UP)) {
             if (isHost)
                 lobbyPlayer1.playAnim("singUP");
             else
@@ -357,7 +357,7 @@ class Lobby extends MusicBeatState {
             sendMessage("LKP::UP");
         }
 
-        if (controls.DOWN_P) {
+        if (Controls.check(DOWN)) {
             if (isHost)
                 lobbyPlayer1.playAnim("singDOWN");
             else
@@ -365,7 +365,7 @@ class Lobby extends MusicBeatState {
             sendMessage("LKP::DOWN");
         }
 
-        if (controls.LEFT_P) {
+        if (Controls.check(LEFT)) {
             if (isHost)
                 lobbyPlayer1.playAnim("singLEFT");
             else
@@ -373,7 +373,7 @@ class Lobby extends MusicBeatState {
             sendMessage("LKP::LEFT");
         }
         
-        if (controls.RIGHT_P) {
+        if (Controls.check(RIGHT)) {
             if (isHost)
                 lobbyPlayer1.playAnim("singRIGHT");
             else
@@ -381,7 +381,7 @@ class Lobby extends MusicBeatState {
             sendMessage("LKP::RIGHT");
         }
 
-        if (!controls.UP && !controls.DOWN && !controls.LEFT && !controls.RIGHT) {
+        if (!Controls.check(UP) && !Controls.check(DOWN) && !Controls.check(LEFT) && !Controls.check(RIGHT)) {
             // player.animation.curAnim.name != "idle" so it doesnt spam
             if (isHost) {
                 if (lobbyPlayer1.animation.curAnim.name != "idle")

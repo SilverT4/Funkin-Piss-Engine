@@ -24,24 +24,12 @@ class PlayerSettings
 
 	public var id(default, null):Int;
 
-	#if (haxe >= "4.0.0")
-	public final controls:Controls;
-	#else
-	public var controls:Controls;
-	#end
-
 	// public var avatar:Player;
 	// public var camera(get, never):PlayCamera;
 
-	function new(id, scheme)
+	function new(id)
 	{
 		this.id = id;
-		this.controls = new Controls('player$id', scheme);
-	}
-
-	public function setKeyboardScheme(scheme)
-	{
-		controls.setKeyboardScheme(scheme);
 	}
 
 	/* 
@@ -117,6 +105,7 @@ class PlayerSettings
 	 */
 	static public function init():Void
 	{
+		/*
 		if (player1 == null)
 		{
 			player1 = new PlayerSettings(0, Solo);
@@ -149,6 +138,7 @@ class PlayerSettings
 		}
 
 		// DeviceManager.init();
+		*/
 	}
 
 	static public function reset()

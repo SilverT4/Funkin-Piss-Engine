@@ -23,11 +23,6 @@ class OptionsSubState extends FlxSubState {
 	var curSelected:Int = 0;
 	var inGame:Bool;
 
-	private var controls(get, never):Controls;
-
-	inline function get_controls():Controls
-		return PlayerSettings.player1.controls;
-
 	public function new(?inGame = false) {
 		super();
 
@@ -64,12 +59,12 @@ class OptionsSubState extends FlxSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.UP_P) {
+		if (Controls.check(UI_UP)) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected -= 1;
 		}
 
-		if (controls.DOWN_P) {
+		if (Controls.check(UI_DOWN)) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected += 1;
 		}
@@ -131,8 +126,8 @@ class OptionsPrefencesSubState extends OptionSubState {
 	override public function update(elapsed) {
 		super.update(elapsed);
 
-		if (controls.RIGHT_P || controls.LEFT_P) {
-			if (controls.LEFT_P) {
+		if (Controls.check(UI_RIGHT) || Controls.check(UI_LEFT)) {
+			if (Controls.check(UI_LEFT)) {
 				if (itemList[curSelected].text.startsWith("FPS Limit")) {
 					if (Options.framerate > 5)
 						Options.framerate -= 5;
@@ -145,7 +140,7 @@ class OptionsPrefencesSubState extends OptionSubState {
 					setOptionText(curSelected, "Background Dimness: " + Options.bgDimness);
 				}
 			}
-			if (controls.RIGHT_P) {
+			if (Controls.check(UI_RIGHT)) {
 				if (itemList[curSelected].text.startsWith("FPS Limit")) {
 					if (Options.framerate < 240)
 						Options.framerate += 5;
@@ -160,7 +155,7 @@ class OptionsPrefencesSubState extends OptionSubState {
 			}
 		}
 
-		if (controls.ACCEPT) {
+		if (Controls.check(ACCEPT)) {
 			switch (itemList[curSelected].text) {
 				case "BF Skin":
 					closeSubState();
@@ -188,7 +183,7 @@ class OptionsGameplaySubState extends OptionSubState {
 	override public function update(elapsed) {
 		super.update(elapsed);
 
-		if (controls.RIGHT_P || controls.LEFT_P) {
+		if (Controls.check(UI_RIGHT) || Controls.check(UI_LEFT)) {
 			if (itemList[curSelected].text.startsWith("Controls: ")) {
 				if (Options.controls == "ASWD") {
 					Options.controls = "DFJK";
@@ -214,11 +209,6 @@ class OptionSubState extends FlxSubState {
 
 	public var curSelected:Int = 0;
 	var inGame:Bool;
-
-	private var controls(get, never):Controls;
-
-	private inline function get_controls():Controls
-		return PlayerSettings.player1.controls;
 
 	public function new(itemList, inGame) {
 		super();
@@ -255,12 +245,12 @@ class OptionSubState extends FlxSubState {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.UP_P) {
+		if (Controls.check(UI_UP)) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected -= 1;
 		}
 
-		if (controls.DOWN_P) {
+		if (Controls.check(UI_DOWN)) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected += 1;
 		}
@@ -279,7 +269,7 @@ class OptionSubState extends FlxSubState {
 			}
 		});
 
-		if (controls.ACCEPT) {
+		if (Controls.check(ACCEPT)) {
 			for (checkbox in checkboxes) {
 				if (checkbox.ID == curSelected) {
 					checkOption(curSelected);
@@ -403,11 +393,7 @@ class OptionsCharacterSubState extends FlxSubState {
 
     var grpTexts:FlxTypedGroup<FlxText>;
     var inGame = false;
-
-	private var controls(get, never):Controls;
-
-	inline function get_controls():Controls
-		return PlayerSettings.player1.controls;
+	
     override public function new(character, ?inGame) {
         super();
 
@@ -441,12 +427,12 @@ class OptionsCharacterSubState extends FlxSubState {
     override function update(elapsed:Float) {
 		super.update(elapsed);
 
-		if (controls.UP_P) {
+		if (Controls.check(UI_UP)) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected -= 1;
 		}
 
-		if (controls.DOWN_P) {
+		if (Controls.check(UI_DOWN)) {
 			FlxG.sound.play(Paths.sound('scrollMenu'));
 			curSelected += 1;
 		}

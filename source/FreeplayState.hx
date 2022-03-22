@@ -255,9 +255,9 @@ class FreeplayState extends MusicBeatState {
 
 		scoreText.text = "PERSONAL BEST:" + FlxStringUtil.formatMoney(lerpScore, false);
 
-		var upP = controls.UP_P;
-		var downP = controls.DOWN_P;
-		var accepted = controls.ACCEPT;
+		var upP = Controls.check(UI_UP, JUST_PRESSED);
+		var downP = Controls.check(UI_DOWN, JUST_PRESSED);
+		var accepted = Controls.check(ACCEPT, JUST_PRESSED);
 
 		if (upP) {
 			changeSelection(-1);
@@ -271,12 +271,12 @@ class FreeplayState extends MusicBeatState {
 			changeSelection(0);
 		}
 
-		if (controls.LEFT_P)
+		if (Controls.check(UI_LEFT, JUST_PRESSED))
 			changeDiff(-1);
-		if (controls.RIGHT_P)
+		if (Controls.check(UI_RIGHT, JUST_PRESSED))
 			changeDiff(1);
 
-		if (controls.BACK) {
+		if (Controls.check(BACK, JUST_PRESSED)) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			FlxG.switchState(new MainMenuState());
 		}

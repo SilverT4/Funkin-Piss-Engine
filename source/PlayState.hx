@@ -1,5 +1,7 @@
 package;
 
+import flixel.input.FlxInput.FlxInputState;
+import Controls.KeyType;
 import OptionsSubState.Background;
 import Stage.BackgroundDancer;
 import haxe.io.Bytes;
@@ -1824,17 +1826,19 @@ class PlayState extends MusicBeatState {
 		}
 		// better streaming of shit
 
+		/*
 		// RESET = Quick Game Over Screen
-		if (controls.RESET) {
+		if (Controls.RESET) {
 			health = 0;
 			trace("RESET = True");
 		}
 
 		// CHEAT = brandon's a pussy
-		if (controls.CHEAT) {
+		if (Controls.CHEAT) {
 			health += 1;
 			trace("User is cheating!");
 		}
+		*/
 
 		if (health <= 0) {
 			bf.stunned = true;
@@ -2389,44 +2393,25 @@ class PlayState extends MusicBeatState {
 	}
 
 	function isKeyPressedForNoteData(noteData:Int = 0, ?pressType:String = ""):Bool {
+		var input:FlxInputState;
+		switch (pressType) {
+			case "P":
+				input = FlxInputState.JUST_PRESSED;
+			case "R":
+				input = FlxInputState.JUST_RELEASED;
+			default:
+				input = FlxInputState.PRESSED;
+		}
 		if (SONG.whichK == 4) {
 			switch noteData {
 				case 0:
-					switch (pressType) {
-						case "P":
-							return controls.LEFT_P;
-						case "R":
-							return controls.LEFT_R;
-						default:
-							return controls.LEFT;
-					}
+					return Controls.check(LEFT, input);
 				case 1:
-					switch (pressType) {
-						case "P":
-							return controls.DOWN_P;
-						case "R":
-							return controls.DOWN_R;
-						default:
-							return controls.DOWN;
-					}
+					return Controls.check(DOWN, input);
 				case 2:
-					switch (pressType) {
-						case "P":
-							return controls.UP_P;
-						case "R":
-							return controls.UP_R;
-						default:
-							return controls.UP;
-					}
+					return Controls.check(UP, input);
 				case 3:
-					switch (pressType) {
-						case "P":
-							return controls.RIGHT_P;
-						case "R":
-							return controls.RIGHT_R;
-						default:
-							return controls.RIGHT;
-					}
+					return Controls.check(RIGHT, input);
 			}
 		}
 		else if (SONG.whichK == 6) {

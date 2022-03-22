@@ -13,6 +13,12 @@ class CoolUtil {
 		return difficultyArray[PlayState.storyDifficulty];
 	}
 
+	static inline var multiplier = 10000000;
+	// The number of zeros in the following value
+	// corresponds to the number of decimals rounding precision
+	public static function roundFloat(value:Float):Float
+		return Math.round(value * multiplier) / multiplier;
+
 	public static function isStringInt(s:String) {
 		var index = 0;
 		if (s.startsWith("-")) {

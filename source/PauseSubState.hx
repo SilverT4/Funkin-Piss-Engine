@@ -23,7 +23,7 @@ class PauseSubState extends MusicBeatSubstate {
 
 	var pauseMusic:FlxSound;
 
-	public function new(x:Float, y:Float) {
+	public function new(x:Float, y:Float, ?skipTween:Bool = false) {
 		super();
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
@@ -31,11 +31,6 @@ class PauseSubState extends MusicBeatSubstate {
 		pauseMusic.play(false, FlxG.random.int(0, Std.int(pauseMusic.length / 2)));
 
 		FlxG.sound.list.add(pauseMusic);
-
-		var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-		bg.alpha = 0;
-		bg.scrollFactor.set();
-		add(bg);
 
 		var levelInfo:FlxText = new FlxText(0, 15, 0, "", 32);
 		levelInfo.text += PlayState.SONG.song;
@@ -63,9 +58,21 @@ class PauseSubState extends MusicBeatSubstate {
 		levelInfo.x = FlxG.width - (levelInfo.width + 20);
 		levelDifficulty.x = FlxG.width - (levelDifficulty.width + 20);
 
-		FlxTween.tween(bg, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
-		FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
-		FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+		PlayState.currentPlaystate.pauseBG.visible = true;
+		PlayState.currentPlaystate.pauseBG.alpha = 0.0;
+
+		if (!skipTween) {
+			FlxTween.tween(PlayState.currentPlaystate.pauseBG, {alpha: 0.6}, 0.4, {ease: FlxEase.quartInOut});
+			FlxTween.tween(levelInfo, {alpha: 1, y: 20}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.3});
+			FlxTween.tween(levelDifficulty, {alpha: 1, y: levelDifficulty.y + 5}, 0.4, {ease: FlxEase.quartInOut, startDelay: 0.5});
+		} 
+		else {
+			PlayState.currentPlaystate.pauseBG.alpha = 0.6;
+			levelInfo.alpha = 1;
+			levelInfo.y = 20;
+			levelDifficulty.alpha = 1;
+			levelDifficulty.y = levelDifficulty.y + 5;
+		}
 
 		grpMenuShit = new FlxTypedGroup<Alphabet>();
 		add(grpMenuShit);
@@ -83,6 +90,8 @@ class PauseSubState extends MusicBeatSubstate {
 	}
 
 	override function update(elapsed:Float) {
+		PlayState.currentPlaystate.paused = true;
+
 		var daSelected:String = menuItems[curSelected];
 		if (pauseMusic.volume < 0.5)
 			pauseMusic.volume += 0.01 * elapsed;

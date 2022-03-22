@@ -1,5 +1,6 @@
 package;
 
+import OptionsSubState.Background;
 import Stage.BackgroundDancer;
 import haxe.io.Bytes;
 import multiplayer.Lobby;
@@ -123,6 +124,8 @@ class PlayState extends MusicBeatState {
 	public static var preloadedCharacters:Map<String, Character>;
 
 	public static var preloadedBfs:Map<String, Boyfriend>;
+
+	public var pauseBG:Background;
 
 	#if desktop
 	// Discord RPC variables
@@ -607,6 +610,14 @@ class PlayState extends MusicBeatState {
 
 		iconP2.y = healthBar.y - (iconP2.height / 2);
 		add(iconP2);
+
+		pauseBG = new Background(FlxColor.BLACK, true);
+		pauseBG.setGraphicSize(Std.int(pauseBG.width * 1.3));
+		pauseBG.updateHitbox();
+		pauseBG.screenCenter();
+		pauseBG.alpha = 0.6;
+		pauseBG.visible = false;
+		add(pauseBG);
 
 		if (Lobby.isHost && isMultiplayer) {
             var hostMode = new FlxText(10, 20, 0, 'HOST MODE', 16);
@@ -1385,20 +1396,6 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	override function openSubState(SubState:FlxSubState) {
-		if (paused) {
-			if (FlxG.sound.music != null) {
-				FlxG.sound.music.pause();
-				vocals.pause();
-			}
-
-			if (!startTimer.finished)
-				startTimer.active = false;
-		}
-
-		super.openSubState(SubState);
-	}
-
 	override function closeSubState() {
 		if (openSettings && canPause && startedCountdown) {
 			persistentUpdate = false;
@@ -1512,7 +1509,7 @@ class PlayState extends MusicBeatState {
 		vocals.play();
 	}
 
-	private var paused:Bool = false;
+	public var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 
@@ -1591,6 +1588,11 @@ class PlayState extends MusicBeatState {
 				}
 				// phillyCityLights.members[curLight].alpha -= (Conductor.crochet / 1000) * FlxG.elapsed;
 		}
+
+		if (!paused) {
+			PlayState.currentPlaystate.pauseBG.visible = false;
+		}
+		
 		super.update(elapsed);
 
 		if (curBeat == 25 && curSong.toLowerCase() == "winter-horrorland")
@@ -1614,20 +1616,7 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause && !isMultiplayer) {
-			persistentUpdate = false;
-			persistentDraw = true;
-			paused = true;
-
-			// 1 / 10000 chance for Gitaroo Man easter egg
-			if (FlxG.random.bool(0.01)) {
-				FlxG.switchState(new GitarooPause());
-			}
-			else
-				openSubState(new PauseSubState(bf.getScreenPosition().x, bf.getScreenPosition().y));
-
-			#if desktop
-			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-			#end
+			pauseGame();
 		}
 		if (FlxG.keys.justPressed.EIGHT) {
 			FlxG.switchState(new AnimationDebugCharacterSelector());
@@ -3213,6 +3202,25 @@ class PlayState extends MusicBeatState {
 		}
 
 		luaCall("beatHit");
+	}
+
+	public function pauseGame(?skipTween:Bool = false) {
+		persistentUpdate = false;
+		persistentDraw = true;
+
+		openSubState(new PauseSubState(bf.getScreenPosition().x, bf.getScreenPosition().y, skipTween));
+
+		#if desktop
+		DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+		#end
+
+		if (FlxG.sound.music != null) {
+			FlxG.sound.music.pause();
+			vocals.pause();
+		}
+
+		if (!startTimer.finished)
+			startTimer.active = false;
 	}
 
 	public static function changeCharacter(char:String, newChar:String) {

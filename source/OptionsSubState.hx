@@ -33,22 +33,11 @@ class OptionsSubState extends FlxSubState {
 
 		this.inGame = inGame;
 
-		if (inGame) {
-			var bg:FlxSprite = new FlxSprite().makeGraphic(FlxG.width, FlxG.height, FlxColor.BLACK);
-			bg.alpha = 0.6;
-			bg.scrollFactor.set();
-			add(bg);
-		}
-		else {
-			var bg = new Background(FlxColor.ORANGE);
-			add(bg);
-		}
+		if (inGame)
+			FlxG.cameras.list[FlxG.cameras.list.length - 1].zoom = 0.7;
 
-		/*
-		var testBg = new FlxSprite(0, 0).makeGraphic(FlxG.width, FlxG.height, FlxColor.MAGENTA);
-		testBg.scrollFactor.set();
-		add(testBg);
-		*/
+		var bg = new Background(FlxColor.ORANGE);
+		add(bg);
 
 		var curY = 0.0;
 		var curIndex = -1;
@@ -115,8 +104,13 @@ class OptionsSubState extends FlxSubState {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MainMenuState.selectedSomethin = false;
 			PlayState.openSettings = false;
-			if (inGame) close();
-			else FlxG.switchState(new MainMenuState());
+			FlxG.cameras.list[FlxG.cameras.list.length - 1].zoom = 1;
+			if (inGame) {
+				close();
+				PlayState.currentPlaystate.pauseGame(true);
+			}
+			else 
+				FlxG.switchState(new MainMenuState());
 		}
 	}
 }
@@ -147,6 +141,7 @@ class OptionsPrefencesSubState extends OptionSubState {
 				else if (itemList[curSelected].text.startsWith("Background Dimness")) {
 					if (Options.bgDimness > 0.0)
 						Options.bgDimness -= 0.05;
+					Options.bgDimness = CoolUtil.roundFloat(Options.bgDimness);
 					setOptionText(curSelected, "Background Dimness: " + Options.bgDimness);
 				}
 			}
@@ -157,7 +152,9 @@ class OptionsPrefencesSubState extends OptionSubState {
 					setOptionText(curSelected, "FPS Limit: " + Options.framerate);
 				}
 				else if (itemList[curSelected].text.startsWith("Background Dimness")) {
-					if (Options.bgDimness < 1.0) Options.bgDimness += 0.05;
+					if (Options.bgDimness < 1.0) 
+						Options.bgDimness += 0.05;
+					Options.bgDimness = CoolUtil.roundFloat(Options.bgDimness);
 					setOptionText(curSelected, "Background Dimness: " + Options.bgDimness);
 				}
 			}
@@ -230,7 +227,6 @@ class OptionSubState extends FlxSubState {
 		this.itemList = itemList;
 
 		var bg = new Background(FlxColor.MAGENTA);
-		if (inGame) bg.alpha = 0.8;
 		add(bg);
 
 		var curY = 0.0;
@@ -382,10 +378,13 @@ class Checkbox extends AnimatedSprite {
 }
 
 class Background extends FlxSprite {
-	public function new(Color:FlxColor) {
+	public function new(Color:FlxColor, ?onlyColor:Bool = false) {
 		super(-80, 0);
 
 		loadGraphic(Paths.image('menuDesat'));
+		if (onlyColor) {
+			makeGraphic(frameWidth, frameHeight, Color);
+		}
 		scrollFactor.x = 0;
 		scrollFactor.y = 0.15;
 		setGraphicSize(Std.int(width * 1.1));
@@ -394,4 +393,132 @@ class Background extends FlxSprite {
 		antialiasing = true;
 		color = Color;
 	}
+}
+
+class OptionsCharacterSubState extends FlxSubState {
+
+    var character:String;
+    var character_path:String;
+    var character_list:Array<String>;
+
+    var grpTexts:FlxTypedGroup<FlxText>;
+    var inGame = false;
+
+	private var controls(get, never):Controls;
+
+	inline function get_controls():Controls
+		return PlayerSettings.player1.controls;
+    override public function new(character, ?inGame) {
+        super();
+
+        this.inGame = inGame;
+        this.character = character;
+        character_path = "mods/skins/" + character + "/";
+        character_list = new Array<String>();
+
+        character_list.push("Vanilla");
+		for (file in SysFile.readDirectory(character_path)) {
+			var path = haxe.io.Path.join([character_path, file]);
+            if (SysFile.isDirectory(path)) {
+                character_list.push(file);
+            }
+		}
+
+		var bg = new Background(FlxColor.BLACK, true);
+		bg.alpha = 0.7;
+		add(bg);
+
+        grpTexts = new FlxTypedGroup<FlxText>();
+
+        add(bg);
+		add(grpTexts);
+
+        updateMenu();
+
+        cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+    }
+
+    override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		if (controls.UP_P) {
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+			curSelected -= 1;
+		}
+
+		if (controls.DOWN_P) {
+			FlxG.sound.play(Paths.sound('scrollMenu'));
+			curSelected += 1;
+		}
+
+        if (FlxG.keys.justPressed.ESCAPE) {
+			FlxG.sound.play(Paths.sound('cancelMenu'));
+			closeSubState();
+			FlxG.state.openSubState(new OptionsPrefencesSubState(inGame));
+		}
+
+        if (curSelected < 0)
+			curSelected = character_list.length - 1;
+
+		if (curSelected >= character_list.length)
+			curSelected = 0;
+
+		grpTexts.forEach(function(txt:FlxText) {
+			if (txt.ID == curSelected)
+				txt.color = FlxColor.YELLOW;
+            else
+                txt.color = FlxColor.WHITE;
+		});
+
+        if (FlxG.keys.justPressed.ENTER) {
+			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
+            if (character_list[curSelected] == "Vanilla") {
+                switch (character) {
+                    case "bf":
+                        Options.customBf = false;
+                        if (inGame) PlayState.bf = new Boyfriend(PlayState.bf.x, PlayState.bf.y, PlayState.SONG.player1);
+                    case "gf":
+                        Options.customGf = false;
+                        if (inGame) PlayState.gf = new Character(PlayState.gf.x, PlayState.gf.y, PlayState.gfVersion);
+                    case "dad":
+                        Options.customDad = false;
+                        if (inGame) PlayState.dad = new Character(PlayState.dad.x, PlayState.dad.y, PlayState.SONG.player2);
+                }
+            } else {
+                switch (character) {
+                    case "bf":
+                        Options.customBf = true;
+                        Options.customBfPath = character_path + character_list[curSelected] + "/";
+                        if (inGame) PlayState.bf = new Boyfriend(PlayState.bf.x, PlayState.bf.y, "bf-custom");
+                    case "gf":
+                        Options.customGf = true;
+                        Options.customGfPath = character_path + character_list[curSelected] + "/";
+                        if (inGame) PlayState.gf = new Character(PlayState.gf.x, PlayState.gf.y, "gf-custom");
+                    case "dad":
+                        Options.customDad = true;
+                        Options.customDadPath = character_path + character_list[curSelected] + "/";
+                        if (inGame) PlayState.dad = new Character(PlayState.dad.x, PlayState.dad.y, "dad-custom");
+                }
+            }
+            Options.saveAll();
+            if (inGame) {
+                PlayState.updateChar(character);
+            }
+        }
+    }
+
+    function updateMenu() {
+		grpTexts.clear();
+        var i = 0;
+		for (character in character_list) {
+			var optionText:FlxText = new FlxText(20, 20 + (i * 50), 0, character, 32);
+			optionText.scrollFactor.set();
+			optionText.ID = i;
+			optionText.setBorderStyle(FlxTextBorderStyle.OUTLINE, FlxColor.BLACK, 2);
+			grpTexts.add(optionText);
+            i++;
+		}
+	}
+
+	var curSelected:Int;
 }

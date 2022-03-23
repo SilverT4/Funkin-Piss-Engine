@@ -14,9 +14,6 @@ To create a data for the song:
 
 Or steal the data from some mod or idk and paste it in "mods/songs/yoursong/" folder
 
-## Action Notes
-To add a Action Note that is not visible in the game press ALT + LEFT CLICK
-
 # Stages
 To add a stage create a folder in "mods/stages/" folder with the name of your stage
 After that create a "/images/" folder in it and place there your assets

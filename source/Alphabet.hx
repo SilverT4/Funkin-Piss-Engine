@@ -274,10 +274,10 @@ class AlphaCharacter extends FlxSprite {
 		animation.play(letter);
 		updateHitbox();
 
-		FlxG.log.add('the row' + row);
-
 		y = (110 - height);
 		y += row * 60;
+
+		FlxG.log.add('the row' + row);
 	}
 
 	public function createNumber(letter:String):Void {
@@ -315,6 +315,11 @@ class AlphaCharacter extends FlxSprite {
 				animation.addByPrefix(letter, letter, 24);
 
 				y += 70 * size;
+			case "-":
+				animation.addByPrefix(letter, letter, 24);
+
+				y += 20 * size;
+				x -= 40 * size;
 			default:
 				animation.addByPrefix(letter, letter, 24);
 

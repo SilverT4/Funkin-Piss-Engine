@@ -1,5 +1,5 @@
 import Paths;
-import AnimatedSprite;
 import CoolUtil;
+import Controls;
 
 using StringTools;

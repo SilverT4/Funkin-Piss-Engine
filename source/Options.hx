@@ -1,5 +1,8 @@
 package;
 
+import sys.ssl.Key;
+import flixel.input.keyboard.FlxKey;
+import Controls.KeyBind;
 import flixel.FlxG;
 import flixel.math.FlxPoint;
 import flixel.util.FlxSave;
@@ -11,7 +14,6 @@ class Options {
 		"ghostTapping",
 		"bgDimness",
 		"framerate",
-		"controls",
 		"discordRPC",
 		"customGf",
 		"customGfPath",
@@ -26,7 +28,6 @@ class Options {
 	public static var ghostTapping = true;
 	public static var bgDimness:Float = 0.0;
 	public static var framerate:Int = 145;
-	public static var controls = "ASWD";
 	public static var discordRPC:Bool = true;
 
 	// SKINS
@@ -36,6 +37,9 @@ class Options {
 	public static var customBfPath = "";
 	public static var customDad = false;
 	public static var customDadPath = "";
+	
+	public static var optionsSave:FlxSave;
+	public static var controlsSave:FlxSave;
 
 	public static function startupSaveScript() {
 		optionsSave = new FlxSave();
@@ -44,6 +48,13 @@ class Options {
 		#if debug
 		trace("Options Data: " + optionsSave.data);
 		#end
+
+		controlsSave = new FlxSave();
+		controlsSave.bind("controls");
+		saveKeyBinds();
+		#if debug
+		trace("Controls Data: " + controlsSave.data);
+		#end
 	}
 
 	public static function exists(variable):Dynamic {
@@ -51,6 +62,21 @@ class Options {
 			return true;
 		}
 		return false;
+	}
+
+	public static function saveKeyBinds() {
+		if (controlsSave.data == "{ }" || controlsSave.data == null) {
+			KeyBind.setToDefault();
+			for (keyType => keyArray in KeyBind.controlsMap) {
+				Reflect.setField(controlsSave.data, Std.string(keyType), keyArray);
+			}
+		}
+		else {
+			for (field in Reflect.fields(controlsSave.data)) {
+				var val = Reflect.field(controlsSave.data, field);
+				KeyBind.controlsMap.set(KeyBind.typeFromString(field), val);
+			}
+		}
 	}
 
 	public static function get(variable):Dynamic {
@@ -66,9 +92,10 @@ class Options {
 		saveFile();
 	}
 
-	/** Saves the save file */
+	/** Saves options and controls save file */
 	public static function saveFile() {
 		optionsSave.flush();
+		controlsSave.flush();
 	}
 
 	public static function saveAndLoadAll() {
@@ -102,6 +129,4 @@ class Options {
 		FlxG.drawFramerate = framerate;
 		// PlayerSettings.player1.controls.bindFromSettings(true);
 	}
-
-	public static var optionsSave:FlxSave;
 }

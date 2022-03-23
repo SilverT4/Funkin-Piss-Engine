@@ -1617,7 +1617,7 @@ class PlayState extends MusicBeatState {
 			//how the fuck it throws exceptions
 		}
 
-		if (FlxG.keys.justPressed.ENTER && startedCountdown && canPause && !isMultiplayer) {
+		if (Controls.check(PAUSE, JUST_PRESSED) && startedCountdown && canPause && !isMultiplayer) {
 			pauseGame();
 		}
 		if (FlxG.keys.justPressed.EIGHT) {

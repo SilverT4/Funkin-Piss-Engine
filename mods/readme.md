@@ -84,15 +84,6 @@ If you wanna to make it easier to set the x and y values:
 2. Enter the character name in the white box
 3. When you end setting up the offsets get the current offset values from the "Offsets" list so for example [69, -420] is x: 69 and y: -420
 
-#### Controls:
- - W and S - change the animation
- - V - show helper sprite of current animation, basically if you'll go to another animation helper sprite will appear in less visible version
- - JKIL - move the camera
- - ARROWS - change the offset of current animation hold SHIFT to move it faster
- - R - reload the sprite
- - Q - zoom out camera
- - E - zoom in camera
-
 # Examples:
 #### Skin config file: (config.yml) <br>
 ```

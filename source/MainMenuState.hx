@@ -1,5 +1,6 @@
 package;
 
+import flixel.addons.transition.TransitionData;
 import flixel.FlxSubState;
 import multiplayer.Lobby.LobbySelectorState;
 #if desktop
@@ -33,6 +34,13 @@ class MainMenuState extends MusicBeatState {
 
 	var magenta:FlxSprite;
 	var camFollow:FlxObject;
+	var skipTrans:Bool;
+
+	public function new(?skipTrans:Bool = false) {
+		super();
+
+		this.skipTrans = skipTrans;
+	}
 
 	override function create() {
 		#if desktop
@@ -40,8 +48,14 @@ class MainMenuState extends MusicBeatState {
 		DiscordClient.changePresence("In the Menus", null);
 		#end
 
-		transIn = FlxTransitionableState.defaultTransIn;
-		transOut = FlxTransitionableState.defaultTransOut;
+		if (!skipTrans) {
+			transIn = FlxTransitionableState.defaultTransIn;
+			transOut = FlxTransitionableState.defaultTransOut;
+		} else {
+			transIn = new TransitionData(NONE);
+			transOut = new TransitionData(NONE);
+		}
+
 		selectedSomethin = false;
 
 		if (!FlxG.sound.music.playing) {
@@ -171,6 +185,7 @@ class MainMenuState extends MusicBeatState {
 										case 'freeplay':
 											FlxG.switchState(new FreeplayState());
 										case 'options':
+											transOut = new TransitionData(NONE);
 											openSubState(new OptionsSubState());
 									}
 								});

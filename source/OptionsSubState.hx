@@ -1,5 +1,9 @@
 package;
 
+import flixel.FlxObject;
+import flixel.math.FlxPoint;
+import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
+import flixel.input.keyboard.FlxKey;
 import flixel.graphics.frames.FlxAtlasFrames;
 import flixel.FlxState;
 import flixel.FlxSubState;
@@ -105,7 +109,7 @@ class OptionsSubState extends FlxSubState {
 				PlayState.currentPlaystate.pauseGame(true);
 			}
 			else 
-				FlxG.switchState(new MainMenuState());
+				FlxG.switchState(new MainMenuState(true));
 		}
 	}
 }
@@ -174,7 +178,7 @@ class OptionsPrefencesSubState extends OptionSubState {
 class OptionsGameplaySubState extends OptionSubState {
 	public function new(inGame) {
 		var items = [
-			new OptionItem("Controls: " + Options.controls),
+			new OptionItem("Controls"),
 			new OptionItem("Ghost Tapping", true, Options.ghostTapping, value -> Options.ghostTapping = value)
 		];
 		super(items, inGame);
@@ -183,15 +187,10 @@ class OptionsGameplaySubState extends OptionSubState {
 	override public function update(elapsed) {
 		super.update(elapsed);
 
-		if (Controls.check(UI_RIGHT) || Controls.check(UI_LEFT)) {
-			if (itemList[curSelected].text.startsWith("Controls: ")) {
-				if (Options.controls == "ASWD") {
-					Options.controls = "DFJK";
-				}
-				else {
-					Options.controls = "ASWD";
-				}
-				setOptionText(curSelected, "Controls: " + Options.controls);
+		if (Controls.check(ACCEPT)) {
+			if (itemList[curSelected].text == "Controls") {
+				closeSubState();
+				FlxG.state.openSubState(new OptionsControlsSubstate(inGame));
 			}
 		}
 	}
@@ -369,14 +368,13 @@ class Checkbox extends AnimatedSprite {
 
 class Background extends FlxSprite {
 	public function new(Color:FlxColor, ?onlyColor:Bool = false) {
-		super(-80, 0);
+		super(-80);
 
 		loadGraphic(Paths.image('menuDesat'));
 		if (onlyColor) {
 			makeGraphic(frameWidth, frameHeight, Color);
 		}
-		scrollFactor.x = 0;
-		scrollFactor.y = 0.15;
+		scrollFactor.set(0, 0.15);
 		setGraphicSize(Std.int(width * 1.1));
 		updateHitbox();
 		screenCenter();
@@ -507,4 +505,190 @@ class OptionsCharacterSubState extends FlxSubState {
 	}
 
 	var curSelected:Int;
+}
+
+class ControlsItem extends FlxTypedSpriteGroup<Alphabet> {
+	public var key:Alphabet;
+	public var bind1:Alphabet;
+	public var bind2:Alphabet;
+
+	public function new(keyText:String, bind1Text:String, bind2Text:String) {
+		super();
+
+		key = new Alphabet(0, 0, keyText, true);
+		key.scrollFactor.set();
+		key.x += 150;
+
+		bind1 = new Alphabet(key.x + 450, 0, bind1Text, false);
+		bind1.y -= bind1.height;
+		bind1.scrollFactor.set();
+
+		bind2 = new Alphabet(bind1.x + 300, 0, bind2Text, false);
+		bind2.y -= bind2.height;
+		bind2.scrollFactor.set();
+
+		add(key);
+		add(bind1);
+		add(bind2);
+	}
+}
+
+class OptionsControlsSubstate extends FlxSubState {
+	public var items = new FlxTypedGroup<ControlsItem>();
+
+	public var curSelected:Int = 0;
+	public var curTab:Int = 0;
+	var inGame:Bool;
+
+	var camFollow:FlxObject;
+	var thisCamera:FlxCamera;
+
+	var waiting:Bool;
+	var inputText:FlxText;
+
+	public function new(inGame) {
+		super();
+		
+		this.inGame = inGame;
+
+		var bg = new Background(FlxColor.MAGENTA);
+		bg.scrollFactor.y = 0.1;
+		bg.setGraphicSize(Std.int(bg.width * 1.2));
+		bg.updateHitbox();
+		bg.screenCenter();
+		add(bg);
+
+		var curY = 400.0;
+		var curIndex = -1;
+		for (keyType in Type.allEnums(KeyType)) {
+			curIndex++;
+
+			var name = keyType.getName();
+			var bind1:String = KeyBind.fromType(keyType)[0];
+			var bind2:String = KeyBind.fromType(keyType)[1];
+
+			if (bind1 == null)
+				bind1 = "---";
+			if (bind2 == null)
+				bind2 = "---";
+			
+			var shit = new ControlsItem(name, bind1, bind2);
+			shit.ID = curIndex;
+			shit.y += curY;
+			curY += shit.key.height + 25;
+			items.add(shit);
+		}
+		add(items);
+
+		items.forEach(function(item:ControlsItem) {
+			if (item.ID == 0) {
+				var keyText = new Alphabet(item.key.x, item.bind1.y - item.bind1.height * 1.5, "Key", true);
+				var bindsText = new Alphabet( item.bind1.x + ((item.bind2.x - item.bind1.x) / 2) , item.bind1.y - item.bind1.height * 1.5, "Binds", true);
+
+				add(keyText);
+				add(bindsText);
+			}
+		});
+
+		inputText = new FlxText(0, 0, 0, "Waiting for input...");
+		inputText.scrollFactor.set();
+		inputText.setFormat("VCR OSD Mono", 24, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		inputText.screenCenter();
+		inputText.visible = false;
+		add(inputText);
+		
+		thisCamera = new FlxCamera();
+
+		FlxG.cameras.add(thisCamera, false);
+
+		camFollow = new FlxObject(FlxG.width / 2, 0, 0, 0);
+		thisCamera.follow(camFollow, LOCKON, 0.04);
+
+		cameras = [thisCamera];
+	}
+
+	override function update(elapsed:Float) {
+		super.update(elapsed);
+
+		inputText.visible = waiting;
+
+		if (waiting) {
+			waitForInput();
+		} 
+		else {
+			if (Controls.check(UI_UP)) {
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+				curSelected -= 1;
+			}
+	
+			if (Controls.check(UI_DOWN)) {
+				FlxG.sound.play(Paths.sound('scrollMenu'));
+				curSelected += 1;
+			}
+
+			if (Controls.check(ACCEPT)) {
+				waiting = true;
+			}
+
+			if (Controls.check(UI_RIGHT))
+				curTab = 1;
+	
+			if (Controls.check(UI_LEFT))
+				curTab = 0;
+
+			if (FlxG.keys.justPressed.ESCAPE) {
+				Options.saveAll();
+				Options.applyAll();
+				closeSubState();
+				FlxG.cameras.remove(thisCamera);
+				FlxG.state.openSubState(new OptionsGameplaySubState(inGame));
+			}
+		}
+
+		if (curSelected < 0)
+			curSelected = items.length - 1;
+
+		if (curSelected >= items.length)
+			curSelected = 0;
+
+		items.forEach(function(item:ControlsItem) {
+			item.key.alpha = 0.5;
+			item.bind1.alpha = 0.5;
+			item.bind2.alpha = 0.5;
+
+			if (item.ID == curSelected) {
+				camFollow.y = item.y + 100;
+
+				item.key.alpha = 1;
+
+				if (curTab == 0)
+					item.bind1.alpha = 1;
+				else
+					item.bind2.alpha = 1;
+			}
+		});
+	}
+
+	function waitForInput() {
+		waiting = true;
+
+		items.forEach(function(item:ControlsItem) {
+			if (item.ID == curSelected) {
+				if (curTab == 0)
+					item.bind1.setText("...");
+				else
+					item.bind2.setText("...");
+
+				if (FlxG.keys.anyJustPressed([ANY])) {
+					waiting = false;
+					var curKey = FlxG.keys.getIsDown()[0].ID;
+					Controls.bind(KeyBind.typeFromString(item.key.text), curKey, curTab);
+					if (curTab == 0)
+						item.bind1.setText(curKey.toString());
+					else
+						item.bind2.setText(curKey.toString());
+				}
+			}
+		});
+	}
 }

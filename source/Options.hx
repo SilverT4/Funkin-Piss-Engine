@@ -42,18 +42,15 @@ class Options {
 	public static var controlsSave:FlxSave;
 
 	public static function startupSaveScript() {
+		controlsSave = new FlxSave();
+		controlsSave.bind("controls");
+		saveKeyBinds();
+
 		optionsSave = new FlxSave();
 		optionsSave.bind("options");
 		saveAndLoadAll();
 		#if debug
 		trace("Options Data: " + optionsSave.data);
-		#end
-
-		controlsSave = new FlxSave();
-		controlsSave.bind("controls");
-		saveKeyBinds();
-		#if debug
-		trace("Controls Data: " + controlsSave.data);
 		#end
 	}
 

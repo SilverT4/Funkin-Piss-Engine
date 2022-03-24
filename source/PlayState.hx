@@ -76,7 +76,7 @@ class PlayState extends MusicBeatState {
 	private var bgDimness:FlxSprite;
 
 	private var healthBarBG:FlxSprite;
-	private var healthBar:FlxBar;
+	public var healthBar:FlxBar;
 
 	private var generatedMusic:Bool = false;
 	private var startingSong:Bool = false;
@@ -574,7 +574,6 @@ class PlayState extends MusicBeatState {
 		else
 			healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), PlayState, "health", 0, 2);
 		healthBar.scrollFactor.set();
-		healthBar.createFilledBar(0xFFFF0000, 0xFF66FF33);
 		// healthBar
 		add(healthBar);
 
@@ -606,6 +605,8 @@ class PlayState extends MusicBeatState {
 			iconP1 = new HealthIcon(dad.curCharacter, true);
 			iconP2 = new HealthIcon(bf.curCharacter, false);
 		}
+
+		healthBar.createFilledBar(CoolUtil.getDominantColor(iconP2), CoolUtil.getDominantColor(iconP1));
 		
 		iconP1.y = healthBar.y - (iconP1.height / 2);
 		add(iconP1);
@@ -727,7 +728,7 @@ class PlayState extends MusicBeatState {
 		super.create();
 	}
 
-	public static function updateChar(char:Dynamic) {
+	public function updateChar(char:Dynamic) {
 		switch (char) {
 			case 0, "gf":
 				gfLayer.forEach(b -> gfLayer.remove(b));
@@ -748,6 +749,8 @@ class PlayState extends MusicBeatState {
 				} else {
 					iconP2.setChar(bf.curCharacter, false);
 				}
+				healthBar.createFilledBar(CoolUtil.getDominantColor(iconP2), CoolUtil.getDominantColor(iconP1));
+				healthBar.value = health;
 				/*
 				if (bf.config != null) {
 					bf.x = Std.parseFloat(Std.string(bf.config.get("X")));
@@ -762,6 +765,8 @@ class PlayState extends MusicBeatState {
 				} else {
 					iconP1.setChar(dad.curCharacter, true);
 				}
+				healthBar.createFilledBar(CoolUtil.getDominantColor(iconP2), CoolUtil.getDominantColor(iconP1));
+				healthBar.value = health;
 				/*
 				if (dad.config != null) {
 					dad.x = Std.parseFloat(Std.string(dad.config.get("X")));
@@ -3208,7 +3213,7 @@ class PlayState extends MusicBeatState {
 			startTimer.active = false;
 	}
 
-	public static function changeCharacter(char:String, newChar:String) {
+	public function changeCharacter(char:String, newChar:String) {
 		var newNewChar:Character = null;
 		var newBofrend:Boyfriend = null;
 

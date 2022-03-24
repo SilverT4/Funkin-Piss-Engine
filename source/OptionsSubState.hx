@@ -486,7 +486,7 @@ class OptionsCharacterSubState extends FlxSubState {
             }
             Options.saveAll();
             if (inGame) {
-                PlayState.updateChar(character);
+                PlayState.currentPlaystate.updateChar(character);
             }
         }
     }

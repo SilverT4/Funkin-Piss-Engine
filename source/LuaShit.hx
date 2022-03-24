@@ -39,7 +39,7 @@ class LuaShit {
 
         // Changes character
         Lua_helper.add_callback(lua, "changeCharacter", function(char:String, newChar:String) {
-            PlayState.changeCharacter(char, newChar);
+            PlayState.currentPlaystate.changeCharacter(char, newChar);
 		});
 
         // Sets the size of some sprite

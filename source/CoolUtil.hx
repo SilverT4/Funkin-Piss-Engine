@@ -1,5 +1,7 @@
 package;
 
+import flixel.util.FlxColor;
+import flixel.FlxSprite;
 import sys.FileSystem;
 import multiplayer.Lobby;
 import haxe.io.Path;
@@ -11,6 +13,48 @@ class CoolUtil {
 
 	public static function difficultyString():String {
 		return difficultyArray[PlayState.storyDifficulty];
+	}
+
+	public static function getLargestKeyInMap(map:Map<String, Int>):String {
+		var largestKey:String = null;
+		for (key in map.keys()) {
+			if (largestKey == null || map.get(key) > map.get(largestKey)) {
+				largestKey = key;
+			}
+		}
+		return largestKey;
+	}
+
+	/**get dominant color so you dont have to set it manually*/
+	public static function getDominantColor(sprite:FlxSprite):FlxColor {
+		var colors = new Map<String, Int>();
+		for (pixelWidth in 0...sprite.frameWidth) {
+			for (pixelHeight in 0...sprite.frameHeight) {
+				var pixel = sprite.pixels.getPixel(pixelWidth, pixelHeight).hex();
+				if (colors.exists(pixel))
+					colors.set(pixel, colors.get(pixel) + 1);
+				else
+					colors.set(pixel, 1);
+			}
+		}
+
+		//remove transparent colors
+		colors.remove("0");
+
+		//for example theres 6942 key it will return #6942 which is invalid so the hex value should be #006942, this is what this thing does
+		for (key in colors.keys()) {
+			if (key.length < 6) {
+				var zeros = "";
+				for (shit in 0...6 - key.length) {
+					zeros += "0";
+				}
+				var newKey = zeros + key;
+				colors.set(newKey, colors.get(key));
+				colors.remove(key);
+			}
+		}
+		
+		return FlxColor.fromString("#" + getLargestKeyInMap(colors));
 	}
 
 	static inline var multiplier = 10000000;

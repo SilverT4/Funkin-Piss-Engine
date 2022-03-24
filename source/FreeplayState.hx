@@ -48,7 +48,7 @@ class FreeplayState extends MusicBeatState {
 		var initSonglist = CoolUtil.coolTextFile(Paths.txt('freeplaySonglist'));
 
 		for (i in 0...initSonglist.length) {
-			songs.push(new SongMetadata(initSonglist[i], 1, 'gf', "#ff82a5"));
+			songs.push(new SongMetadata(initSonglist[i], "week0", 'gf', "#ff82a5"));
 		}
 
 		/* 
@@ -70,26 +70,26 @@ class FreeplayState extends MusicBeatState {
 		isDebug = true;
 		#end
 
-		if (StoryMenuState.weekUnlocked[2] || isDebug)
-			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], 1, ['dad'], "#9471e3");
+		if (StoryMenuState.isWeekUnlocked("week0") || isDebug)
+			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], "week1", ['dad'], "#9471e3");
 
-		if (StoryMenuState.weekUnlocked[2] || isDebug)
-			addWeek(['Spookeez', 'South', 'Monster'], 2, ['spooky', 'spooky', 'monster'], "#2a3d42");
+		if (StoryMenuState.isWeekUnlocked("week1") || isDebug)
+			addWeek(['Spookeez', 'South', 'Monster'], "week2", ['spooky', 'spooky', 'monster'], "#2a3d42");
 
-		if (StoryMenuState.weekUnlocked[3] || isDebug)
-			addWeek(['Pico', 'Philly', 'Blammed'], 3, ['pico'], "#b0284f");
+		if (StoryMenuState.isWeekUnlocked("week2") || isDebug)
+			addWeek(['Pico', 'Philly', 'Blammed'], "week3", ['pico'], "#b0284f");
 
-		if (StoryMenuState.weekUnlocked[4] || isDebug)
-			addWeek(['Satin-Panties', 'High', 'Milf'], 4, ['mom'], "#ff82a5");
+		if (StoryMenuState.isWeekUnlocked("week3") || isDebug)
+			addWeek(['Satin-Panties', 'High', 'Milf'], "week4", ['mom'], "#ff82a5");
 
-		if (StoryMenuState.weekUnlocked[5] || isDebug)
-			addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], 5, ['parents-christmas', 'parents-christmas', 'monster-christmas'], "#e3edff");
+		if (StoryMenuState.isWeekUnlocked("week4") || isDebug)
+			addWeek(['Cocoa', 'Eggnog', 'Winter-Horrorland'], "week5", ['parents-christmas', 'parents-christmas', 'monster-christmas'], "#e3edff");
 
-		if (StoryMenuState.weekUnlocked[6] || isDebug)
-			addWeek(['Senpai', 'Roses', 'Thorns'], 6, ['senpai', 'senpai', 'spirit'], "#f593de");
+		if (StoryMenuState.isWeekUnlocked("week5") || isDebug)
+			addWeek(['Senpai', 'Roses', 'Thorns'], "week6", ['senpai', 'senpai', 'spirit'], "#f593de");
 
-		if (StoryMenuState.weekUnlocked[7] || isDebug)
-			addWeek(['Ugh', 'Guns', 'Stress'], 7, ['tankman'], "#ffb029");
+		if (StoryMenuState.isWeekUnlocked("week6") || isDebug)
+			addWeek(['Ugh', 'Guns', 'Stress'], "week7", ['tankman'], "#ffb029");
 
 		var otherSongsAdded = [];
 
@@ -98,15 +98,17 @@ class FreeplayState extends MusicBeatState {
 			var path = haxe.io.Path.join([pengine_weeks_path, file]);
 			if (SysFile.isDirectory(path)) {
 				var data = Yaml.parse(SysFile.getContent(path + "/config.yml"));
-				var map:TObjectMap<Dynamic, Dynamic> = data.get('songs');
-				var songs:Array<String> = [];
-				var characters:Array<String> = [];
-				for (song in map.keys()) {
-					songs.push(song);
-					otherSongsAdded.push(song.toLowerCase());
-					characters.push(data.get("songs").get(song).get("character"));
+				if (StoryMenuState.isWeekUnlocked(Std.string(data.get('unlockedAfter')))) {
+					var map:TObjectMap<Dynamic, Dynamic> = data.get('songs');
+					var songs:Array<String> = [];
+					var characters:Array<String> = [];
+					for (song in map.keys()) {
+						songs.push(song);
+						otherSongsAdded.push(song.toLowerCase());
+						characters.push(data.get("songs").get(song).get("character"));
+					}
+					addWeek(songs, Std.string(data.get('weekID')), characters, Std.string(data.get('color')));
 				}
-				addWeek(songs, -1, characters, Std.string(data.get('color')));
 			}
 		}
 
@@ -116,7 +118,7 @@ class FreeplayState extends MusicBeatState {
 				var path = haxe.io.Path.join([pengine_song_path, file]);
 				if (SysFile.isDirectory(path)) {
 					var folder = path.split("/")[2];
-					addWeek([folder], -1, null, "#6bb580");
+					addWeek([folder], "week-1", null, "#6bb580");
 				}
 			}
 		}
@@ -219,17 +221,17 @@ class FreeplayState extends MusicBeatState {
 		super.create();
 	}
 
-	public function addSong(songName:String, weekNum:Int, songCharacter:String, freeplayColor:String) {
-		songs.push(new SongMetadata(songName, weekNum, songCharacter, freeplayColor));
+	public function addSong(songName:String, week:String, songCharacter:String, freeplayColor:String) {
+		songs.push(new SongMetadata(songName, week, songCharacter, freeplayColor));
 	}
 
-	public function addWeek(songs:Array<String>, weekNum:Int, ?songCharacters:Array<String>, freeplayColor:String) {
+	public function addWeek(songs:Array<String>, week:String, ?songCharacters:Array<String>, freeplayColor:String) {
 		if (songCharacters == null)
 			songCharacters = ['face'];
 
 		var num:Int = 0;
 		for (song in songs) {
-			addSong(song, weekNum, songCharacters[num], freeplayColor);
+			addSong(song, week, songCharacters[num], freeplayColor);
 
 			if (songCharacters.length != 1)
 				num++;
@@ -455,11 +457,11 @@ class FreeplayState extends MusicBeatState {
 
 class SongMetadata {
 	public var songName:String = "";
-	public var week:Int = 0;
+	public var week:String = "week0";
 	public var songCharacter:String = "";
 	public var freeplayColor:String = "#9471e3";
 
-	public function new(song:String, week:Int, songCharacter:String, ?freeplayColor:String) {
+	public function new(song:String, week:String, songCharacter:String, ?freeplayColor:String) {
 		this.songName = song;
 		this.week = week;
 		this.songCharacter = songCharacter;

@@ -232,8 +232,6 @@ class Lobby extends MusicBeatState {
 			case 2:
 				PlayState.dataFileDifficulty = '-hard';
 		}
-		PlayState.storyWeek = -1;
-		trace('CUR WEEK ' + PlayState.storyWeek);
 
         if (SysFile.exists(Paths.instNoLib(song))) {
 			PlayState.SONG = Song.loadFromJson(song + PlayState.dataFileDifficulty, song);
@@ -241,6 +239,9 @@ class Lobby extends MusicBeatState {
         else if (SysFile.exists(Paths.PEinst(song))) {
 			PlayState.SONG = Song.PEloadFromJson(song + PlayState.dataFileDifficulty, song);
 		}
+
+        PlayState.storyWeek = "week-1";
+		trace('CUR WEEK ' + PlayState.storyWeek);
 
 		if (isHost) {
             FlxG.switchState(new PlayState("bf", true));

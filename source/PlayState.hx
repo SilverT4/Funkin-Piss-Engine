@@ -1,5 +1,6 @@
 package;
 
+import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.input.FlxInput.FlxInputState;
 import Controls.KeyType;
 import OptionsSubState.Background;
@@ -41,7 +42,7 @@ using StringTools;
 class PlayState extends MusicBeatState {
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
-	public static var storyWeek:Int = 0;
+	public static var storyWeek:String = "week0";
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
 
@@ -247,6 +248,7 @@ class PlayState extends MusicBeatState {
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
+		trace("CURRENT WEEK " + storyWeek);
 		trace("Current Mania Mode: " + SONG.whichK + "K");
 
 		if (SysFile.exists("mods/songs/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
@@ -2117,9 +2119,12 @@ class PlayState extends MusicBeatState {
 
 				transIn = FlxTransitionableState.defaultTransIn;
 				transOut = FlxTransitionableState.defaultTransOut;
+				
+				StoryMenuState.setWeekUnlocked(storyWeek, true);
 
 				FlxG.switchState(new StoryMenuState());
 
+				/*
 				// if ()
 				StoryMenuState.weekUnlocked[Std.int(Math.min(storyWeek + 1, StoryMenuState.weekUnlocked.length - 1))] = true;
 
@@ -2129,6 +2134,8 @@ class PlayState extends MusicBeatState {
 
 				FlxG.save.data.weekUnlocked = StoryMenuState.weekUnlocked;
 				FlxG.save.flush();
+				*/
+				
 			}
 			else {
 				if (storyDifficulty == 0)
@@ -2154,7 +2161,7 @@ class PlayState extends MusicBeatState {
 				FlxTransitionableState.skipNextTransOut = true;
 				prevCamFollow = camFollow;
 
-				if (customSong == false)
+				if (!CoolUtil.isCustomWeek(storyWeek))
 					PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + dataFileDifficulty, PlayState.storyPlaylist[0]);
 				else
 					PlayState.SONG = Song.PEloadFromJson(PlayState.storyPlaylist[0].toLowerCase() + dataFileDifficulty, PlayState.storyPlaylist[0].toLowerCase());
@@ -3340,6 +3347,8 @@ class PlayState extends MusicBeatState {
 	var lua:LuaShit;
 
 	public static var updateElapsed:Float = 0.0;
+
+	public static var week:Week;
 }
 
 /*		⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌

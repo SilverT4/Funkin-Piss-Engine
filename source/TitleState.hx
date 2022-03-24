@@ -71,6 +71,7 @@ class TitleState extends MusicBeatState {
 
 		Highscore.load();
 
+		/*
 		if (FlxG.save.data.weekUnlocked != null) {
 			// FIX LATER!!!
 			// WEEK UNLOCK PROGRESSION!!
@@ -83,6 +84,7 @@ class TitleState extends MusicBeatState {
 			if (!StoryMenuState.weekUnlocked[0])
 				StoryMenuState.weekUnlocked[0] = true;
 		}
+		*/
 
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());

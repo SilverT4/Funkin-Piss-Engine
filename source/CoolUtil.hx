@@ -7,12 +7,17 @@ import multiplayer.Lobby;
 import haxe.io.Path;
 import lime.utils.Assets;
 import yaml.Yaml;
+import openfl.utils.Assets as OpenFlAssets;
 
 class CoolUtil {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
 
 	public static function difficultyString():String {
 		return difficultyArray[PlayState.storyDifficulty];
+	}
+
+	public static function isCustomWeek(week:String) {
+		return !OpenFlAssets.hasLibrary(week);
 	}
 
 	public static function getLargestKeyInMap(map:Map<String, Int>):String {

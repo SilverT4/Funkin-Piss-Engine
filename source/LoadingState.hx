@@ -12,6 +12,7 @@ import lime.utils.Assets as LimeAssets;
 import lime.utils.AssetLibrary;
 import lime.utils.AssetManifest;
 import haxe.io.Path;
+import openfl.utils.Assets as OpenFlAssets;
 
 class LoadingState extends MusicBeatState {
 	inline static var MIN_TIME = 1.0;
@@ -56,7 +57,7 @@ class LoadingState extends MusicBeatState {
 				checkLoadSong(Paths.voices(PlayState.SONG.song));
 
 			checkLibrary("shared");
-			if (PlayState.storyWeek > 0)
+			if (Std.parseFloat(PlayState.storyWeek) > Std.parseFloat("week0"))
 				checkLibrary("week" + PlayState.storyWeek);
 			else
 				checkLibrary("tutorial");
@@ -134,8 +135,8 @@ class LoadingState extends MusicBeatState {
 	}
 
 	static function getNextState(target:FlxState, stopMusic = false):FlxState {
-		Paths.setCurrentLevel("week" + PlayState.storyWeek);
-		if (PlayState.storyWeek != -1 && PlayState.storyWeek <= 7) {
+		Paths.setCurrentLevel(PlayState.storyWeek);
+		if (PlayState.storyWeek != "week-1" && OpenFlAssets.hasLibrary(PlayState.storyWeek)) {
 			#if NO_PRELOAD_ALL
 			var loaded = isSoundLoaded(Paths.inst(PlayState.SONG.song))
 				&& (!PlayState.SONG.needsVoices || isSoundLoaded(Paths.voices(PlayState.SONG.song)))

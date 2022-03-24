@@ -14,9 +14,6 @@ To create a data for the song:
 
 Or steal the data from some mod or idk and paste it in "mods/songs/yoursong/" folder
 
-## Action Notes
-To add a Action Note that is not visible in the game press ALT + LEFT CLICK
-
 # Stages
 To add a stage create a folder in "mods/stages/" folder with the name of your stage
 After that create a "/images/" folder in it and place there your assets
@@ -83,15 +80,6 @@ If you wanna to make it easier to set the x and y values:
 1. Go to any song and press 8
 2. Enter the character name in the white box
 3. When you end setting up the offsets get the current offset values from the "Offsets" list so for example [69, -420] is x: 69 and y: -420
-
-#### Controls:
- - W and S - change the animation
- - V - show helper sprite of current animation, basically if you'll go to another animation helper sprite will appear in less visible version
- - JKIL - move the camera
- - ARROWS - change the offset of current animation hold SHIFT to move it faster
- - R - reload the sprite
- - Q - zoom out camera
- - E - zoom in camera
 
 # Examples:
 #### Skin config file: (config.yml) <br>

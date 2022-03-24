@@ -67,7 +67,7 @@ class Highscore {
 		if (!songScores.exists(formatSong(week, diff)))
 			setScore(formatSong(week, diff), 0);
 
-		return songScores.get(formatSong(week, diff));
+		return songScores.get(formatSong(week, diff)) + 1;
 	}
 
 	public static function load():Void {

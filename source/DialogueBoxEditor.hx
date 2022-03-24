@@ -10,6 +10,8 @@ import flixel.FlxState;
 class DBox extends FlxSpriteGroup {
     public var text:Alphabet;
 
+    //STILL DOESNT WORK PROPERLY
+
     public function new(Text:String) {
         super();
         var box = new FlxSprite(0, 45);

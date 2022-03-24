@@ -13,11 +13,11 @@ import flixel.util.FlxTimer;
 using StringTools;
 
 class NonWeebWeekDialogueBox extends FlxSpriteGroup {
-	var box:FlxSprite;
+	public var box:FlxSprite;
 
 	var curCharacter:String = '';
 
-	var dialogue:Alphabet;
+	public var dialogue:Alphabet;
 	var dialogueList:Array<String> = [];
 	var dropText:FlxText;
 
@@ -209,5 +209,5 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 		dialogueList[0] = dialogueList[0].substr(splitName[1].length + 2).trim();
 	}
 
-	var theDialog:Alphabet;
+	public var theDialog:Alphabet;
 }

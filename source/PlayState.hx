@@ -1652,6 +1652,14 @@ class PlayState extends MusicBeatState {
 			#end
 		}
 
+		if (FlxG.keys.justPressed.FIVE) {
+			FlxG.switchState(new DialogueBoxEditor());
+
+			#if desktop
+			DiscordClient.changePresence("Dialogue Editor", null, null, true);
+			#end
+		}
+
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
 		// FlxG.watch.addQuick('VOLRight', vocals.amplitudeRight);
 

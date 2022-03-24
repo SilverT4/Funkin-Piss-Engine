@@ -238,8 +238,7 @@ animations:
 
 #### Week config.yml file:
 ```
-# if you wanna to hide the week from story menu change the number value to -1
-# Sorry for no week unlock option i will probably add it sometime later
+# Sorry for no week unlock option i will add it sometime later because it's still very crappy
 
 color: "#2a3d42"
 storyModeName: "teh epic week"

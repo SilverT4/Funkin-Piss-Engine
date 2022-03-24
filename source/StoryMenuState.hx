@@ -416,10 +416,10 @@ class StoryMenuState extends MusicBeatState {
 
 		// USING THESE WEIRD VALUES SO THAT IT DOESNT FLOAT UP
 		sprDifficulty.y = leftArrow.y - 15;
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(weeks[curWeek].id, curDifficulty);
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(weeks[curWeek].id, curDifficulty);
 		#end
 
 		FlxTween.tween(sprDifficulty, {y: leftArrow.y + 15, alpha: 1}, 0.07);
@@ -514,7 +514,7 @@ class StoryMenuState extends MusicBeatState {
 		txtTracklist.x -= FlxG.width * 0.35;
 
 		#if !switch
-		intendedScore = Highscore.getWeekScore(curWeek, curDifficulty);
+		intendedScore = Highscore.getWeekScore(weeks[curWeek].id, curDifficulty);
 		#end
 	}
 

@@ -2130,6 +2130,10 @@ class PlayState extends MusicBeatState {
 				
 				StoryMenuState.setWeekUnlocked(storyWeek, true);
 
+				if (SONG.validScore) {
+					Highscore.saveWeekScore(storyWeek, campaignScore, storyDifficulty);
+				}
+
 				FlxG.switchState(new StoryMenuState());
 
 				/*

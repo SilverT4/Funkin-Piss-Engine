@@ -617,7 +617,7 @@ class PlayState extends MusicBeatState {
 		add(iconP2);
 
 		pauseBG = new Background(FlxColor.BLACK, true);
-		pauseBG.setGraphicSize(Std.int(pauseBG.width * 1.3));
+		pauseBG.setGraphicSize(Std.int(pauseBG.width * 1.3)); 
 		pauseBG.updateHitbox();
 		pauseBG.screenCenter();
 		pauseBG.alpha = 0.6;

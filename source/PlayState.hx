@@ -650,6 +650,7 @@ class PlayState extends MusicBeatState {
 		doof.cameras = [camHUD];
 		sub.cameras = [camHUD];
 		sub_bg.cameras = [camHUD];
+		pauseBG.cameras = [camStatic];
 
 		// if (SONG.song == 'South')
 		// FlxG.camera.alpha = 0.7;

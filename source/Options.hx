@@ -20,7 +20,8 @@ class Options {
 		"customBf",
 		"customBfPath",
 		"customDad",
-		"customDadPath"
+		"customDadPath",
+		"disableCrashHandler"
 	];
 
 	// MAIN
@@ -29,6 +30,7 @@ class Options {
 	public static var bgDimness:Float = 0.0;
 	public static var framerate:Int = 145;
 	public static var discordRPC:Bool = true;
+	public static var disableCrashHandler:Bool = false;
 
 	// SKINS
 	public static var customGf = false;

@@ -83,7 +83,7 @@ If you wanna to make it easier to set the x and y values:
 
 # Examples:
 #### Skin config file: (config.yml) <br>
-```
+``` yaml
 #Default boyfriend offset values
 animations:
   scared:
@@ -131,7 +131,7 @@ animations:
 ```
 
 #### Song script.lua file example:
-```
+``` lua
 -- Example Config so you don't have to think 30 minut how to do something
 
 print("Hello World!")
@@ -167,7 +167,7 @@ end
 ```
 
 #### Character config.yml file:
-```
+``` yaml
 # Default boyfriend anim values
 # IMPORTANT: If animation is for idle pose add isIdle: true
 # Note: Restarting the song will also reload this config!
@@ -237,7 +237,7 @@ animations:
 ```
 
 #### Week config.yml file:
-```
+``` yaml
 # Sorry for no week unlock option i will add it sometime later because it's still very crappy
 
 color: "#2a3d42"
@@ -250,8 +250,8 @@ songs:
  fsjfodsjofsp:
   character: forgor
 ```
-Stages config.yml file:
-```
+#### Stages config.yml file:
+``` yaml
 zoom: 0.9
 
 images:

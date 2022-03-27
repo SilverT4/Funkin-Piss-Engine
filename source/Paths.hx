@@ -20,9 +20,9 @@ class Paths {
 	// improve these because it's shit
 	inline public static var SOUND_EXT = #if web "mp3" #else "ogg" #end;
 
-	static var currentLevel:String;
+	static var currentLevel:String = "week0";
 
-	static var currentStage:String;
+	static var currentStage:String = "stage";
 
 	static public function setCurrentLevel(name:String) {
 		currentLevel = name.toLowerCase();

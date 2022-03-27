@@ -25,11 +25,22 @@ class Splash extends FlxSprite {
     public function updatePos() {
         if (whaNote != null) {
             if (whaNote.mustPress) {
-                y = PlayState.currentPlaystate.playerStrums.y;
-                x = PlayState.currentPlaystate.playerStrums.x + (FlxG.width / 2);
+                PlayState.currentPlaystate.playerStrums.forEach(function(spr:FlxSprite) {
+                    if (Math.abs(whaNote.noteData) == spr.ID) {
+                        y = spr.y;
+                        x = spr.x;
+                        return;
+                    }
+                });
             }
             else {
-                y = PlayState.currentPlaystate.dadStrums.y;
+                PlayState.currentPlaystate.dadStrums.forEach(function(spr:FlxSprite) {
+                    if (Math.abs(whaNote.noteData) == spr.ID) {
+                        y = spr.y;
+                        x = spr.x;
+                        return;
+                    }
+                });
             }
         }
     }

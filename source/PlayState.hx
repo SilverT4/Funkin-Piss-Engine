@@ -1893,12 +1893,12 @@ class PlayState extends MusicBeatState {
 				prevStrumPos[1] = playerStrums.y;
 			}
 			if (curTweenTest == null) {
-				curTweenTest = FlxTween.tween(playerStrums, {y: playerStrums.y + 200, x: playerStrums.x - 50}, 0.5);
+				curTweenTest = FlxTween.tween(playerStrums.getFirstAlive(), {y: playerStrums.y + 100, x: playerStrums.x - 50}, 0.5);
 			}
 			else {
 				if (curTweenTest.finished) {
-					curTweenTest = FlxTween.tween(playerStrums, {y: playerStrums.y + 200, x: playerStrums.x - 50}, 0.5, {onComplete: tween -> {
-						curTweenTest = FlxTween.tween(playerStrums, {y: prevStrumPos[1], x: prevStrumPos[0]}, 0.5);
+					curTweenTest = FlxTween.tween(playerStrums.getFirstAlive(), {y: playerStrums.y + 100, x: playerStrums.x - 50}, 0.5, {onComplete: tween -> {
+						curTweenTest = FlxTween.tween(playerStrums.getFirstAlive(), {y: prevStrumPos[1], x: prevStrumPos[0]}, 0.5);
 					}});
 				}
 			}
@@ -2245,7 +2245,7 @@ class PlayState extends MusicBeatState {
 		splash.scrollFactor.set();
 		splash.cameras = [camHUD];
 
-		var divider = 4;
+		var divider = 4.2;
 
 		if (SONG.whichK == 6) {
 			divider = 2;
@@ -2278,7 +2278,10 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
-		splash.offset.set(-((Note.getSwagWidth(SONG.whichK) * whaNote.noteData) - (whaNote.width / divider)), 50);
+		splash.offset.set(
+			Note.getSwagWidth(SONG.whichK) - (whaNote.width / divider), 
+			Note.getSwagWidth(SONG.whichK)
+		);
 
 		splash.updatePos();
 

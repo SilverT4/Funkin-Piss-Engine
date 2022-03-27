@@ -18,7 +18,7 @@ Or steal the data from some mod or idk and paste it in "mods/songs/yoursong/" fo
 To add a stage create a folder in "mods/stages/" folder with the name of your stage
 After that create a "/images/" folder in it and place there your assets
 Then create a config.yml in "mods/stages/{stagename}/" with:
-```
+``` yaml
 images:
   image_name_from_images_folder:
     
@@ -30,7 +30,7 @@ To edit the stage go into any fucking song and press 6 then select your stage
 # Weeks
 To add a week create a folder in "mods/weeks/" with the name of your stage
 Then create a config.yml file in "mods/weeks/{weekname}/" with:
-```
+``` yaml
 songs:
  songname:
   
@@ -44,7 +44,7 @@ To add a week image (that in storymode) place a image with the name of your stag
 To add a character:
 1. Paste .xml and .png to the "mods/characters/{your character name}/" folder
 2. create a config.yml with:
-```
+``` yaml
 animations:
  xmlDownAnimationName:
   name: singDOWN

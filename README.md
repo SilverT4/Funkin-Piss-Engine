@@ -2,12 +2,11 @@
 Engine made mainly to improve vanilla client and make modding easier and MUCH faster.
 ## Setting Shit up
 1. Install [Haxe](https://haxe.org/download/) and [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) or if you already have installed update Haxe and HaxeFlixel to latest version so it doesn't throw exceptions when compiling
-2. Install these libraries using Command Line:
-```
+2. Run [InstallLibraries.bat](https://raw.githack.com/Paidyy/Funkin-PEngine/main/art/installLibraries.bat) or install these libraries using Command Line:
+``` bat
 haxelib install flixel-addons
 haxelib install flixel-ui
 haxelib install hscript
-haxelib install faxe
 haxelib git discord_rpc https://github.com/Aidan63/linc_discord-rpc
 haxelib install openfl-webm
 haxelib git yaml https://github.com/Paidyy/haxe-yaml.git

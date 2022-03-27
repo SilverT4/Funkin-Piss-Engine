@@ -242,9 +242,8 @@ class TitleState extends MusicBeatState {
 	var transitioning:Bool = false;
 
 	override function update(elapsed:Float) {
-		if (FlxG.keys.justPressed.F5) {
-
-		}
+		if (FlxG.keys.justPressed.F1)
+			CoolUtil.crash();
 
 		if (FlxG.sound.music != null)
 			Conductor.songPosition = FlxG.sound.music.time;

@@ -40,11 +40,18 @@ import Discord.DiscordClient;
 using StringTools;
 
 class PlayState extends MusicBeatState {
+	//CACHE
+	public static var preloadedCharacters:Map<String, Character>;
+	public static var preloadedBfs:Map<String, Boyfriend>;
+
 	public static var SONG:SwagSong;
 	public static var isStoryMode:Bool = false;
 	public static var storyWeek:String = "week0";
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
+	public static var dataFileDifficulty:String;
+	public static var playAs:String = "bf";
+	public static var whichCharacterToBotFC:String = "";
 
 	private var vocals:FlxSound;
 
@@ -62,21 +69,21 @@ class PlayState extends MusicBeatState {
 
 	private static var prevCamFollow:FlxObject;
 
-	private static var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	private var playerStrums:FlxTypedGroup<FlxSprite>;
-	private var dadStrums:FlxTypedGroup<FlxSprite>;
+	public var strumLineNotes:FlxTypedGroup<FlxSprite>;
+	public var playerStrums:FlxTypedGroup<FlxSprite>;
+	public var dadStrums:FlxTypedGroup<FlxSprite>;
 
-	public static var camZooming:Bool = false;
+	public var camZooming:Bool = false;
 	private var curSong:String = "";
 
 	public var gfSpeed:Int = 1;
 
-	public static var health:Float = 1;
+	public var health:Float = 1;
 	public var combo:Int = 0;
 
-	private var bgDimness:FlxSprite;
+	public var bgDimness:FlxSprite;
 
-	private var healthBarBG:FlxSprite;
+	public var healthBarBG:FlxSprite;
 	public var healthBar:FlxBar;
 
 	private var generatedMusic:Bool = false;
@@ -94,26 +101,21 @@ class PlayState extends MusicBeatState {
 
 	public static var stage:Stage;
 
-	public static var playAs:String = "bf";
-	public static var whichCharacterToBotFC:String = "";
-
 	public static var isMultiplayer:Bool = false;
 
-	var accuracy:Accuracy;
+	public var accuracy:Accuracy;
 
 	var dialogue:Array<String>;
 
 	var wiggleShit:WiggleEffect = new WiggleEffect();
 
-	var talking:Bool = true;
-	var songScore:Int = 0;
-	var scoreTxt:FlxText;
+	public var talking:Bool = true;
+	public var songScore:Int = 0;
+	public var scoreTxt:FlxText;
 
 	public static var gfLayer = new FlxGroup();
 	public static var dadLayer = new FlxGroup();
 	public static var bfLayer = new FlxGroup();
-
-	public static var dataFileDifficulty:String;
 
 	public static var campaignScore:Int = 0;
 
@@ -122,11 +124,7 @@ class PlayState extends MusicBeatState {
 	// how big to stretch the pixel art assets
 	public static var daPixelZoom:Float = 6;
 
-	var inCutscene:Bool = false;
-
-	public static var preloadedCharacters:Map<String, Character>;
-
-	public static var preloadedBfs:Map<String, Boyfriend>;
+	public var inCutscene:Bool = false;
 
 	public var pauseBG:Background;
 
@@ -235,8 +233,8 @@ class PlayState extends MusicBeatState {
 		camStatic.bgColor.alpha = 0;
 
 		FlxG.cameras.reset(camGame);
-		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.add(camStatic, false);
+		FlxG.cameras.add(camHUD, false);
 		FlxG.cameras.setDefaultDrawTarget(camGame, true);
 
 		persistentUpdate = true;
@@ -248,7 +246,7 @@ class PlayState extends MusicBeatState {
 		Conductor.mapBPMChanges(SONG);
 		Conductor.changeBPM(SONG.bpm);
 
-		trace("CURRENT WEEK " + storyWeek);
+		trace("Current Week: " + storyWeek);
 		trace("Current Mania Mode: " + SONG.whichK + "K");
 
 		if (SysFile.exists("mods/songs/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
@@ -257,34 +255,9 @@ class PlayState extends MusicBeatState {
 		else if (SysFile.exists("assets/data/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
 			dialogue = CoolUtil.coolTextFile(Paths.txt(SONG.song.toLowerCase() + '/dialogue'));
 		}
-		else if (!SysFile.exists("assets/data/" + SONG.song.toLowerCase() + "/dialogue.txt") && !SysFile.exists("mods/songs/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
+		else {
 			dialogue = null;
 		}
-
-		/*
-			switch (SONG.song.toLowerCase())
-			{
-				case 'tutorial':
-					dialogue = ["Hey you're pretty cute.", 'Use the arrow keys to keep up with me singing.'];
-				case 'bopeebo':
-					dialogue = CoolUtil.coolTextFile(Paths.txt(SONG.song.toLowerCase() + '/' + SONG.song.toLowerCase() + 'Dialogue'));
-				case 'fresh':
-					dialogue = ["Not too shabby boy.", ""];
-				case 'dadbattle':
-					dialogue = [
-						"gah you think you're hot stuff?",
-						"If you can beat me here...",
-						"Only then I will even CONSIDER letting you date my daughter!"
-					];
-				case 'senpai':
-					dialogue = CoolUtil.coolTextFile(Paths.txt('senpai/senpaiDialogue'));
-				case 'roses':
-					dialogue = CoolUtil.coolTextFile(Paths.txt('roses/rosesDialogue'));
-				case 'thorns':
-					dialogue = CoolUtil.coolTextFile(Paths.txt('thorns/thornsDialogue'));
-				default:
-			}
-		 */
 
 		#if desktop
 		// Making difficulty text for Discord Rich Presence.
@@ -389,7 +362,6 @@ class PlayState extends MusicBeatState {
 		} else {
 			gf = new Character(stage.gfX, stage.gfY, gfVersion);
 		}
-		gf.scrollFactor.set(0.95, 0.95);
 
 		if (Options.customGf && SONG.player2.startsWith("gf")) {
 			dad = new Character(stage.dadX, stage.dadY, "gf-custom");
@@ -572,9 +544,9 @@ class PlayState extends MusicBeatState {
 		add(healthBarBG);
 
 		if (stage.stage.startsWith('school'))
-			healthBar = new FlxBar(healthBarBG.x + 8, healthBarBG.y + 8, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 16), Std.int(healthBarBG.height - 16), PlayState, "health", 0, 2);
+			healthBar = new FlxBar(healthBarBG.x + 8, healthBarBG.y + 8, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 16), Std.int(healthBarBG.height - 16), this, "health", 0, 2);
 		else
-			healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), PlayState, "health", 0, 2);
+			healthBar = new FlxBar(healthBarBG.x + 4, healthBarBG.y + 4, RIGHT_TO_LEFT, Std.int(healthBarBG.width - 8), Std.int(healthBarBG.height - 8), this, "health", 0, 2);
 		healthBar.scrollFactor.set();
 		// healthBar
 		add(healthBar);
@@ -2013,7 +1985,6 @@ class PlayState extends MusicBeatState {
 					if (SONG.needsVoices)
 						vocals.volume = 1;
 
-					luaCall("onNotePress", ["bf", daNote.noteData]);
 					removeNote(daNote);
 				}
 
@@ -2070,8 +2041,8 @@ class PlayState extends MusicBeatState {
 		luaSetVariable("camFollowX", camFollow.x);
 		luaSetVariable("camFollowY", camFollow.y);
 
-		//causes crashes not using it
-		//luaCall("update", [elapsed]);
+		//can cause crashes
+		luaCall("onUpdate", [elapsed]);
 	}
 
 	public function removeNote(daNote:Note) {
@@ -2949,11 +2920,20 @@ class PlayState extends MusicBeatState {
 					ActionNoteonPressed(note);
 					removeNote(note);
 				}
+
+				if (noteHitAsDad)
+					luaCall("onNotePress", ["dad", note.noteData]);
+				else
+					luaCall("onNotePress", ["bf", note.noteData]);
 			}
 		}
 		catch (exc) {
 			trace(exc.details());
 		}
+	}
+
+	function convertNoteToArray(note:Note) {
+
 	}
 
 	function startDiscordRPCTimer() {
@@ -3313,7 +3293,10 @@ class PlayState extends MusicBeatState {
 						health -= 0.001;
 					}, 0);	
 				case "damage":
-					health -= Std.parseFloat(daNote.actionValue);
+					if (daNote.actionValue != null)
+						health -= Std.parseFloat(daNote.actionValue);
+					else
+						health -= 0.3;
 			}
 		}
 		daNote.blockActions = true;

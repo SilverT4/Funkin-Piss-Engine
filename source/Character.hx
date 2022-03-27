@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.FlxSprite;
 import flixel.graphics.frames.FlxAtlasFrames;
@@ -36,7 +37,7 @@ class Character extends AnimatedSprite {
 
 		switch (curCharacter) {
 			case 'bf-custom':
-				for (file in SysFile.readDirectory(Options.customBfPath)) {
+				for (file in FileSystem.readDirectory(Options.customBfPath)) {
 					if (file.endsWith(".xml")) {
 						tex = Paths.PEgetSparrowAtlas(Options.customBfPath + file.substring(0, file.length - 4));
 						frames = tex;
@@ -101,7 +102,7 @@ class Character extends AnimatedSprite {
 
 				playAnim('idle');
 			case 'gf-custom':
-				for (file in SysFile.readDirectory(Options.customGfPath)) {
+				for (file in FileSystem.readDirectory(Options.customGfPath)) {
 					if (file.endsWith(".xml")) {
 						tex = Paths.PEgetSparrowAtlas(Options.customGfPath + file.substring(0, file.length - 4));
 						frames = tex;
@@ -161,7 +162,7 @@ class Character extends AnimatedSprite {
 				playAnim('danceRight');
 			case 'dad-custom':
 				// DAD ANIMATION LOADING CODE
-				for (file in SysFile.readDirectory(Options.customDadPath)) {
+				for (file in FileSystem.readDirectory(Options.customDadPath)) {
 					if (file.endsWith(".xml")) {
 						tex = Paths.PEgetSparrowAtlas(Options.customDadPath + file.substring(0, file.length - 4));
 						frames = tex;
@@ -963,7 +964,7 @@ class Character extends AnimatedSprite {
 
 	public function setConfig(path:String) {
 		configPath = path;
-		if (SysFile.exists(configPath)) {
+		if (FileSystem.exists(configPath)) {
 			config = CoolUtil.readYAML(configPath);
 		}
 	}

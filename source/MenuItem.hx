@@ -1,5 +1,7 @@
 package;
 
+import sys.io.File;
+import sys.FileSystem;
 import openfl.display.BitmapData;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -15,11 +17,11 @@ class MenuItem extends FlxSpriteGroup {
 
 	public function new(x:Float, y:Float, weekID:String = "") {
 		super(x, y);
-		if (SysFile.exists('assets/images/storymenu/$weekID.png')) {
+		if (FileSystem.exists('assets/images/storymenu/$weekID.png')) {
 			week = new FlxSprite().loadGraphic(Paths.image('storymenu/$weekID'));
 		}
-		else if (SysFile.exists('mods/weeks/$weekID/$weekID.png')) {
-			week = new FlxSprite().loadGraphic(BitmapData.fromBytes(SysFile.getBytes('mods/weeks/$weekID/$weekID.png')));
+		else if (FileSystem.exists('mods/weeks/$weekID/$weekID.png')) {
+			week = new FlxSprite().loadGraphic(BitmapData.fromBytes(File.getBytes('mods/weeks/$weekID/$weekID.png')));
 		}
 		else {
 			week = new FlxSprite().makeGraphic(390, 90, FlxColor.WHITE);

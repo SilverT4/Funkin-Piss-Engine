@@ -1,5 +1,6 @@
 package;
 
+import sys.io.File;
 import haxe.Exception;
 import openfl.display.BitmapData;
 import lime.ui.FileDialog;
@@ -17,6 +18,13 @@ import openfl.utils.Assets as OpenFlAssets;
 
 class CoolUtil {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
+
+	public static function writeToFile(path:String, content:String, ?binary:Bool = false):Void {
+        if (!FileSystem.exists(path)) {
+            File.write(path, binary);
+        }
+        File.saveContent(path, content);
+    }
 
 	/**
 	 * :)
@@ -149,7 +157,7 @@ class CoolUtil {
 	public static function coolTextFile(path:String, ?modsFolder = false):Array<String> {
 		var daList;
 		if (modsFolder) {
-			daList = SysFile.getContent(path).trim().split('\n');
+			daList = File.getContent(path).trim().split('\n');
 		}
 		else {
 			daList = Assets.getText(path).trim().split('\n');
@@ -174,9 +182,9 @@ class CoolUtil {
 	public static function getStages():Array<String> {
 		var stages = Stage.stagesList;
 		var mods_characters_path = "mods/stages/";
-		for (stage in SysFile.readDirectory(mods_characters_path)) {
+		for (stage in FileSystem.readDirectory(mods_characters_path)) {
 			var path = Path.join([mods_characters_path, stage]);
-			if (SysFile.isDirectory(path)) {
+			if (FileSystem.isDirectory(path)) {
 				stages.push(stage);
 			}
 		}
@@ -186,9 +194,9 @@ class CoolUtil {
 	public static function getCharacters():Array<String> {
 		var list = CoolUtil.coolTextFile(Paths.txt('characterList'));
 		var mods_characters_path = "mods/characters/";
-		for (char in SysFile.readDirectory(mods_characters_path)) {
+		for (char in FileSystem.readDirectory(mods_characters_path)) {
 			var path = Path.join([mods_characters_path, char]);
-			if (SysFile.isDirectory(path)) {
+			if (FileSystem.isDirectory(path)) {
 				list.push(char);
 			}
 		}
@@ -198,14 +206,14 @@ class CoolUtil {
 	public static function getSongs():Array<String> {
 		var list = [];
 		var assets_song_path = "assets/songs/";
-		for (file in SysFile.readDirectory(assets_song_path)) {
+		for (file in FileSystem.readDirectory(assets_song_path)) {
 			var path = haxe.io.Path.join([assets_song_path, file]);
 			if (FileSystem.isDirectory(path)) {
 				list.push(file);
 			}
 		}
 		var pengine_song_path = "mods/songs/";
-		for (file in SysFile.readDirectory(pengine_song_path)) {
+		for (file in FileSystem.readDirectory(pengine_song_path)) {
 			var path = haxe.io.Path.join([pengine_song_path, file]);
 			if (FileSystem.isDirectory(path)) {
 				list.push(file);

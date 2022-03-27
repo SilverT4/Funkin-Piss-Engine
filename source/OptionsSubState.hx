@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import flixel.FlxObject;
 import flixel.math.FlxPoint;
 import flixel.group.FlxSpriteGroup.FlxTypedSpriteGroup;
@@ -402,9 +403,9 @@ class OptionsCharacterSubState extends FlxSubState {
         character_list = new Array<String>();
 
         character_list.push("Vanilla");
-		for (file in SysFile.readDirectory(character_path)) {
+		for (file in FileSystem.readDirectory(character_path)) {
 			var path = haxe.io.Path.join([character_path, file]);
-            if (SysFile.isDirectory(path)) {
+            if (FileSystem.isDirectory(path)) {
                 character_list.push(file);
             }
 		}

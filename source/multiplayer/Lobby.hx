@@ -233,10 +233,10 @@ class Lobby extends MusicBeatState {
 				PlayState.dataFileDifficulty = '-hard';
 		}
 
-        if (SysFile.exists(Paths.instNoLib(song))) {
+        if (FileSystem.exists(Paths.instNoLib(song))) {
 			PlayState.SONG = Song.loadFromJson(song + PlayState.dataFileDifficulty, song);
 		}
-        else if (SysFile.exists(Paths.PEinst(song))) {
+        else if (FileSystem.exists(Paths.PEinst(song))) {
 			PlayState.SONG = Song.PEloadFromJson(song + PlayState.dataFileDifficulty, song);
 		}
 

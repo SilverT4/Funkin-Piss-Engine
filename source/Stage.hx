@@ -1,5 +1,7 @@
 package;
 
+import sys.io.File;
+import sys.FileSystem;
 import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.FlxSprite;
 import openfl.display.BitmapData;
@@ -519,7 +521,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 				bgTank4.scrollFactor.set(1.6, 1);
 				bgTank5.scrollFactor.set(1.1, 1);
             default:
-                if (SysFile.exists('mods/stages/$stage/')) {
+                if (FileSystem.exists('mods/stages/$stage/')) {
                     setConfig('mods/stages/$stage/config.yml');
                     
                     if (config != null) {
@@ -537,7 +539,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
                         for (image in map.keys()) {
                             var keys:AnyObjectMap = config.get('images').get(image);
-                            var stageSprite = new StageAsset(0, 0, image).loadGraphic(BitmapData.fromBytes(SysFile.getBytes('mods/stages/$stage/images/$image.png')));
+                            var stageSprite = new StageAsset(0, 0, image).loadGraphic(BitmapData.fromBytes(File.getBytes('mods/stages/$stage/images/$image.png')));
                             if (keys != null) {
                                 if (keys.get("x") != null) stageSprite.x = keys.get("x");
                                 if (keys.get("y") != null) stageSprite.y = keys.get("y");
@@ -556,7 +558,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
     public function setConfig(path:String) {
 		configPath = path;
-		if (SysFile.exists(configPath)) {
+		if (FileSystem.exists(configPath)) {
 			config = CoolUtil.readYAML(configPath);
 		}
 	}

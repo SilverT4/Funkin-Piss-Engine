@@ -1,5 +1,9 @@
 package;
 
+import flixel.tweens.misc.VarTween;
+import flixel.group.FlxSpriteGroup;
+import sys.FileSystem;
+import sys.io.File;
 import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.input.FlxInput.FlxInputState;
 import Controls.KeyType;
@@ -69,9 +73,9 @@ class PlayState extends MusicBeatState {
 
 	private static var prevCamFollow:FlxObject;
 
-	public var strumLineNotes:FlxTypedGroup<FlxSprite>;
-	public var playerStrums:FlxTypedGroup<FlxSprite>;
-	public var dadStrums:FlxTypedGroup<FlxSprite>;
+	public var strumLineNotes:FlxSpriteGroup;
+	public var playerStrums:FlxSpriteGroup;
+	public var dadStrums:FlxSpriteGroup;
 
 	public var camZooming:Bool = false;
 	private var curSong:String = "";
@@ -157,9 +161,12 @@ class PlayState extends MusicBeatState {
 	/**
 	 * Plays Animation on strum line
 	 * 
-	 * list of animations: 
+	 * list of animations:
+	 * 
 	 * `pressed` - pressed key
+	 * 
 	 * `static` - idle animation
+	 * 
 	 * `confirm` - on pressed note
 	 */
 	public function strumPlayAnim(noteData:Int, as:String, animation:String = "static") {
@@ -249,10 +256,10 @@ class PlayState extends MusicBeatState {
 		trace("Current Week: " + storyWeek);
 		trace("Current Mania Mode: " + SONG.whichK + "K");
 
-		if (SysFile.exists("mods/songs/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
+		if (FileSystem.exists("mods/songs/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
 			dialogue = CoolUtil.coolTextFile("mods/songs/" + SONG.song.toLowerCase() + "/dialogue.txt", true);
 		}
-		else if (SysFile.exists("assets/data/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
+		else if (FileSystem.exists("assets/data/" + SONG.song.toLowerCase() + "/dialogue.txt")) {
 			dialogue = CoolUtil.coolTextFile(Paths.txt(SONG.song.toLowerCase() + '/dialogue'));
 		}
 		else {
@@ -490,11 +497,11 @@ class PlayState extends MusicBeatState {
 		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
 		strumLine.scrollFactor.set();
 
-		strumLineNotes = new FlxTypedGroup<FlxSprite>();
+		strumLineNotes = new FlxSpriteGroup();
 		add(strumLineNotes);
 
-		playerStrums = new FlxTypedGroup<FlxSprite>();
-		dadStrums = new FlxTypedGroup<FlxSprite>();
+		playerStrums = new FlxSpriteGroup();
+		dadStrums = new FlxSpriteGroup();
 
 		// startCountdown();
 
@@ -693,12 +700,14 @@ class PlayState extends MusicBeatState {
 
 		startDiscordRPCTimer();
 
-		if (SysFile.exists(Paths.getLuaPath(curSong.toLowerCase()))) {
+		if (FileSystem.exists(Paths.getLuaPath(curSong.toLowerCase()))) {
 			lua = new LuaShit(Paths.getLuaPath(curSong.toLowerCase()));
 			
 			luaSetVariable("curDifficulty", storyDifficulty);
 			luaSetVariable("stageZoom", PlayState.stage.camZoom);
 		}
+
+		
 
 		super.create();
 	}
@@ -1014,7 +1023,7 @@ class PlayState extends MusicBeatState {
 		lastReportedPlayheadPosition = 0;
 
 		if (!paused)
-			if (SysFile.exists(Paths.instNoLib(PlayState.SONG.song))) {
+			if (FileSystem.exists(Paths.instNoLib(PlayState.SONG.song))) {
 				FlxG.sound.playMusic(Paths.inst(PlayState.SONG.song), 1, false);
 			} else {
 				FlxG.sound.playMusic(Sound.fromFile(Paths.PEinst(PlayState.SONG.song)), 1, false);
@@ -1043,7 +1052,7 @@ class PlayState extends MusicBeatState {
 		curSong = songData.song;
 
 		if (SONG.needsVoices)
-			if (SysFile.exists(Paths.voicesNoLib(PlayState.SONG.song))) {
+			if (FileSystem.exists(Paths.voicesNoLib(PlayState.SONG.song))) {
 				vocals = new FlxSound().loadEmbedded(Paths.voices(PlayState.SONG.song));
 			} else {
 				vocals = FlxG.sound.load(Sound.fromFile(Paths.PEvoices(PlayState.SONG.song)));
@@ -1501,7 +1510,11 @@ class PlayState extends MusicBeatState {
 	}
 
 	private var godMode = false;
+
+	var curTweenTest:VarTween;
 	override public function update(elapsed:Float) {
+		if (curTweenTest.finished)
+			curTweenTest = FlxTween.tween(playerStrums, {y: playerStrums.y + 25}, 0.1);
 		updateElapsed = elapsed;
 
 		bgDimness.alpha = Options.bgDimness;

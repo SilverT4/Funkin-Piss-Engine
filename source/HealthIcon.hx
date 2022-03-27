@@ -1,5 +1,7 @@
 package;
 
+import sys.io.File;
+import sys.FileSystem;
 import openfl.display.BitmapData;
 import flixel.FlxSprite;
 
@@ -50,36 +52,36 @@ class HealthIcon extends FlxSprite {
 			case "pico-speaker": curChar = "pico";
 			default:
 				curChar = char;
-				if (SysFile.exists("mods/characters/" + curChar + "/icon.png")) {
+				if (FileSystem.exists("mods/characters/" + curChar + "/icon.png")) {
 					type = "mods";
 				}
 		}
 		if (type == "skin") {
 			if (isPlayer == false) {
 				if (char.startsWith("gf")) {
-					if (Options.customGf && SysFile.exists(Paths.skinIcon("gf"))) {
-						loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("gf"))), true, 150, 150);
+					if (Options.customGf && FileSystem.exists(Paths.skinIcon("gf"))) {
+						loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.skinIcon("gf"))), true, 150, 150);
 					} else {
 						loadGraphic(Paths.image('icons/icon-gf'), true, 150, 150);
 					}
 				}
 				else if (char.startsWith("dad")) {
-					if (Options.customDad && SysFile.exists(Paths.skinIcon("dad"))) {
-						loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("dad"))), true, 150, 150);
+					if (Options.customDad && FileSystem.exists(Paths.skinIcon("dad"))) {
+						loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.skinIcon("dad"))), true, 150, 150);
 					} else {
 						loadGraphic(Paths.image('icons/icon-dad'), true, 150, 150);
 					}
 				}
 			}
-			else if (isPlayer && Options.customBf && SysFile.exists(Paths.skinIcon("bf"))) {
-				loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.skinIcon("bf"))), true, 150, 150);
+			else if (isPlayer && Options.customBf && FileSystem.exists(Paths.skinIcon("bf"))) {
+				loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.skinIcon("bf"))), true, 150, 150);
 			} else {
 				loadGraphic(Paths.image('icons/icon-bf'), true, 150, 150);
 			}
 		}
 		if (type == "mods") {
-			if (SysFile.exists(Paths.modsIcon(curChar))) {
-				loadGraphic(BitmapData.fromBytes(SysFile.getBytes(Paths.modsIcon(curChar))), true, 150, 150);
+			if (FileSystem.exists(Paths.modsIcon(curChar))) {
+				loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.modsIcon(curChar))), true, 150, 150);
 			} else {
 				loadGraphic(Paths.image('icons/icon-face'), true, 150, 150);
 			}

@@ -1,5 +1,7 @@
 package;
 
+import sys.io.File;
+import sys.FileSystem;
 import yaml.Yaml;
 import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.group.FlxGroup;
@@ -346,7 +348,7 @@ class StageDebug extends FlxState {
                 stage.config.get('images').get(image.name).set('size', image.sizeMultiplier);
             }
 			var renderedYaml = Yaml.render(stage.config);
-			SysFile.writeToFile(stage.configPath, renderedYaml);
+			CoolUtil.writeToFile(stage.configPath, renderedYaml);
 		}
 	}
 

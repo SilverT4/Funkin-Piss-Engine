@@ -299,7 +299,7 @@ class AnimationDebug extends FlxState {
 				char.config.get('animations').get(key).set('y', char.animOffsets.get(getAnimNameFromKey(char.config, key))[1]);
 			}
 			var renderedYaml = Yaml.render(char.config);
-			SysFile.writeToFile(char.configPath, renderedYaml);
+			CoolUtil.writeToFile(char.configPath, renderedYaml);
 
 			/*
 				var receipt = {assistant:"Chris", items:[{rice:2.34}], teststst: true};

@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import Section.SwagSection;
 import haxe.Json;
 import haxe.format.JsonParser;
@@ -82,7 +83,7 @@ class Song
 		//trace("Chart Path: " + 'mods/songs/' + songNameNoDiff + '/' + songName + ".json");
 		var rawJson = "{}";
 		try {
-			if (SysFile.exists("mods/songs/" + songNameNoDiff + "/" + songName + ".json")) {
+			if (FileSystem.exists("mods/songs/" + songNameNoDiff + "/" + songName + ".json")) {
 				#if desktop
 				rawJson = sys.io.File.getContent("mods/songs/" + songNameNoDiff + "/" + songName + ".json");
 				#end

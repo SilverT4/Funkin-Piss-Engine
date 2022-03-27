@@ -1,5 +1,7 @@
 package;
 
+import sys.io.File;
+import sys.FileSystem;
 import flixel.math.FlxRandom;
 import yaml.util.ObjectMap.TObjectMap;
 import yaml.Yaml;
@@ -94,10 +96,10 @@ class FreeplayState extends MusicBeatState {
 		var otherSongsAdded = [];
 
 		var pengine_weeks_path = "mods/weeks/";
-		for (file in SysFile.readDirectory(pengine_weeks_path)) {
+		for (file in FileSystem.readDirectory(pengine_weeks_path)) {
 			var path = haxe.io.Path.join([pengine_weeks_path, file]);
-			if (SysFile.isDirectory(path)) {
-				var data = Yaml.parse(SysFile.getContent(path + "/config.yml"));
+			if (FileSystem.isDirectory(path)) {
+				var data = Yaml.parse(File.getContent(path + "/config.yml"));
 				if (StoryMenuState.isWeekUnlocked(Std.string(data.get('unlockedAfter')))) {
 					var map:TObjectMap<Dynamic, Dynamic> = data.get('songs');
 					var songs:Array<String> = [];
@@ -113,10 +115,10 @@ class FreeplayState extends MusicBeatState {
 		}
 
 		var pengine_song_path = "mods/songs/";
-		for (file in SysFile.readDirectory(pengine_song_path)) {
+		for (file in FileSystem.readDirectory(pengine_song_path)) {
 			if (!otherSongsAdded.contains(file.toLowerCase())) {
 				var path = haxe.io.Path.join([pengine_song_path, file]);
-				if (SysFile.isDirectory(path)) {
+				if (FileSystem.isDirectory(path)) {
 					var folder = path.split("/")[2];
 					addWeek([folder], "week-1", null, "#6bb580");
 				}
@@ -287,7 +289,7 @@ class FreeplayState extends MusicBeatState {
 			if (doubleSpace == 1) {
 				goToSong();
 			} else {
-				if (SysFile.exists(Paths.instNoLib(songs[curSelected].songName))) {
+				if (FileSystem.exists(Paths.instNoLib(songs[curSelected].songName))) {
 					FlxG.sound.playMusic(Paths.inst(songs[curSelected].songName), 0.6);
 				} else {
 					FlxG.sound.playMusic(Sound.fromFile(Paths.PEinst(songs[curSelected].songName)));
@@ -295,7 +297,7 @@ class FreeplayState extends MusicBeatState {
 
 				var poop:String = Highscore.formatSong(songs[curSelected].songName.toLowerCase(), curDifficulty);
 				var json:SwagSong;
-				if (SysFile.exists(Paths.instNoLib(songs[curSelected].songName))) {
+				if (FileSystem.exists(Paths.instNoLib(songs[curSelected].songName))) {
 					json = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 				} else {
 					json = Song.PEloadFromJson(poop, songs[curSelected].songName.toLowerCase());
@@ -333,7 +335,7 @@ class FreeplayState extends MusicBeatState {
 
 		var customSong = false;
 		
-		if (SysFile.exists(Paths.instNoLib(songs[curSelected].songName))) {
+		if (FileSystem.exists(Paths.instNoLib(songs[curSelected].songName))) {
 			PlayState.SONG = Song.loadFromJson(poop, songs[curSelected].songName.toLowerCase());
 		} else {
 			customSong = true;

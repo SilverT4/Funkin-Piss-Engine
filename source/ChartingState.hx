@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import flixel.input.actions.FlxActionInputAnalog.FlxActionInputAnalogMouseMotion;
 import lime.media.AudioBuffer;
 import haxe.io.Bytes;
@@ -535,7 +536,7 @@ class ChartingState extends MusicBeatState {
 			// vocals.stop();
 		}
 		
-		if (SysFile.exists(Paths.instNoLib(daSong))) {
+		if (FileSystem.exists(Paths.instNoLib(daSong))) {
 			vocals = new FlxSound().loadEmbedded(Paths.voices(daSong));
 			FlxG.sound.playMusic(Paths.inst(daSong), 0.6);
 		} else {

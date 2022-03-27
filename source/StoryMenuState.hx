@@ -1,5 +1,7 @@
 package;
 
+import sys.io.File;
+import sys.FileSystem;
 import yaml.util.ObjectMap.AnyObjectMap;
 import openfl.sensors.Accelerometer;
 import yaml.util.ObjectMap.TObjectMap;
@@ -123,10 +125,10 @@ class StoryMenuState extends MusicBeatState {
 		weeks.push(new Week('week7', ['Ugh', 'Guns', 'Stress'], ['tankman', 'bf', 'gf'], "Tankman", new UnlockedAfterMap("week6")));
 
 		var pengine_weeks_path = "mods/weeks/";
-		for (file in SysFile.readDirectory(pengine_weeks_path)) {
+		for (file in FileSystem.readDirectory(pengine_weeks_path)) {
 			var path = haxe.io.Path.join([pengine_weeks_path, file]);
-			if (SysFile.isDirectory(path)) {
-				var data = Yaml.parse(SysFile.getContent(path + "/config.yml"));
+			if (FileSystem.isDirectory(path)) {
+				var data = Yaml.parse(File.getContent(path + "/config.yml"));
 				if (Std.string(data.get("onlyInFreeplay")) != "true") {
 					var map:TObjectMap<Dynamic, Dynamic> = data.get('songs');
 					var songs:Array<String> = [];
@@ -377,7 +379,7 @@ class StoryMenuState extends MusicBeatState {
 
 			PlayState.storyDifficulty = curDifficulty;
 
-			if (SysFile.exists(Paths.instNoLib(PlayState.storyPlaylist[0].toLowerCase()))) {
+			if (FileSystem.exists(Paths.instNoLib(PlayState.storyPlaylist[0].toLowerCase()))) {
 				PlayState.SONG = Song.loadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());
 			} else {
 				PlayState.SONG = Song.PEloadFromJson(PlayState.storyPlaylist[0].toLowerCase() + diffic, PlayState.storyPlaylist[0].toLowerCase());

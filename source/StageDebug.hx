@@ -1,5 +1,6 @@
 package;
 
+import yaml.Yaml;
 import yaml.util.ObjectMap.AnyObjectMap;
 import flixel.group.FlxGroup;
 import flixel.FlxSprite;
@@ -330,8 +331,12 @@ class StageDebug extends FlxState {
 			}
             stage.config.set('zoom', stage.camZoom);
 
+            for (char in characters) {
+                stage.config.set('${char.curCharacter}X', char.x);
+                stage.config.set('${char.curCharacter}Y', char.y);
+            }
+
 			var map:AnyObjectMap = stage.config.get('images');
-            trace(stage.config);
             for (image in stage) {
                 if (!map.exists(image.name)) {
                     stage.config.get('images').set(image.name);
@@ -340,9 +345,8 @@ class StageDebug extends FlxState {
 				stage.config.get('images').get(image.name).set('y', image.y);
                 stage.config.get('images').get(image.name).set('size', image.sizeMultiplier);
             }
-            trace(stage.config);
-			var renderedYaml = new YamlRender(stage.config);
-			SysFile.writeToFile(stage.configPath, renderedYaml.daFinalYAML);
+			var renderedYaml = Yaml.render(stage.config);
+			SysFile.writeToFile(stage.configPath, renderedYaml);
 		}
 	}
 

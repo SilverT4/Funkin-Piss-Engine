@@ -78,12 +78,12 @@ class LuaShit {
 
         // Sets the player's health
         Lua_helper.add_callback(lua, "setHealth", function(value:Float) {
-            Reflect.setField(PlayState, "health", value);
+            Reflect.setField(PlayState.currentPlaystate, "health", value);
         });
 
         // Returns player's health
         Lua_helper.add_callback(lua, "getHealth", function() {
-            return Reflect.field(PlayState, "health");
+            return Reflect.field(PlayState.currentPlaystate, "health");
         });
 
         // Sets the camera position

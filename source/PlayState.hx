@@ -66,7 +66,8 @@ class PlayState extends MusicBeatState {
 	private static var notes:FlxTypedGroup<Note>;
 	private var unspawnNotes:Array<Note> = [];
 
-	private var strumLine:FlxSprite;
+	public var strumLineDad:FlxSprite;
+	public var strumLineBf:FlxSprite;
 	private var curSection:Int = 0;
 
 	public static var camFollow:FlxObject;
@@ -494,8 +495,11 @@ class PlayState extends MusicBeatState {
 
 		Conductor.songPosition = -5000;
 
-		strumLine = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
-		strumLine.scrollFactor.set();
+		strumLineDad = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
+		strumLineDad.scrollFactor.set();
+
+		strumLineBf = new FlxSprite(0, 50).makeGraphic(FlxG.width, 10);
+		strumLineBf.scrollFactor.set();
 
 		strumLineNotes = new FlxSpriteGroup();
 		add(strumLineNotes);
@@ -1184,7 +1188,7 @@ class PlayState extends MusicBeatState {
 		if (SONG.whichK == 6) {
 			for (i in 0...6) {
 				// FlxG.log.add(i);
-				var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
+				var babyArrow:FlxSprite = new FlxSprite(0, 0);
 	
 				switch (stage.stage) {
 					default:
@@ -1231,6 +1235,11 @@ class PlayState extends MusicBeatState {
 								babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
 						}
 				}
+
+				if (player == 1)
+					babyArrow.y = strumLineBf.y;
+				else
+					babyArrow.y = strumLineDad.y;
 	
 				babyArrow.updateHitbox();
 				babyArrow.scrollFactor.set();
@@ -1259,7 +1268,7 @@ class PlayState extends MusicBeatState {
 		else {
 			for (i in 0...4) {
 				// FlxG.log.add(i);
-				var babyArrow:FlxSprite = new FlxSprite(0, strumLine.y);
+				var babyArrow:FlxSprite = new FlxSprite(0, 0);
 	
 				switch (stage.stage) {
 					case 'school' | 'schoolEvil':
@@ -1329,6 +1338,11 @@ class PlayState extends MusicBeatState {
 								babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
 						}
 				}
+
+				if (player == 1)
+					babyArrow.y = strumLineBf.y;
+				else
+					babyArrow.y = strumLineDad.y;
 	
 				babyArrow.updateHitbox();
 				babyArrow.scrollFactor.set();
@@ -1512,10 +1526,11 @@ class PlayState extends MusicBeatState {
 	private var godMode = false;
 
 	var curTweenTest:VarTween;
+	var prevStrumPos:Array<Float> = null;
+
 	override public function update(elapsed:Float) {
-		if (curTweenTest.finished)
-			curTweenTest = FlxTween.tween(playerStrums, {y: playerStrums.y + 25}, 0.1);
-		updateElapsed = elapsed;
+		strumLineBf.y = playerStrums.y + 50;
+		strumLineDad.y = dadStrums.y + 50;
 
 		bgDimness.alpha = Options.bgDimness;
 
@@ -1871,8 +1886,50 @@ class PlayState extends MusicBeatState {
 			}
 		}
 
+		if (curBeat > 50) {
+			if (prevStrumPos == null && playerStrums != null) {
+				prevStrumPos = new Array<Float>();
+				prevStrumPos[0] = playerStrums.x;
+				prevStrumPos[1] = playerStrums.y;
+			}
+			if (curTweenTest == null) {
+				curTweenTest = FlxTween.tween(playerStrums, {y: playerStrums.y + 200, x: playerStrums.x - 50}, 0.5);
+			}
+			else {
+				if (curTweenTest.finished) {
+					curTweenTest = FlxTween.tween(playerStrums, {y: playerStrums.y + 200, x: playerStrums.x - 50}, 0.5, {onComplete: tween -> {
+						curTweenTest = FlxTween.tween(playerStrums, {y: prevStrumPos[1], x: prevStrumPos[0]}, 0.5);
+					}});
+				}
+			}
+		}
+
 		if (generatedMusic) {
 			notes.forEachAlive(function(daNote:Note) {
+				var daNoteStrumLine:FlxSprite;
+				if (daNote.mustPress)
+					daNoteStrumLine = strumLineBf;
+				else
+					daNoteStrumLine = strumLineDad;
+
+				var strumNote:FlxSprite = new FlxSprite();
+				if (daNote.mustPress) {
+					playerStrums.forEach(function(spr:FlxSprite) {
+						if (Math.abs(daNote.noteData) == spr.ID) {
+							strumNote = spr;
+							return;
+						}
+					});
+				}
+				else {
+					dadStrums.forEach(function(spr:FlxSprite) {
+						if (Math.abs(daNote.noteData) == spr.ID) {
+							strumNote = spr;
+							return;
+						}
+					});
+				}
+
 				if (daNote.y > FlxG.height) {
 					daNote.active = false;
 					daNote.visible = false;
@@ -1882,14 +1939,19 @@ class PlayState extends MusicBeatState {
 					daNote.active = true;
 				}
 
-				daNote.y = (strumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
+				if (!daNote.isSustainNote)
+					daNote.x = strumNote.x;
+				else
+					daNote.x = strumNote.x + (strumNote.width / 2.9);
+
+				daNote.y = (daNoteStrumLine.y - (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(SONG.speed, 2)));
 
 				// i am so fucking sorry for this if condition
 				if (daNote.isSustainNote
-					&& daNote.y + daNote.offset.y <= strumLine.y + Note.getSwagWidth(SONG.whichK) / 2
+					&& daNote.y + daNote.offset.y <= daNoteStrumLine.y + Note.getSwagWidth(SONG.whichK) / 2
 					&& (!daNote.mustPress || (daNote.wasGoodHit || (daNote.prevNote.wasGoodHit && !daNote.canBeHit)))) 
 					{
-					var swagRect = new FlxRect(0, strumLine.y + Note.getSwagWidth(SONG.whichK) / 2 - daNote.y, daNote.width * 2, daNote.height * 2);
+					var swagRect = new FlxRect(0, daNoteStrumLine.y + Note.getSwagWidth(SONG.whichK) / 2 - daNote.y, daNote.width * 2, daNote.height * 2);
 					swagRect.y /= daNote.scale.y;
 					swagRect.height -= swagRect.y;
 
@@ -2178,12 +2240,10 @@ class PlayState extends MusicBeatState {
 	var endingSong:Bool = false;
 
 	private function spawnSplashNote(whaNote:Note) {
-		var splash = new Splash();
+		var splash = new Splash(whaNote);
 
 		splash.scrollFactor.set();
-		splash.y = strumLine.y - strumLine.y - strumLine.y;
 		splash.cameras = [camHUD];
-		add(splash);
 
 		var divider = 4;
 
@@ -2217,12 +2277,12 @@ class PlayState extends MusicBeatState {
 					splash.animation.play('right', false, false, 0);
 			}
 		}
-		splash.x = (Note.getSwagWidth(SONG.whichK) * whaNote.noteData) - (whaNote.width / divider);
-		if (whaNote.mustPress) {
-			splash.x += ((FlxG.width / 2) * 1);
-		} else {
-			splash.x += ((FlxG.width / 2) * 0);
-		}
+
+		splash.offset.set(-((Note.getSwagWidth(SONG.whichK) * whaNote.noteData) - (whaNote.width / divider)), 50);
+
+		splash.updatePos();
+
+		add(splash);
 	}
 
 	private function popUpScore(daNote:Note):Void {

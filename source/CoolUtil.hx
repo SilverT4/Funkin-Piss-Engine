@@ -1,5 +1,11 @@
 package;
 
+import haxe.Exception;
+import openfl.display.BitmapData;
+import lime.ui.FileDialog;
+import openfl.utils.ByteArray;
+import openfl.display.PNGEncoderOptions;
+import flixel.FlxG;
 import flixel.util.FlxColor;
 import flixel.FlxSprite;
 import sys.FileSystem;
@@ -11,6 +17,13 @@ import openfl.utils.Assets as OpenFlAssets;
 
 class CoolUtil {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
+
+	/**
+	 * :)
+	 */
+	public static function crash() {
+		throw new Exception("no bitches error (690)");
+	}
 
 	public static function difficultyString():String {
 		return difficultyArray[PlayState.storyDifficulty];

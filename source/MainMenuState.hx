@@ -27,7 +27,7 @@ class MainMenuState extends MusicBeatState {
 	var menuItems:FlxTypedGroup<FlxSprite>;
 
 	#if !switch
-	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options'];
+	var optionShit:Array<String> = ['story mode', 'freeplay', 'donate', 'options', 'multiplayer'];
 	#else
 	var optionShit:Array<String> = ['story mode', 'freeplay', 'options'];
 	#end
@@ -66,7 +66,7 @@ class MainMenuState extends MusicBeatState {
 
 		var bg:FlxSprite = new FlxSprite(-80).loadGraphic(Paths.image('menuBG'));
 		bg.scrollFactor.x = 0;
-		bg.scrollFactor.y = 0.15;
+		bg.scrollFactor.y = 0.2 - (optionShit.length / 100) * 1.7;
 		bg.setGraphicSize(Std.int(bg.width * 1.1));
 		bg.updateHitbox();
 		bg.screenCenter();
@@ -78,7 +78,7 @@ class MainMenuState extends MusicBeatState {
 
 		magenta = new FlxSprite(-80).loadGraphic(Paths.image('menuDesat'));
 		magenta.scrollFactor.x = 0;
-		magenta.scrollFactor.y = 0.15;
+		magenta.scrollFactor.y = bg.scrollFactor.y;
 		magenta.setGraphicSize(Std.int(magenta.width * 1.1));
 		magenta.updateHitbox();
 		magenta.screenCenter();
@@ -94,7 +94,7 @@ class MainMenuState extends MusicBeatState {
 		var tex = Paths.getSparrowAtlas('FNF_main_menu_assets');
 
 		for (i in 0...optionShit.length) {
-			var menuItem:FlxSprite = new FlxSprite(0, 60 + (i * 160));
+			var menuItem:FlxSprite = new FlxSprite(0, -50 + (i * 160));
 			menuItem.frames = tex;
 			menuItem.animation.addByPrefix('idle', optionShit[i] + " basic", 24);
 			menuItem.animation.addByPrefix('selected', optionShit[i] + " white", 24);
@@ -102,7 +102,7 @@ class MainMenuState extends MusicBeatState {
 			menuItem.ID = i;
 			menuItem.screenCenter(X);
 			menuItems.add(menuItem);
-			menuItem.scrollFactor.set();
+			menuItem.scrollFactor.set(0, 0.3);
 			menuItem.antialiasing = true;
 		}
 
@@ -133,10 +133,6 @@ class MainMenuState extends MusicBeatState {
 		}
 
 		if (!selectedSomethin) {
-			if (FlxG.keys.justPressed.M) {
-				FlxG.switchState(new LobbySelectorState());
-			}
-
 			if (Controls.check(UI_UP, JUST_PRESSED)) {
 				FlxG.sound.play(Paths.sound('scrollMenu'));
 				changeItem(-1);
@@ -187,6 +183,8 @@ class MainMenuState extends MusicBeatState {
 										case 'options':
 											transOut = new TransitionData(NONE);
 											openSubState(new OptionsSubState());
+										case 'multiplayer':
+											FlxG.switchState(new LobbySelectorState());
 									}
 								});
 							}

@@ -300,6 +300,10 @@ class Note extends FlxSprite {
 	override function update(elapsed:Float) {
 		super.update(elapsed);
 
+		if (isSustainNote && PlayState.currentPlaystate.downscroll) {
+			flipY = true;
+		}
+
 		// The * 0.5 is so that it's easier to hit them too late, instead of too early
 		if (strumTime > Conductor.songPosition - Conductor.safeZoneOffset && strumTime < Conductor.songPosition + (Conductor.safeZoneOffset * 0.5))
 			canBeHit = true;

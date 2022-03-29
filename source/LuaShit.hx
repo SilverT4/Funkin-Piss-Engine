@@ -1,5 +1,6 @@
 package;
 
+import flixel.FlxG;
 import flixel.tweens.FlxTween;
 import flixel.FlxObject;
 import flixel.FlxSprite;
@@ -26,6 +27,13 @@ class LuaShit {
         Lua.init_callbacks(lua);
 
         setVariable("swagSong", PlayState.SONG);
+        setVariable("windowWidth", FlxG.width);
+        setVariable("windowHeight", FlxG.height);
+
+        // Sets the game camera default zoom
+        Lua_helper.add_callback(lua, "setDownscroll", function(value:Bool) {
+            PlayState.currentPlaystate.downscroll = value;
+        });
 
         // Sets the game camera default zoom
         Lua_helper.add_callback(lua, "setDefaultCamZoom", function(zoom:Float) {
@@ -66,13 +74,62 @@ class LuaShit {
             daSprite.setPosition(x, y);
         });
 
+        // Sets the position of specified strum note
+        Lua_helper.add_callback(lua, "setStrumNotePos", function(char:String, note:Int, x:Float, y:Float) {
+            if (char == "dad") {
+                PlayState.currentPlaystate.dadStrumLineNotes.forEach(function(spr:FlxSprite) {
+                    if (note == spr.ID) {
+                        spr.setPosition(x, y);
+                        return;
+                    }
+                });
+            }
+            else {
+                PlayState.currentPlaystate.bfStrumLineNotes.forEach(function(spr:FlxSprite) {
+                    if (note == spr.ID) {
+                        spr.setPosition(x, y);
+                        return;
+                    }
+                });
+            }
+        });
+
+        // Returns position of specified strum note
+        Lua_helper.add_callback(lua, "getStrumNotePos", function(char:String, note:Int) {
+            var arr = new Null<Array<Float>>();
+            if (char == "dad") {
+                PlayState.currentPlaystate.dadStrumLineNotes.forEach(function(spr:FlxSprite) {
+                    if (note == spr.ID) {
+                        arr = [spr.x, spr.y];
+                    }
+                });
+            } else {
+                PlayState.currentPlaystate.bfStrumLineNotes.forEach(function(spr:FlxSprite) {
+                    if (note == spr.ID) {
+                        arr = [spr.x, spr.y];
+                    }
+                });
+            }
+            return arr;
+        });
+
         // Sets some variable from playstate
         Lua_helper.add_callback(lua, "setVariable", function(object:String, value:Dynamic) {
-            Reflect.setField(PlayState, object, value);
+            Reflect.setField(PlayState.currentPlaystate, object, value);
         });
 
         // Returns some variable from playstate
         Lua_helper.add_callback(lua, "getVariable", function(object:String) {
+            return Reflect.field(PlayState.currentPlaystate, object);
+        });
+
+        // Sets some public static variable from playstate
+        Lua_helper.add_callback(lua, "setStaticVariable", function(object:String, value:Dynamic) {
+            Reflect.setField(PlayState, object, value);
+        });
+
+        // Returns some public static variable from playstate
+        Lua_helper.add_callback(lua, "getStaticVariable", function(object:String) {
             return Reflect.field(PlayState, object);
         });
 

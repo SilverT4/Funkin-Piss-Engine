@@ -120,7 +120,7 @@ class FreeplayState extends MusicBeatState {
 				var path = haxe.io.Path.join([pengine_song_path, file]);
 				if (FileSystem.isDirectory(path)) {
 					var folder = path.split("/")[2];
-					addWeek([folder], "week-1", null, "#6bb580");
+					addWeek([folder], "week-1", null, null);
 				}
 			}
 		}
@@ -152,8 +152,21 @@ class FreeplayState extends MusicBeatState {
 			songText.targetY = i;
 			grpSongs.add(songText);
 
-			var icon:HealthIcon = new HealthIcon(songs[i].songCharacter);
+			var iconChar = songs[i].songCharacter;
+
+			if (iconChar == "face") {
+				var json:SwagSong = CoolUtil.getSongJson(songs[i].songName);
+				if (json != null) {
+					iconChar = json.player2;
+				}
+			}
+
+			var icon:HealthIcon = new HealthIcon(iconChar);
 			icon.sprTracker = songText;
+
+			if (songs[i].freeplayColor == null) {
+				songs[i].freeplayColor = CoolUtil.getDominantColor(icon).toWebString();
+			}
 
 			// using a FlxGroup is too much fuss!
 			iconArray.push(icon);
@@ -461,7 +474,7 @@ class SongMetadata {
 	public var songName:String = "";
 	public var week:String = "week0";
 	public var songCharacter:String = "";
-	public var freeplayColor:String = "#9471e3";
+	public var freeplayColor:String = null;
 
 	public function new(song:String, week:String, songCharacter:String, ?freeplayColor:String) {
 		this.songName = song;

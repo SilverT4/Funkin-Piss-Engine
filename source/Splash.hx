@@ -25,7 +25,7 @@ class Splash extends FlxSprite {
     public function updatePos() {
         if (whaNote != null) {
             if (whaNote.mustPress) {
-                PlayState.currentPlaystate.playerStrums.forEach(function(spr:FlxSprite) {
+                PlayState.currentPlaystate.bfStrumLineNotes.forEach(function(spr:FlxSprite) {
                     if (Math.abs(whaNote.noteData) == spr.ID) {
                         y = spr.y;
                         x = spr.x;
@@ -34,7 +34,7 @@ class Splash extends FlxSprite {
                 });
             }
             else {
-                PlayState.currentPlaystate.dadStrums.forEach(function(spr:FlxSprite) {
+                PlayState.currentPlaystate.dadStrumLineNotes.forEach(function(spr:FlxSprite) {
                     if (Math.abs(whaNote.noteData) == spr.ID) {
                         y = spr.y;
                         x = spr.x;

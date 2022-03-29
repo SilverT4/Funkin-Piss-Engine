@@ -55,7 +55,8 @@ class ChartingState extends MusicBeatState {
         "Ebola",
         "Damage",
         "Picos",
-		"Change Character"
+		"Change Character",
+		"Change Scroll Speed"
     ];
 
     public static var actionNoteDescriptionList:Array<String> = [
@@ -81,7 +82,9 @@ class ChartingState extends MusicBeatState {
 		It can cause a 1 second lag to load a character\n
 		Using custom characters is recommended here\n
 		Value Syntax: <gf, bf, dad>, <character>\n
-		Example Value: dad, pico"
+		Example Value: dad, pico",
+
+		"Just like in the name"
     ];
 
 	var _file:FileReference;
@@ -739,7 +742,10 @@ class ChartingState extends MusicBeatState {
 				FlxG.sound.music.stop();
 				vocals.stop();
 				FlxG.mouse.visible = false;
-				FlxG.switchState(new PlayState());
+				if (FlxG.keys.pressed.CONTROL)
+					FlxG.switchState(new PlayState(null, null, Conductor.songPosition));
+				else
+					FlxG.switchState(new PlayState());
 			}
 
 			if (FlxG.keys.justPressed.E) {
@@ -994,9 +1000,9 @@ class ChartingState extends MusicBeatState {
 		if (curSelectedNote != null) {
 			trace("cur note: " + curSelectedNote);
 			stepperSusLength.value = curSelectedNote[2];
-			actionMenu.selectedLabel = "";
+			actionMenu.selectLabel("");
 			actionValue.text = "";
-			actionMenu.selectedLabel = curSelectedNote[3];
+			actionMenu.selectLabel(curSelectedNote[3]);
 			actionValue.text = curSelectedNote[4];
 		}
 	}

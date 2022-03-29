@@ -1,5 +1,6 @@
 package;
 
+import Song.SwagSong;
 import sys.io.File;
 import haxe.Exception;
 import openfl.display.BitmapData;
@@ -18,6 +19,26 @@ import openfl.utils.Assets as OpenFlAssets;
 
 class CoolUtil {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
+
+	public static function getSongJson(songName:String, ?difficulty:Int):SwagSong {
+		var dataFileDifficulty:String = "";
+		switch (difficulty) {
+			case 0:
+				dataFileDifficulty = '-easy';
+			case 1:
+				dataFileDifficulty = "";
+			case 2:
+				dataFileDifficulty = '-hard';
+		}
+
+		var json:SwagSong;
+		if (FileSystem.exists(Paths.instNoLib(songName.toLowerCase()))) {
+			json = Song.loadFromJson(songName.toLowerCase() + dataFileDifficulty, songName.toLowerCase());
+		} else {
+			json = Song.PEloadFromJson(songName.toLowerCase() + dataFileDifficulty, songName.toLowerCase());
+		}
+		return json;
+	}
 
 	public static function writeToFile(path:String, content:String, ?binary:Bool = false):Void {
         if (!FileSystem.exists(path)) {

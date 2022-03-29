@@ -57,8 +57,8 @@ class OptionsSubState extends FlxSubState {
 		}
 		add(optionsItems);
 
-		// sets this state camera to camStatic
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		if (inGame)
+			cameras = [PlayState.camStatic];
 	}
 
 	override function update(elapsed:Float) {
@@ -239,8 +239,8 @@ class OptionSubState extends FlxSubState {
 		add(items);
 		add(checkboxes);
 
-		// sets this state camera to camStatic
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		if (inGame)
+			cameras = [PlayState.camStatic];
 	}
 
 	override function update(elapsed:Float) {
@@ -421,7 +421,8 @@ class OptionsCharacterSubState extends FlxSubState {
 
         updateMenu();
 
-        cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		if (inGame)
+			cameras = [PlayState.camStatic];
     }
 
     override function update(elapsed:Float) {

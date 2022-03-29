@@ -85,7 +85,7 @@ class PauseSubState extends MusicBeatSubstate {
 
 		changeSelection();
 
-		cameras = [FlxG.cameras.list[FlxG.cameras.list.length - 1]];
+		cameras = [PlayState.camStatic];
 	}
 
 	override function update(elapsed:Float) {

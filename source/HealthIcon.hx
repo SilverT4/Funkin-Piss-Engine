@@ -63,6 +63,7 @@ class HealthIcon extends FlxSprite {
 						loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.skinIcon("gf"))), true, 150, 150);
 					} else {
 						loadGraphic(Paths.image('icons/icon-gf'), true, 150, 150);
+						curChar = "gf";
 					}
 				}
 				else if (char.startsWith("dad")) {
@@ -70,6 +71,7 @@ class HealthIcon extends FlxSprite {
 						loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.skinIcon("dad"))), true, 150, 150);
 					} else {
 						loadGraphic(Paths.image('icons/icon-dad'), true, 150, 150);
+						curChar = "dad";
 					}
 				}
 			}
@@ -77,6 +79,7 @@ class HealthIcon extends FlxSprite {
 				loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.skinIcon("bf"))), true, 150, 150);
 			} else {
 				loadGraphic(Paths.image('icons/icon-bf'), true, 150, 150);
+				curChar = "bf";
 			}
 		}
 		if (type == "mods") {
@@ -84,6 +87,7 @@ class HealthIcon extends FlxSprite {
 				loadGraphic(BitmapData.fromBytes(File.getBytes(Paths.modsIcon(curChar))), true, 150, 150);
 			} else {
 				loadGraphic(Paths.image('icons/icon-face'), true, 150, 150);
+				curChar = "face";
 			}
 		}
 		if (type == "normal") {
@@ -91,6 +95,7 @@ class HealthIcon extends FlxSprite {
 				loadGraphic(Paths.image('icons/icon-$curChar'), true, 150, 150);
 			} else {
 				loadGraphic(Paths.image('icons/icon-face'), true, 150, 150);
+				curChar = "face";
 			}
 		}
 		

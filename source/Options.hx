@@ -21,7 +21,8 @@ class Options {
 		"customBfPath",
 		"customDad",
 		"customDadPath",
-		"disableCrashHandler"
+		"disableCrashHandler",
+		"downscroll"
 	];
 
 	// MAIN
@@ -31,6 +32,7 @@ class Options {
 	public static var framerate:Int = 145;
 	public static var discordRPC:Bool = true;
 	public static var disableCrashHandler:Bool = false;
+	public static var downscroll:Bool = false;
 
 	// SKINS
 	public static var customGf = false;

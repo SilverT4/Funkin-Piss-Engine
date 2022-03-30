@@ -309,7 +309,7 @@ class Note extends FlxSprite {
 			canBeHit = true;
 		else
 			canBeHit = false;
-
+		
 		if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
 			tooLate = true;
 
@@ -330,9 +330,9 @@ class Note extends FlxSprite {
 		}
 
 		if (PlayState.currentPlaystate.downscroll) {
-			if (animation.curAnim.name.endsWith("holdend")) {
-				offset.y = -(height / 1.35);
-			}
+			if (animation.curAnim != null)
+				if (animation.curAnim.name.endsWith("holdend"))
+					offset.y = -(height / 1.35);
 		}
 	}
 }

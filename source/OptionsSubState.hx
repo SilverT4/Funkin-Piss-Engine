@@ -119,6 +119,7 @@ class OptionsPrefencesSubState extends OptionSubState {
 	public function new(inGame) {
 		var items = [
 			new OptionItem('FPS Limit: ' + Options.framerate),
+			new OptionItem("Downscroll", true, Options.downscroll, value -> Options.downscroll = value),
 			new OptionItem('Background Dimness: ' + Options.bgDimness),
 			new OptionItem('Discord Rich Presence', true, Options.discordRPC, value -> Options.discordRPC = value),
 			new OptionItem('Disable Crash Handler', true, Options.disableCrashHandler, value -> Options.disableCrashHandler = value),

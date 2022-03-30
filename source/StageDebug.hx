@@ -318,7 +318,7 @@ class StageDebug extends FlxState {
         if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.S) {
 			saveConfig();
 		}
-
+ 
         if (FlxG.keys.justPressed.ESCAPE) {
 			FlxG.switchState(new MainMenuState());
 		}

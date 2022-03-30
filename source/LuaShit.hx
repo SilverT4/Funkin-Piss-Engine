@@ -30,6 +30,26 @@ class LuaShit {
         setVariable("windowWidth", FlxG.width);
         setVariable("windowHeight", FlxG.height);
 
+        // Gets the client setting
+        Lua_helper.add_callback(lua, "getSetting", function(setting:String) {
+            return Options.get(setting);
+        });
+
+        // Changes the stage of current playstate
+        Lua_helper.add_callback(lua, "changeStage", function(stageName:String) {
+            PlayState.currentPlaystate.changeStage(stageName);
+        });
+
+        // Caches stage
+        Lua_helper.add_callback(lua, "cacheStage", function(name:String) {
+            Cache.cacheStage(name);
+        });
+
+        // Add zoom to the camera
+        Lua_helper.add_callback(lua, "addCameraZoom", function(value:Float) {
+            PlayState.currentPlaystate.addCameraZoom(value);
+        });
+
         // Sets the game camera default zoom
         Lua_helper.add_callback(lua, "setDownscroll", function(value:Bool) {
             PlayState.currentPlaystate.downscroll = value;
@@ -42,7 +62,7 @@ class LuaShit {
 
         // Caches character so it doesnt lag when changing the character
         Lua_helper.add_callback(lua, "cacheCharacter", function(char:String, daChar:String) {
-            PlayState.cacheCharacter(char, daChar);
+            Cache.cacheCharacter(char, daChar);
         });
 
         // Changes character
@@ -52,25 +72,25 @@ class LuaShit {
 
         // Sets the size of some sprite
         Lua_helper.add_callback(lua, "setGraphicSize", function (sprite:String, width:Int, height:Int) {
-            var daSprite:FlxSprite = Reflect.field(PlayState, sprite);
+            var daSprite:FlxSprite = Reflect.field(PlayState.currentPlaystate, sprite);
             daSprite.setGraphicSize(width, height);
         });
 
         // Returns the x position of some object
         Lua_helper.add_callback(lua, "getPositionX", function (object:String) {
-            var daSprite:FlxObject = Reflect.field(PlayState, object);
+            var daSprite:FlxObject = Reflect.field(PlayState.currentPlaystate, object);
             return daSprite.x;
         });
 
         // Returns the y position of some object
         Lua_helper.add_callback(lua, "getPositionY", function (object:String) {
-            var daSprite:FlxObject = Reflect.field(PlayState, object);
+            var daSprite:FlxObject = Reflect.field(PlayState.currentPlaystate, object);
             return daSprite.y;
         });
 
         // Sets the position of some object
         Lua_helper.add_callback(lua, "setPosition", function (object:String, x:Int, y:Int) {
-            var daSprite:FlxObject = Reflect.field(PlayState, object);
+            var daSprite:FlxObject = Reflect.field(PlayState.currentPlaystate, object);
             daSprite.setPosition(x, y);
         });
 
@@ -154,7 +174,7 @@ class LuaShit {
 
         // Tweens the variable
         Lua_helper.add_callback(lua, "tweenVariable", function(object:String, value:Float = 0, duration:Float = 1) {
-            FlxTween.num(Reflect.field(PlayState, object), value, duration, null, f -> Reflect.setField(PlayState, object, f));
+            FlxTween.num(Reflect.field(PlayState.currentPlaystate, object), value, duration, null, f -> Reflect.setField(PlayState.currentPlaystate, object, f));
         });
 
         // Tweens the cam angle
@@ -213,7 +233,7 @@ class LuaShit {
             return 0;
         });
 
-        // Makes camera do very epic effect (i killed 20 children in africa)
+        // Makes camera do very epic effect (i killed 21 children in africa)
         Lua_helper.add_callback(lua, "shakeCamera", function(cam:String, intensity:Float = 0, duration:Float = 0) {
             if (cam == "hud") {
                 PlayState.camHUD.shake(intensity, duration);

@@ -138,11 +138,15 @@ class Lobby extends MusicBeatState {
         Paths.setCurrentLevel("week-1");
         Paths.setCurrentStage("stage");
 
+        stage = new Stage("philly");
+        add(stage);
+
         lobbyPlayer1 = new Character(0, 0, "bf");
         lobbyPlayer1.flipX = !lobbyPlayer1.flipX;
         lobbyPlayer1.screenCenter(XY);
         lobbyPlayer1.x += PLAYERSPACE;
         lobbyPlayer1.x -= 170;
+        lobbyPlayer1.y += 250;
         add(lobbyPlayer1);
 
         lobbyPlayer2 = new Character(0, 0, "bf");
@@ -151,7 +155,10 @@ class Lobby extends MusicBeatState {
         lobbyPlayer2.x -= 170;
         if (isHost && !server.hasClients())
             lobbyPlayer2.alpha = 0.4;
+        lobbyPlayer2.y += 250;
         add(lobbyPlayer2);
+
+        FlxG.camera.scroll.y += 200;
 
         player1DisplayName = new FlxText(0, lobbyPlayer1.y - 40, 0, player1.nick, 24);
         player1DisplayName.x = (lobbyPlayer1.x + (lobbyPlayer1.width / 2)) - (player1DisplayName.width / 2);
@@ -178,10 +185,10 @@ class Lobby extends MusicBeatState {
 		];
 
 		uiBox = new FlxUITabMenu(null, tabs, true);
-
+        uiBox.scrollFactor.set(0, 0);
 		uiBox.resize(300, 400);
 		uiBox.x = FlxG.width - uiBox.width - 20;
-		uiBox.y = 20;
+		uiBox.y += 20;
 		add(uiBox);
 
         addGeneralUI();
@@ -396,6 +403,8 @@ class Lobby extends MusicBeatState {
             }
         }
     }
+
+	var stage:Stage;
 }
 
 class LobbySelectorState extends FlxState {

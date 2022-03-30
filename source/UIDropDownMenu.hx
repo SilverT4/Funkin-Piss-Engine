@@ -59,6 +59,12 @@ class UIDropDownMenu extends FlxUIDropDownMenu {
 	}
 
 	public function selectLabel(label:String) {
+		if (label == "") {
+			scrollPosition = 0;
+			setList();
+			setData(FlxUIDropDownMenu.makeStrIdLabelArray(curList, true));
+			selectedLabel = label;
+		}
 		for (i in 0...strList.length) {
 			if (!curList.contains(label)) {
 				scrollPosition += 1;
@@ -67,9 +73,15 @@ class UIDropDownMenu extends FlxUIDropDownMenu {
 				continue;
 			} else {
 				selectedLabel = label;
-				break;
+				return;
 			}
 		}
+		//if not found the label
+		
+		scrollPosition = 0;
+		setList();
+		setData(FlxUIDropDownMenu.makeStrIdLabelArray(curList, true));
+		selectedLabel = label;
 	}
 
 

@@ -56,7 +56,10 @@ class ChartingState extends MusicBeatState {
         "Damage",
         "Picos",
 		"Change Character",
-		"Change Scroll Speed"
+		"Change Scroll Speed",
+		"Add Camera Zoom",
+		"Hey",
+		"Play Animation"
     ];
 
     public static var actionNoteDescriptionList:Array<String> = [
@@ -84,7 +87,14 @@ class ChartingState extends MusicBeatState {
 		Value Syntax: <gf, bf, dad>, <character>\n
 		Example Value: dad, pico",
 
-		"Just like in the name"
+		"Just like in the name",
+
+		"Zooms the camera also cancels previous camera zooms",
+
+		"Plays hey animation on gf and bf",
+
+		"Play Animation plays animation on specific character\n
+		Example value: bf, hey"
     ];
 
 	var _file:FileReference;
@@ -169,7 +179,7 @@ class ChartingState extends MusicBeatState {
 				_song.song = daSongName;
 			}
 			Paths.setCurrentLevel("week-1");
-			PlayState.stage = new Stage(_song.stage);
+			PlayState.currentPlaystate.stage = new Stage(_song.stage);
 			PlayState.SONG = _song;
 		}
 	}
@@ -656,9 +666,7 @@ class ChartingState extends MusicBeatState {
 		strumLine.y = getYfromStrum((Conductor.songPosition - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps));
 
 		if (curBeat % 4 == 0 && curStep >= 16 * (curSection + 1)) {
-			trace(curStep);
 			trace((_song.notes[curSection].lengthInSteps) * (curSection + 1));
-			trace('DUMBSHIT');
 
 			if (_song.notes[curSection + 1] == null) {
 				addSection();
@@ -1179,10 +1187,12 @@ class ChartingState extends MusicBeatState {
 		if (FlxG.keys.pressed.CONTROL) {
 			_song.notes[curSection].sectionNotes.push([noteStrum, (noteData + _song.whichK) % (_song.whichK * 2), noteSus]);
 		}
-
+		
+		/*
 		trace("noteStrum: " + noteStrum);
 		trace("curSection:" + curSection);
 		trace("noteData: " + noteData);
+		*/
 
 		updateGrid();
 		updateNoteUI();

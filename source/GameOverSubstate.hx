@@ -17,7 +17,7 @@ class GameOverSubstate extends MusicBeatSubstate {
 	var daStage = "";
 
 	public function new(x:Float, y:Float) {
-		daStage = PlayState.stage.stage;
+		daStage = PlayState.currentPlaystate.stage.name;
 		var daBf:String = '';
 		switch (PlayState.bf.curCharacter) {
 			case 'bf-pixel':

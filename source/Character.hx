@@ -722,8 +722,8 @@ class Character extends AnimatedSprite {
 				frames = Paths.getSparrowAtlas('characters/tankmanCaptain');
 				animation.addByPrefix('idle', "Tankman Idle Dance instance 1", 24);
 				animation.addByPrefix('singUP', "Tankman UP note instance 1", 24);
-				animation.addByPrefix('singRIGHT', "Tankman Right Note instance 1", 24);
-				animation.addByPrefix('singLEFT', "Tankman Note Left instance 1", 24);
+				animation.addByPrefix('singRIGHT', "Tankman Note Left instance 1", 24);
+				animation.addByPrefix('singLEFT', "Tankman Right Note instance 1", 24);
 				animation.addByPrefix('singDOWN', "Tankman DOWN note instance 1", 24);
 				animation.addByPrefix('ugh', "TANKMAN UGH instance 1", 24);
 				animation.addByPrefix('prettyGood', "PRETTY GOOD tankman instance 1", 24);

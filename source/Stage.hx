@@ -26,7 +26,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
         "schoolEvil",
         "tank"
     ];
-    public var stage:String;
+    public var name:String;
     public var camZoom:Float = 0.9;
 
 
@@ -68,10 +68,14 @@ class Stage extends FlxTypedGroup<Dynamic> {
 	public var bgTank4:StageAsset;
 	public var bgTank5:StageAsset;
 
+    public function applyStageShitToPlayState() {
+        PlayState.camZoom = camZoom;
+    }
+
 	public function new(stage:String = "stage") {
 		super();
 
-        this.stage = stage;
+        name = stage;
 
 		switch (stage) {
             case 'stage':
@@ -421,6 +425,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 				bfY -= 50;
 				gfX = 190;
 				gfY = 50;
+                dadY = 280;
 
 				var tankSky:StageAsset = new StageAsset(-60, -400, 'tankSky').loadGraphic(Paths.stageImage('tankSky', stage));
 				tankSky.setGraphicSize(Std.int(tankSky.width * 1.3));

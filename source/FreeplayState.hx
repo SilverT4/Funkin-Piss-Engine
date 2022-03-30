@@ -262,8 +262,11 @@ class FreeplayState extends MusicBeatState {
 		if (FlxG.sound.music.volume < 0.7) {
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
+
+		// sounds like cum zone tbh
+		var fixedBgCumZoom = elapsed * 120;
 		
-		camBG.zoom = FlxMath.lerp(1, camBG.zoom, 0.8);
+		camBG.zoom = FlxMath.lerp(1, camBG.zoom, fixedBgCumZoom);
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
 

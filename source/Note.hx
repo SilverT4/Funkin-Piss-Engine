@@ -86,7 +86,7 @@ class Note extends FlxSprite {
 
 		this.noteData = noteData;
 		
-		daStage = PlayState.stage.stage;
+		daStage = PlayState.currentPlaystate.stage.name;
 
 		switch (action.toLowerCase()) {
 			case("ebola"):
@@ -134,6 +134,45 @@ class Note extends FlxSprite {
 		// trace(prevNote);
 
 		if (isSustainNote && prevNote != null) {
+			if (prevNote.isSustainNote) {
+				if (PlayState.SONG.whichK == 6) {
+					switch (noteData) {
+						case 0:
+							prevNote.animation.play('purplehold');
+						case 1:
+							prevNote.animation.play('greenhold');
+						case 2:
+							prevNote.animation.play('redhold');
+						
+						case 3:
+							prevNote.animation.play('purplehold');
+						case 4:
+							prevNote.animation.play('bluehold');
+						case 5:
+							prevNote.animation.play('redhold');
+					}
+				} else {
+					switch (prevNote.noteData) {
+						case 0:
+							prevNote.animation.play('purplehold');
+						case 1:
+							prevNote.animation.play('bluehold');
+						case 2:
+							prevNote.animation.play('greenhold');
+						case 3:
+							prevNote.animation.play('redhold');
+					}
+				}
+
+				if (PlayState.SONG.whichK == 6) {
+					prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed * PlayState.SONG.whichK / 4.7);
+				} else {
+					prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed);
+				}
+				prevNote.updateHitbox();
+				// prevNote.setGraphicSize();
+			}
+
 			noteScore * 0.2;
 			alpha = 0.6;
 
@@ -173,45 +212,6 @@ class Note extends FlxSprite {
 
 			if (daStage.startsWith('school'))
 				x += 30;
-
-			if (prevNote.isSustainNote) {
-				if (PlayState.SONG.whichK == 6) {
-					switch (noteData) {
-						case 0:
-							prevNote.animation.play('purplehold');
-						case 1:
-							prevNote.animation.play('greenhold');
-						case 2:
-							prevNote.animation.play('redhold');
-						
-						case 3:
-							prevNote.animation.play('purplehold');
-						case 4:
-							prevNote.animation.play('bluehold');
-						case 5:
-							prevNote.animation.play('redhold');
-					}
-				} else {
-					switch (prevNote.noteData) {
-						case 0:
-							prevNote.animation.play('purplehold');
-						case 1:
-							prevNote.animation.play('bluehold');
-						case 2:
-							prevNote.animation.play('greenhold');
-						case 3:
-							prevNote.animation.play('redhold');
-					}
-				}
-
-				if (PlayState.SONG.whichK == 6) {
-					prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed * PlayState.SONG.whichK / 4.7);
-				} else {
-					prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed);
-				}
-				prevNote.updateHitbox();
-				// prevNote.setGraphicSize();
-			}
 		}
 	}
 
@@ -327,6 +327,12 @@ class Note extends FlxSprite {
 		if (tooLate) {
 			if (alpha > 0.3)
 				alpha = 0.3;
+		}
+
+		if (PlayState.currentPlaystate.downscroll) {
+			if (animation.curAnim.name.endsWith("holdend")) {
+				offset.y = -(height / 1.35);
+			}
 		}
 	}
 }

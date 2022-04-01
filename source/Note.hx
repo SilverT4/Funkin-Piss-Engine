@@ -321,8 +321,16 @@ class Note extends FlxSprite {
 			}
 		}
 
-		if (strumTime <= Conductor.songPosition)
-			wasGoodHitButt = true;
+		if (wasGoodHitButt) {
+			missedSongPosition = true;
+			wasGoodHitButt = false;
+		}
+
+		if (!missedSongPosition) {
+			if (strumTime <= Conductor.songPosition)
+				wasGoodHitButt = true;
+		}
+
 
 		if (tooLate) {
 			if (alpha > 0.3)
@@ -335,4 +343,6 @@ class Note extends FlxSprite {
 					offset.y = -(height / 1.35);
 		}
 	}
+
+	public var missedSongPosition:Bool = false;
 }

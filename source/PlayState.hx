@@ -2149,7 +2149,7 @@ class PlayState extends MusicBeatState {
 					removeNote(daNote);
 				}
 
-				if (SONG.song == "Stress") {
+				if (daNote.wasGoodHitButt && SONG.song == "Stress") {
 					peecoStressOnArrowShoot(daNote);
 				}
 			});
@@ -2372,6 +2372,10 @@ class PlayState extends MusicBeatState {
 			
 			var score:Int = 50;
 			var daRating:String = "shit";
+
+			if (SONG.song == "Stress") {
+				peecoStressOnArrowShoot(daNote);
+			}
 	
 			if (noteDiff > Conductor.safeZoneOffset * 0.9) {
 				daRating = 'shit';
@@ -3161,11 +3165,12 @@ class PlayState extends MusicBeatState {
 	}
 
 	function peecoStressOnArrowShoot(note:Note) {
-		if (curBeat >= 0 && curBeat <= 31 ||
-			curBeat >= 96 && curBeat <= 191 ||
-			curBeat >= 288 && curBeat <= 316) {
-			gf.playAnim("picoShoot" + (note.noteData + 1));
-		}
+		if (gf.curCharacter == "pico-speaker")
+			if (curBeat >= 0 && curBeat <= 31 ||
+				curBeat >= 96 && curBeat <= 191 ||
+				curBeat >= 288 && curBeat <= 316) {
+				gf.playAnim("picoShoot" + (note.noteData + 1));
+			}
 	}
 
 	override function stepHit() {

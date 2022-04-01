@@ -36,6 +36,7 @@ class Accuracy {
                     notesAccuracySum -= 0;
             }
         }
+        PlayState.currentPlaystate.sendMultiplayerMessage('ACC::${getAccuracyPercent()}');
     }
     public function getAccuracyPercent():String {
         return FlxMath.roundDecimal(notesAccuracySum / songNotesCount, 4) * 100 + "%";

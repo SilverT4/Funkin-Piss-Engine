@@ -72,7 +72,7 @@ class Lobby extends MusicBeatState {
     public static var curDifficulty:Int = 2;
 
     public static var songsDropDown:UIDropDownMenu;
-	public static var difficultyDropDown:FlxUIDropDownMenu;
+	public static var difficultyDropDown:UIDropDownMenu;
 
     var uiBox:FlxUITabMenu;
 
@@ -203,6 +203,8 @@ class Lobby extends MusicBeatState {
             sendMessage('SONG::$curSong');
 		});
 		songsDropDown.selectLabel(curSong);
+        if (!isHost)
+            songsDropDown.lock = true;
 		var songsText = new FlxText(songsDropDown.x - 5, songsDropDown.y - 15, 0, "Song:");
 
         var diffs:Array<String> = [
@@ -210,11 +212,13 @@ class Lobby extends MusicBeatState {
             "Normal",
             "Hard"
         ];
-        difficultyDropDown = new FlxUIDropDownMenu(songsDropDown.x + songsDropDown.width + 10, songsDropDown.y, FlxUIDropDownMenu.makeStrIdLabelArray(diffs, true), function(difficulty) {
+        difficultyDropDown = new UIDropDownMenu(songsDropDown.x + songsDropDown.width + 10, songsDropDown.y, diffs, function(difficulty, index) {
             curDifficulty = CoolUtil.stringToOgType(difficulty);
             sendMessage('DIFF::$curDifficulty');
-		});
-		difficultyDropDown.selectedLabel = "Hard";
+		}, 3);
+        difficultyDropDown.selectLabel("Hard");
+        if (!isHost)
+            difficultyDropDown.lock = true;
 		var difficultyText = new FlxText(difficultyDropDown.x - 5, difficultyDropDown.y - 15, 0, "Difficulty:");
 
         tab_group_note.add(songsText);

@@ -96,6 +96,13 @@ class ServerBehavior extends UDProteanClientBehavior {
 						PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "pressed");
 					case "SNR":
 						PlayState.currentPlaystate.strumPlayAnim(splited1, "dad", "static");
+					case "SCO":
+						Lobby.player2.score = splited1;
+					case "ACC":
+						Lobby.player2.accuracy = splited1;
+					case "MISN":
+						Lobby.player2.misses = splited1;
+
 				}
 			}
 		}

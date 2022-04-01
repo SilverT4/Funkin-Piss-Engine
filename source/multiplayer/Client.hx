@@ -89,6 +89,12 @@ class ProteanClient extends UDProteanClient {
 							case 2:
 								Lobby.difficultyDropDown.selectedLabel = "Hard";
 						}
+					case "SCO":
+						Lobby.player1.score = splited1;
+					case "ACC":
+						Lobby.player1.accuracy = splited1;
+					case "MISN":
+						Lobby.player1.misses = splited1;
 				}
 			}
 		}

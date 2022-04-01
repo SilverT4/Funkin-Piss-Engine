@@ -71,6 +71,10 @@ class FreeplayState extends MusicBeatState {
 		#if debug
 		isDebug = true;
 		#end
+		
+		for (index in 0...6) {
+			StoryMenuState.setWeekUnlocked('week$index');
+		}
 
 		if (StoryMenuState.isWeekUnlocked("week0") || isDebug)
 			addWeek(['Bopeebo', 'Fresh', 'Dadbattle'], "week1", ['dad'], "#9471e3");

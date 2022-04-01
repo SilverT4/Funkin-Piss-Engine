@@ -30,7 +30,7 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 * Modcharts
 * Configs are in YAML instead of JSON so it is easier to read them
 * Dialogue Cutscenes (not finished, still meh)
-* Lua Support
+* [Lua Support](https://github.com/Paidyy/Funkin-PEngine/wiki/Lua-Documentation)
 * And some fixes to Vanilla
 ## Credits
 ### PEngine

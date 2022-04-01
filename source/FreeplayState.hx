@@ -72,7 +72,7 @@ class FreeplayState extends MusicBeatState {
 		isDebug = true;
 		#end
 		
-		for (index in 0...6) {
+		for (index in 0...7) {
 			StoryMenuState.setWeekUnlocked('week$index');
 		}
 

@@ -17,6 +17,7 @@ class UIDropDownMenu extends FlxUIDropDownMenu {
 
 	public var scrollPosition:Int = 0;
 	public var showItems:Int;
+	public var lock:Bool = false;
     /*
         callback is ignored use fixedCallback instead
     */
@@ -40,20 +41,22 @@ class UIDropDownMenu extends FlxUIDropDownMenu {
 	public override function update(elapsed:Float):Void {
 		super.update(elapsed);
 
-		if (visible && FlxG.mouse.overlaps(this)) {
-			if (FlxG.mouse.wheel == 1 || FlxG.mouse.wheel == -1) {
-				if (FlxG.mouse.wheel == 1) { // SCROLLING UP
-					if ((scrollPosition) > 0) {
-						scrollPosition -= 1;
+		if (!lock) {
+			if (visible && FlxG.mouse.overlaps(this)) {
+				if (FlxG.mouse.wheel == 1 || FlxG.mouse.wheel == -1) {
+					if (FlxG.mouse.wheel == 1) { // SCROLLING UP
+						if ((scrollPosition) > 0) {
+							scrollPosition -= 1;
+						}
 					}
-				}
-				else if (FlxG.mouse.wheel == -1) { // SCROLLING DOWN
-					if (scrollPosition < (strList.length - showItems)) {
-						scrollPosition += 1;
+					else if (FlxG.mouse.wheel == -1) { // SCROLLING DOWN
+						if (scrollPosition < (strList.length - showItems)) {
+							scrollPosition += 1;
+						}
 					}
+					setList();
+					setData(FlxUIDropDownMenu.makeStrIdLabelArray(curList, true));
 				}
-				setList();
-				setData(FlxUIDropDownMenu.makeStrIdLabelArray(curList, true));
 			}
 		}
 	}
@@ -88,16 +91,18 @@ class UIDropDownMenu extends FlxUIDropDownMenu {
 	
 
 	override private function onClickItem(i:Int):Void {
-		var item:FlxUIButton = list[i];
-		selectSomething(item.name, item.label.text);
-		showList(false);
-
-		if (fixedCallback != null) {
-			fixedCallback(item.label.text, i);
-		}
-
-		if (broadcastToFlxUI) {
-			FlxUI.event(CLICK_EVENT, this, item.name, params);
+		if (!lock) {
+			var item:FlxUIButton = list[i];
+			selectSomething(item.name, item.label.text);
+			showList(false);
+	
+			if (fixedCallback != null) {
+				fixedCallback(item.label.text, i);
+			}
+	
+			if (broadcastToFlxUI) {
+				FlxUI.event(CLICK_EVENT, this, item.name, params);
+			}
 		}
 	}
 

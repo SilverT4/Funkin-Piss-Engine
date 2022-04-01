@@ -28,7 +28,6 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 * Custom Skins (no need to change character in chart editor!)
 * Make mods without touching code
 * Modcharts
-* 0.2.8 Version stuff ported like: Week 7, Note Splashes etc.
 * Configs are in YAML instead of JSON so it is easier to read them
 * Dialogue Cutscenes (not finished, still meh)
 * Lua Support

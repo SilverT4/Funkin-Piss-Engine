@@ -57,7 +57,7 @@ class LuaShit {
 
         // Sets the game camera default zoom
         Lua_helper.add_callback(lua, "setDefaultCamZoom", function(zoom:Float) {
-            PlayState.camZoom = zoom;
+            PlayState.currentPlaystate.stage.camZoom = zoom;
         });
 
         // Caches character so it doesnt lag when changing the character

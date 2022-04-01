@@ -731,9 +731,9 @@ class Character extends AnimatedSprite {
 				flipX = true;
 
 				setOffset('idle');
-				setOffset("singRIGHT", 70, -10);
+				setOffset("singLEFT", 70, -10);
 				setOffset("singDOWN", 70, -100);
-				setOffset("singLEFT", 20, -30);
+				setOffset("singRIGHT", 20, -30);
 				setOffset('singUP', 50, 50);
 				setOffset("ugh");
 				setOffset("prettyGood");

@@ -1,4 +1,8 @@
 # Friday Night Funkin': PEngine
+<p align="center">
+  <img width="404" height="290" src="art/thumbnailPEngine.png">
+</p>
+
 Engine made mainly to improve vanilla client and make modding easier and MUCH faster.
 ## Setting Shit up
 1. Install [Haxe](https://haxe.org/download/) and [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) or if you already have installed update Haxe and HaxeFlixel to latest version so it doesn't throw exceptions when compiling

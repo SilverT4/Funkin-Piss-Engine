@@ -418,6 +418,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
                     add(waveSprite);
                     add(waveSpriteFG);
                     */
+            /*
 			case 'tank':
 				camZoom = 0.95;
 
@@ -525,6 +526,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 				bgTank3.scrollFactor.set(2.6, 1);
 				bgTank4.scrollFactor.set(1.6, 1);
 				bgTank5.scrollFactor.set(1.1, 1);
+            */
             default:
                 if (FileSystem.exists('mods/stages/$stage/')) {
                     setConfig('mods/stages/$stage/config.yml');

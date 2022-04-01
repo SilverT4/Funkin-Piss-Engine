@@ -122,7 +122,7 @@ class StoryMenuState extends MusicBeatState {
 		weeks.push(new Week('week4', ['Satin-Panties', "High", "Milf"], ['mom', 'bf', 'gf'], "MOMMY MUST MURDER", new UnlockedAfterMap("week3")));
 		weeks.push(new Week('week5', ['Cocoa', 'Eggnog', 'Winter-Horrorland'], ['parents-christmas', 'bf', 'gf'], "RED SNOW", new UnlockedAfterMap("week4")));
 		weeks.push(new Week('week6', ['Senpai', 'Roses', 'Thorns'], ['senpai', 'bf', 'gf'], "hating simulator ft. moawling", new UnlockedAfterMap("week5")));
-		weeks.push(new Week('week7', ['Ugh', 'Guns', 'Stress'], ['tankman', 'bf', 'gf'], "Tankman", new UnlockedAfterMap("week6")));
+		//weeks.push(new Week('week7', ['Ugh', 'Guns', 'Stress'], ['tankman', 'bf', 'gf'], "Tankman", new UnlockedAfterMap("week6")));
 
 		var pengine_weeks_path = "mods/weeks/";
 		for (file in FileSystem.readDirectory(pengine_weeks_path)) {

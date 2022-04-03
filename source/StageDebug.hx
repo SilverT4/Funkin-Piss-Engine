@@ -189,6 +189,8 @@ class StageDebug extends FlxState {
     }
 
     override function update(elapsed) {
+        FlxG.mouse.visible = true;
+
         if (FlxG.keys.justPressed.A) {
             curTab = 0;
         }
@@ -266,20 +268,24 @@ class StageDebug extends FlxState {
             camFollow.velocity.set();
         }
 
+        if ((FlxG.keys.pressed.CONTROL && FlxG.mouse.justPressed) || (FlxG.keys.justPressed.CONTROL && FlxG.mouse.pressed) || (FlxG.keys.justPressed.CONTROL && FlxG.mouse.justPressed)) {
+            //on clicked sprite
+        }
+
         if (FlxG.keys.pressed.CONTROL && FlxG.mouse.pressed) {
             if (FlxG.mouse.justMoved) {
                 if (curTab == 0)
                     for (penis in stage) {
                         if (penis.name == imageList[currentSprite]) {
-                            penis.x = FlxG.mouse.x;
-                            penis.y = FlxG.mouse.y;
+                            penis.x = penis.x + (FlxG.mouse.x - oldMousePos[0]);
+                            penis.y = penis.y + (FlxG.mouse.y - oldMousePos[1]);
                         }
                     }
                 if (curTab == 1)
                     for (char in characters) {
                         if (char.curCharacter == characterList[currentCharacter]) {
-                            char.x = FlxG.mouse.x;
-                            char.y = FlxG.mouse.y;
+                            char.x = char.x + (FlxG.mouse.x - oldMousePos[0]);
+                            char.y = char.y + (FlxG.mouse.y - oldMousePos[1]);
                         }
                     }
             }
@@ -324,6 +330,8 @@ class StageDebug extends FlxState {
 		}
 
         super.update(elapsed);
+
+        oldMousePos = [FlxG.mouse.x, FlxG.mouse.y];
     }
 
     function saveConfig() {
@@ -357,4 +365,6 @@ class StageDebug extends FlxState {
 	var currentCharacter:Int = 0;
 
 	var characterList:Array<String> = [];
+
+	var oldMousePos:Array<Int>;
 }

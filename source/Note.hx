@@ -43,8 +43,11 @@ class Note extends FlxSprite {
 	/** `true` if the note `strumTime` equals or is higher than current song position. works only for dad note */
 	public var wasGoodHit:Bool = false;
 
-	/** `true` if the note `strumTime` equals or is higher than current song position */
+	/** `true` if the note `strumTime` equals current song position */
 	public var wasGoodHitButt:Bool = false;
+
+	/** `true` if the note `strumTime` equals or is higher than current song position */
+	public var wasInSongPosition:Bool = false;
 
 	//OTHER
 	public var prevNote:Note;
@@ -312,6 +315,9 @@ class Note extends FlxSprite {
 		
 		if (strumTime < Conductor.songPosition - Conductor.safeZoneOffset && !wasGoodHit)
 			tooLate = true;
+
+		if (strumTime <= Conductor.songPosition)
+			wasInSongPosition = true;
 
 		if (!mustPress) {
 			if (PlayState.playAs == "bf") {

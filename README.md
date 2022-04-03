@@ -4,6 +4,8 @@
 </p>
 
 Engine made mainly to improve vanilla client and make modding easier and MUCH faster.
+
+To start Modding check out [The Wiki!](https://github.com/Paidyy/Funkin-PEngine/wiki)
 ## Setting Shit up
 1. Install [Haxe](https://haxe.org/download/) and [HaxeFlixel](https://haxeflixel.com/documentation/install-haxeflixel/) or if you already have installed update Haxe and HaxeFlixel to latest version so it doesn't throw exceptions when compiling
 2. Run [InstallLibraries.bat](https://raw.githack.com/Paidyy/Funkin-PEngine/main/art/installLibraries.bat) or install these libraries using Command Line:

@@ -19,7 +19,7 @@ import openfl.events.Event;
 
 class Main extends Sprite {
 	public static inline var ENGINE_NAME:String = "PEngine"; //engine name in case i will change it lmao
-	public static inline var ENGINE_VER = "0.1b";
+	public static inline var ENGINE_VER = "0.2b";
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).

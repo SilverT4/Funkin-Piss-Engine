@@ -367,6 +367,9 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 var posX = 400;
                 var posY = 200;
 
+                gfScrollFactorX = 0.95;
+                gfScrollFactorY = 0.95;
+
                 var bg:StageAsset = new StageAsset(posX, posY, 'animatedEvilSchool');
                 bg.frames = Paths.stageSparrow('animatedEvilSchool', stage);
                 bg.animation.addByPrefix('idle', 'background 2', 24);
@@ -535,12 +538,20 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
                         if (config.get("zoom") != null) camZoom = Std.parseFloat(Std.string(config.get("zoom")));
 
+                        //These values will be changed in the future, sorry for making it look ugly asf
                         if (config.get("gfX") != null) gfX = Std.parseFloat(Std.string(config.get("gfX")));
                         if (config.get("gfY") != null) gfY = Std.parseFloat(Std.string(config.get("gfY")));
                         if (config.get("dadX") != null) dadX = Std.parseFloat(Std.string(config.get("dadX")));
                         if (config.get("dadY") != null) dadY = Std.parseFloat(Std.string(config.get("dadY")));
                         if (config.get("bfX") != null) bfX = Std.parseFloat(Std.string(config.get("bfX")));
                         if (config.get("bfY") != null) bfY = Std.parseFloat(Std.string(config.get("bfY")));
+
+                        if (config.get("bfScrollFactorX") != null) bfScrollFactorX = Std.parseFloat(Std.string(config.get("bfScrollFactorX")));
+                        if (config.get("dadScrollFactorX") != null) dadScrollFactorX = Std.parseFloat(Std.string(config.get("dadScrollFactorX")));
+                        if (config.get("gfScrollFactorX") != null) gfScrollFactorX = Std.parseFloat(Std.string(config.get("gfScrollFactorX")));
+                        if (config.get("bfScrollFactorY") != null) bfScrollFactorY = Std.parseFloat(Std.string(config.get("bfScrollFactorY")));
+                        if (config.get("dadScrollFactorY") != null) dadScrollFactorY = Std.parseFloat(Std.string(config.get("dadScrollFactorY")));
+                        if (config.get("gfScrollFactorY") != null) gfScrollFactorY = Std.parseFloat(Std.string(config.get("gfScrollFactorY")));
 
                         var map:AnyObjectMap = config.get('images');
 
@@ -572,6 +583,13 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
 	public var config:AnyObjectMap = new AnyObjectMap();
 	public var configPath:String = "";
+
+	public var bfScrollFactorX:Float = 1;
+    public var dadScrollFactorX:Float = 1;
+    public var gfScrollFactorX:Float = 1;
+    public var bfScrollFactorY:Float = 1;
+    public var dadScrollFactorY:Float = 1;
+    public var gfScrollFactorY:Float = 1;
 }
 
 class StageAsset extends FlxSprite {

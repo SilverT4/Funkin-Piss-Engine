@@ -86,15 +86,10 @@ class TitleState extends MusicBeatState {
 		}
 		*/
 
-		#if FREEPLAY
-		FlxG.switchState(new FreeplayState());
-		#elseif CHARTING
-		FlxG.switchState(new ChartingState());
-		#else
+
 		new FlxTimer().start(1, function(tmr:FlxTimer) {
 			startIntro();
 		});
-		#end
 
 		#if cpp
 		DiscordClient.initialize();
@@ -222,6 +217,15 @@ class TitleState extends MusicBeatState {
 			skipIntro();
 		else
 			initialized = true;
+
+		// lime test windows -debug -D operator_variable
+		#if FREEPLAY
+		FlxG.switchState(new FreeplayState());
+		#elseif CHARTING
+		FlxG.switchState(new ChartingState());
+		#elseif STAGE
+		FlxG.switchState(new StageDebug("stage"));
+		#end
 
 		// credGroup.add(credTextShit);
 	}

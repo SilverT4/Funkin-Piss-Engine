@@ -20,6 +20,7 @@ typedef SwagSong =
 	var whichK:Int;
 	var stage:String;
 	var notes:Array<SwagSection>;
+	var playAs:String;
 }
 
 class Song
@@ -33,14 +34,16 @@ class Song
 	public var whichK:Int = 4;
 	public var stage:String;
 	public var notes:Array<SwagSection>;
+	public var playAs:String = "bf";
 
-	public function new(song, notes, bpm, stage, ?whichK)
+	public function new(song, notes, bpm, stage, ?whichK, ?playAs)
 	{
 		this.song = song;
 		this.bpm = bpm;
 		this.stage = stage;
 		this.whichK = whichK;
 		this.notes = notes;
+		this.playAs = playAs;
 	}
 
 	public static function loadFromJson(jsonInput:String, ?folder:String):SwagSong

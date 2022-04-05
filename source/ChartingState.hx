@@ -171,9 +171,10 @@ class ChartingState extends MusicBeatState {
 				player1: 'bf',
 				player2: 'dad',
 				stage: "stage",
+				playAs: "bf",
 				needsVoices: true,
 				validScore: false,
-				notes: []
+				notes: [],
 			};
 			if (daSongName != null) {
 				_song.song = daSongName;
@@ -351,6 +352,13 @@ class ChartingState extends MusicBeatState {
 
 		var opponentText = new FlxText(player2DropDown.x - 5, player2DropDown.y - 15, 0, "Opponent:");
 
+		var playAsDropDown = new UIDropDownMenu(player1DropDown.x + 130, player2DropDown.y + 50, ["bf", "dad"], function(character:String, i) {
+			_song.playAs = character;
+		}, 2);
+		playAsDropDown.selectedLabel = _song.playAs;
+
+		var playAsText = new FlxText(playAsDropDown.x - 5, playAsDropDown.y - 15, 0, "Play As:");
+
 		var tab_group_song = new FlxUI(null, UI_box);
 		tab_group_song.name = "Song";
 
@@ -360,6 +368,7 @@ class ChartingState extends MusicBeatState {
 		tab_group_song.add(opponentText);
 		tab_group_song.add(maniaText);
 		tab_group_song.add(stageText);
+		tab_group_song.add(playAsText);
 
 		tab_group_song.add(UI_songTitle);
 		tab_group_song.add(check_voices);
@@ -369,6 +378,7 @@ class ChartingState extends MusicBeatState {
 		tab_group_song.add(loadAutosaveBtn);
 		tab_group_song.add(stepperBPM);
 		tab_group_song.add(stepperSpeed);
+		tab_group_song.add(playAsDropDown);
 		tab_group_song.add(player1DropDown);
 		tab_group_song.add(player2DropDown);
 		tab_group_song.add(whichKMenu);
@@ -751,7 +761,7 @@ class ChartingState extends MusicBeatState {
 				vocals.stop();
 				FlxG.mouse.visible = false;
 				if (FlxG.keys.pressed.CONTROL)
-					FlxG.switchState(new PlayState(null, null, Conductor.songPosition));
+					FlxG.switchState(new PlayState(null, Conductor.songPosition));
 				else
 					FlxG.switchState(new PlayState());
 			}

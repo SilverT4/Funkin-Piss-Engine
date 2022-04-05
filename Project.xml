@@ -44,6 +44,9 @@
 	<assets path="assets/preload" rename="assets" exclude="*.ogg" if="web"/>
 	<assets path="assets/preload" rename="assets" exclude="*.mp3" unless="web"/>
 	<assets path="mods" exclude="*.mp3" unless="web"/>
+
+	<assets path="art/linuxUpdateUnzipper" rename="updateUnzipper" if="linux"/>
+	<assets path="art/Unzipper.exe" rename="updateUnzipper.exe" if="windows"/>
 	
 	<!-- <define name="PRELOAD_ALL" /> -->
 	<define name="PRELOAD_ALL" unless="web" />

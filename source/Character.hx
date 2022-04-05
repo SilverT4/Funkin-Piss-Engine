@@ -11,6 +11,8 @@ class Character extends AnimatedSprite {
 	public var isPlayer:Bool = false;
 	public var curCharacter:String = 'bf';
 
+	public var stunned:Bool = false;
+
 	public var holdTimer:Float = 0;
 
 	var animationsFromAlt:List<String>;
@@ -439,8 +441,8 @@ class Character extends AnimatedSprite {
 					animation.addByPrefix('singLEFTmiss', 'Pico Note Right Miss', 24, false);
 				}
 
-				animation.addByPrefix('singUPmiss', 'pico Up note miss', 24);
-				animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24);
+				animation.addByPrefix('singUPmiss', 'pico Up note miss', 24, false);
+				animation.addByPrefix('singDOWNmiss', 'Pico Down Note MISS', 24, false);
 
 				setOffset('idle');
 				setOffset("singUP", -29, 27);
@@ -832,7 +834,17 @@ class Character extends AnimatedSprite {
 		}
 	}
 
+	public function resetColorTransform() {
+		missColorTransform = false;
+		colorTransform.redOffset = 0;
+		colorTransform.greenOffset = 0;
+		colorTransform.blueOffset = 0;
+	}
+
 	override function update(elapsed:Float) {
+		if (!animation.curAnim.name.startsWith("sing") && missColorTransform) {
+			resetColorTransform();
+		}
 		if (PlayState.playAs == "bf") {
 			if (!curCharacter.startsWith('bf')) {
 				if (animation.curAnim.name.startsWith('sing')) {
@@ -865,7 +877,16 @@ class Character extends AnimatedSprite {
 	 * FOR GF DANCING SHIT
 	 */
 	public function dance() {
-		if (!debugMode) {
+		var missAnim = false;
+		if (animation.curAnim.name.endsWith('miss')) {
+			if (animation.curAnim.finished) {
+				missAnim = false;
+			}
+			else {
+				missAnim = true;
+			}
+		}
+		if (!debugMode && !stunned && !missAnim) {
 			switch (curCharacter) {
 				case 'gf':
 					if (!animation.curAnim.name.startsWith('hair')) {
@@ -943,6 +964,8 @@ class Character extends AnimatedSprite {
 
 	override public function playAnim(AnimName:String, Force:Bool = false, Reversed:Bool = false, Frame:Int = 0):Void {
 		if (animation.exists(AnimName)) {
+			resetColorTransform();
+			
 			super.playAnim(AnimName, Force, Reversed, Frame);
 	
 			if (curCharacter == 'gf') {
@@ -958,6 +981,13 @@ class Character extends AnimatedSprite {
 				}
 			}
 		} else {
+			if (AnimName.endsWith("miss")) {
+				super.playAnim(AnimName.substring(0, AnimName.length - 4), Force, Reversed, Frame);
+				colorTransform.redOffset = -45;
+				colorTransform.greenOffset = -80;
+				colorTransform.blueOffset = -50;
+				missColorTransform = true;
+			}
 			#if debug
 			//trace("animation " + AnimName + " doesn't exist");
 			#end
@@ -970,4 +1000,6 @@ class Character extends AnimatedSprite {
 			config = CoolUtil.readYAML(configPath);
 		}
 	}
+
+	var missColorTransform:Bool = false;
 }

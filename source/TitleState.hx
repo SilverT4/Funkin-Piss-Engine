@@ -1,5 +1,6 @@
 package;
 
+import UpdateState.OutdatedState;
 #if cpp
 import Discord.DiscordClient;
 #end
@@ -289,7 +290,11 @@ class TitleState extends MusicBeatState {
 			// FlxG.sound.music.stop();
 			// FlxG.sound.play(Paths.music('titleShoot'), 0.7);
 			new FlxTimer().start(1, function(tmr:FlxTimer) {
-				FlxG.switchState(new MainMenuState());
+				if (Main.outdatedVersion == true) {
+					FlxG.switchState(new OutdatedState());
+				} else {
+					FlxG.switchState(new MainMenuState());
+				}
 			});
 		}
 

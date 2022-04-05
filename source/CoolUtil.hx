@@ -40,11 +40,14 @@ class CoolUtil {
 		return json;
 	}
 
-	public static function writeToFile(path:String, content:String, ?binary:Bool = false):Void {
+	public static function writeToFile(path:String, content:Dynamic, ?binary:Bool = false):Void {
         if (!FileSystem.exists(path)) {
             File.write(path, binary);
         }
-        File.saveContent(path, content);
+		if (binary)
+			File.saveBytes(path, content);
+		else
+        	File.saveContent(path, content);
     }
 
 	/**

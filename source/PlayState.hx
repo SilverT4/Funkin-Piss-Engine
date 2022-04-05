@@ -51,7 +51,7 @@ class PlayState extends MusicBeatState {
 	public static var storyPlaylist:Array<String> = [];
 	public static var storyDifficulty:Int = 1;
 	public static var dataFileDifficulty:String;
-	public static var playAs:String = "bf";
+	public static var playAs:String = null;
 	public static var whichCharacterToBotFC:String = "";
 
 	private var vocals:FlxSound;
@@ -152,11 +152,11 @@ class PlayState extends MusicBeatState {
 	public var currentCameraTween:NumTween;
 	public var currentHUDCameraTween:NumTween;
 
-	public function new(?playAs = "bf", ?isMultiplayer = false, ?songPosition:Float) {
+	public function new(?isMultiplayer = false, ?songPosition:Float) {
 		super();
+		playAs = SONG.playAs;
 		if (playAs == null) playAs = "bf";
 		if (isMultiplayer == null) isMultiplayer = false;
-		PlayState.playAs = playAs;
 		this.isMultiplayer = isMultiplayer;
 		if (songPosition != null) {
 			songPositionCustom = songPosition;
@@ -1722,15 +1722,28 @@ class PlayState extends MusicBeatState {
 			health = 2;
 
 		try {
-			if (healthBar.percent < 20)
-				iconP1.animation.curAnim.curFrame = 1;
-			else
-				iconP1.animation.curAnim.curFrame = 0;
-	
-			if (healthBar.percent > 80)
-				iconP2.animation.curAnim.curFrame = 1;
-			else
-				iconP2.animation.curAnim.curFrame = 0;
+			if (playAs == "bf") {
+				if (healthBar.percent < 20)
+					iconP1.animation.curAnim.curFrame = 1;
+				else
+					iconP1.animation.curAnim.curFrame = 0;
+		
+				if (healthBar.percent > 80)
+					iconP2.animation.curAnim.curFrame = 1;
+				else
+					iconP2.animation.curAnim.curFrame = 0;
+			} 
+			else {
+				if (healthBar.percent < 20)
+					iconP2.animation.curAnim.curFrame = 1;
+				else
+					iconP2.animation.curAnim.curFrame = 0;
+		
+				if (healthBar.percent > 80)
+					iconP1.animation.curAnim.curFrame = 1;
+				else
+					iconP1.animation.curAnim.curFrame = 0;
+			}
 		} catch (exc) {
 			// trace(exc.details());
 		}
@@ -1900,7 +1913,12 @@ class PlayState extends MusicBeatState {
 		*/
 
 		if (health <= 0 && !isMultiplayer) {
-			bf.stunned = true;
+			if (playAs == "bf") {
+				bf.stunned = true;
+			}
+			else {
+				dad.stunned = true;
+			}
 
 			persistentUpdate = false;
 			persistentDraw = false;
@@ -2654,7 +2672,7 @@ class PlayState extends MusicBeatState {
 		if (playAs == "bf") {
 			charStunned = bf.stunned;
 		} else {
-			charStunned = false;
+			charStunned = dad.stunned;
 		}
 		if (isAnyNoteKeyPressed("P") && !charStunned && generatedMusic) {
 			if (playAs == "bf") {
@@ -2821,6 +2839,13 @@ class PlayState extends MusicBeatState {
 	}
 
 	function noteMiss(direction:Int = 1, tooLate:Bool = false, ?daNote:Note = null):Void {
+		var charStunned = false;
+		if (playAs == "bf") {
+			charStunned = bf.stunned;
+		} else {
+			charStunned = dad.stunned;
+		}
+
 		var ignore = false;
 
 		if (daNote == null) {
@@ -2846,7 +2871,7 @@ class PlayState extends MusicBeatState {
 			health -= 0.04;
 			if (tooLate) health -= 0.025;
 	
-			if (!bf.stunned) {
+			if (!charStunned) {
 				if (combo > 5 && gf.animOffsets.exists('sad')) {
 					gf.playAnim('sad');
 				}
@@ -2896,8 +2921,16 @@ class PlayState extends MusicBeatState {
 							bf.stunned = false;
 						});
 					}
-					else
+					else {
 						dad.playAnim(whichAnimationToPlay, true);
+
+						dad.stunned = true;
+	
+						// get stunned for 2 seconds
+						new FlxTimer().start(2 / 60, function(tmr:FlxTimer) {
+							dad.stunned = false;
+						});
+					}
 				}
 			}
 		}

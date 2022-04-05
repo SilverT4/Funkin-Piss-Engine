@@ -1,5 +1,7 @@
 package;
 
+import haxe.Json;
+import sys.Http;
 import OptionsSubState.Background;
 import clipboard.Clipboard;
 import flixel.text.FlxText;
@@ -19,7 +21,7 @@ import openfl.events.Event;
 
 class Main extends Sprite {
 	public static inline var ENGINE_NAME:String = "PEngine"; //engine name in case i will change it lmao
-	public static inline var ENGINE_VER = "0.2b";
+	public static inline var ENGINE_VER = "v0.2b";
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -75,6 +77,21 @@ class Main extends Sprite {
 		initialState = TitleState;
 		#end
 
+		var request = new haxe.Http('https://api.github.com/repos/Paidyy/Funkin-PEngine/releases');
+		request.setHeader('User-Agent', 'haxe');
+		request.setHeader("Accept", "application/vnd.github.v3+json");
+		request.request(); 
+		if (request.responseData != null) {
+			//trace(request.responseData);
+			gitJson = Json.parse(request.responseData);
+			if (gitJson[0].tag_name != null)
+				if (gitJson[0].tag_name != Main.ENGINE_VER)
+					Main.outdatedVersion = true;
+		}
+
+		if (Main.outdatedVersion)
+			trace('Running Version: $ENGINE_VER while there\'s a newer Version: ${gitJson[0].tag_name}');
+
 		addChild(new Game(gameWidth, gameHeight, initialState, zoom, Options.framerate, Options.framerate, skipSplash, startFullscreen));
 
 		#if !mobile
@@ -82,6 +99,10 @@ class Main extends Sprite {
 		#end
 
 	}
+
+	public static var gitJson:Dynamic = null;
+
+	public static var outdatedVersion:Bool = false;
 }
 
 class Game extends FlxGame {

@@ -108,7 +108,7 @@ class MainMenuState extends MusicBeatState {
 
 		FlxG.camera.follow(camFollow, null, 0.06);
 
-		var engineVer:FlxText = new FlxText(5, FlxG.height - (18 * 2), 0, '${Main.ENGINE_NAME} v${Main.ENGINE_VER}', 12);
+		var engineVer:FlxText = new FlxText(5, FlxG.height - (18 * 2), 0, '${Main.ENGINE_NAME} ${Main.ENGINE_VER}', 12);
 		engineVer.scrollFactor.set();
 		engineVer.setFormat("VCR OSD Mono", 16, FlxColor.WHITE, LEFT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 		add(engineVer);

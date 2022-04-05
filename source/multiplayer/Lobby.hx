@@ -255,9 +255,11 @@ class Lobby extends MusicBeatState {
 		trace('CUR WEEK ' + PlayState.storyWeek);
 
 		if (isHost) {
-            FlxG.switchState(new PlayState("bf", true));
+            PlayState.playAs = "bf";
+            FlxG.switchState(new PlayState(true));
         } else {
-            FlxG.switchState(new PlayState("dad", true));
+            PlayState.playAs = "dad";
+            FlxG.switchState(new PlayState(true));
         }
     }
 

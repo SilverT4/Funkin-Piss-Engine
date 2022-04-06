@@ -77,16 +77,18 @@ class Main extends Sprite {
 		initialState = TitleState;
 		#end
 
-		var request = new haxe.Http('https://api.github.com/repos/Paidyy/Funkin-PEngine/releases');
-		request.setHeader('User-Agent', 'haxe');
-		request.setHeader("Accept", "application/vnd.github.v3+json");
-		request.request(); 
-		if (request.responseData != null) {
-			//trace(request.responseData);
-			gitJson = Json.parse(request.responseData);
-			if (gitJson[0].tag_name != null)
-				if (gitJson[0].tag_name != Main.ENGINE_VER)
-					Main.outdatedVersion = true;
+		if (Options.updateChecker) {
+			var request = new Http('https://api.github.com/repos/Paidyy/Funkin-PEngine/releases');
+			request.setHeader('User-Agent', 'haxe');
+			request.setHeader("Accept", "application/vnd.github.v3+json");
+			request.request();
+			if (!CoolUtil.isEmpty(request.responseData)) {
+				//trace(request.responseData);
+				gitJson = Json.parse(request.responseData);
+				if (gitJson[0].tag_name != null)
+					if (gitJson[0].tag_name != Main.ENGINE_VER)
+						Main.outdatedVersion = true;
+			}
 		}
 
 		if (Main.outdatedVersion)

@@ -520,7 +520,7 @@ class PlayState extends MusicBeatState {
 		doof.scrollFactor.set();
 		doof.finishThing = startCountdown;
 
-		var db = new NonWeebWeekDialogueBox(dialogue);
+		db = new NonWeebWeekDialogueBox(dialogue);
 		// db.x += 70;
 		// db.y = FlxG.height * 0.5;
 		db.scrollFactor.set();
@@ -737,11 +737,16 @@ class PlayState extends MusicBeatState {
 					camFollow.setPosition(dad.getMidpoint().x + 120, dad.getMidpoint().y - 70);
 					playCutscene("stressCutscene");
 				default:
-					if (dialogue != null) {
-						normalDialogueIntro(db);
+					if (FileSystem.exists(Paths.getSongFolder(SONG.song) + "cutscene.mp4")) {
+						playCutscene(Paths.getSongFolder(SONG.song) + "cutscene.mp4");
 					}
 					else {
-						startCountdown();
+						if (dialogue != null) {
+							normalDialogueIntro(db);
+						}
+						else {
+							startCountdown();
+						}
 					}
 			}
 		}
@@ -812,14 +817,22 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	function playCutscene(name:String) {
+	function playCutscene(path:String) {
 		inCutscene = true;
 
 		video = new MP4Handler();
 		video.finishCallback = function() {
-			startCountdown();
+			if (dialogue != null) {
+				normalDialogueIntro(db);
+			}
+			else {
+				startCountdown();
+			}
 		}
-		video.playVideo(Paths.video(name));
+		if (!path.contains("/"))
+			video.playVideo(Paths.video(path));
+		else
+			video.playVideo(path);
 	}
 
 	function playOnEndCutscene(name:String) {
@@ -3649,6 +3662,8 @@ class PlayState extends MusicBeatState {
 	}
 
 	var iconCrown:FlxSprite;
+
+	var db:NonWeebWeekDialogueBox;
 }
 
 /*		⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌

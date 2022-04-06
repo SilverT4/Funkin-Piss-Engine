@@ -219,11 +219,13 @@ class TitleState extends MusicBeatState {
 		else
 			initialized = true;
 
-		// lime test windows -debug -D operator_variable
+		// lime test windows -debug -D statement_variable
 		#if FREEPLAY
 		FlxG.switchState(new FreeplayState());
 		#elseif CHARTING
 		FlxG.switchState(new ChartingState());
+		#elseif DIALOGUE
+		FlxG.switchState(new DialogueBoxEditor());
 		#elseif STAGE
 		FlxG.switchState(new StageDebug("stage"));
 		#end

@@ -74,13 +74,87 @@ class Alphabet extends FlxSpriteGroup {
 		addText();
 	}
 
+	public function updateText(newText:String) {
+		_finalText = newText;
+		text = newText;
+		doSplitWords();
+	}
+
+	public function remFromText() {
+		if (lastSprite != null) {
+			text = text.substring(0, text.length - 1);
+			var lastLett = lastSprite.lastSprite;
+			remove(lastSprite);
+			lastSprite = lastLett;
+			updateText(text);
+		}
+	}
+
+	public function addToText(character:String) {
+		//it works?
+		//when adding text use this instead of setText() to prevent lag drop
+
+		updateText(text + character);
+
+		if (lastSprite == null)
+			lastSprite = new AlphaCharacter(0, 0, size);
+
+		#if (haxe >= "4.0.0")
+		var isNumber:Bool = AlphaCharacter.numbers.contains(character);
+		var isSymbol:Bool = AlphaCharacter.symbols.contains(character);
+		#else
+		var isNumber:Bool = AlphaCharacter.numbers.indexOf(character) != -1;
+		var isSymbol:Bool = AlphaCharacter.symbols.indexOf(character) != -1;
+		#end
+
+		var letter:AlphaCharacter = new AlphaCharacter((lastSprite.x + lastSprite.width) - x, 55 * yMulti, size);
+		if (character == "\n") {
+			letter.row = lastSprite.row + 1;
+			letter.x = 0;
+		} else {
+			letter.row = lastSprite.row;
+		}
+		letter.lastSprite = lastSprite;
+
+		if (isBold)
+			letter.createBold(character);
+		else {
+			if (isNumber) {
+				letter.createNumber(character);
+			}
+			else if (isSymbol) {
+				letter.createSymbol(character);
+			}
+			else if (character == " " || character == "\n") {
+				letter.createBlank(character);
+			}
+			else {
+				letter.createLetter(character);
+			}
+		}
+
+		add(letter);
+
+		lastSprite = letter;
+	}
+
 	public function addText() {
 		doSplitWords();
+		
+		yMulti = 0;
 
 		var xPos:Float = 0;
+		var curRow = 0;
 		for (character in splitWords) {
 			if (character == " " || character == "-") {
 				lastWasSpace = true;
+			}
+
+			if (character == "\n") {
+				yMulti++;
+				curRow++;
+				xPos = 0;
+				xPosResetted = true;
 			}
 			
 			#if (haxe >= "4.0.0")
@@ -92,9 +166,12 @@ class Alphabet extends FlxSpriteGroup {
 			#end
 
 			if (AlphaCharacter.alphabet.indexOf(character.toLowerCase()) != -1 || (!isBold && (isNumber || isSymbol))) {
-				if (lastSprite != null) {
+				if (lastSprite != null && !xPosResetted) {
 					xPos = lastSprite.x + lastSprite.width;
 					xPos -= x;
+				}
+				else {
+					xPosResetted = false;
 				}
 
 				if (lastWasSpace) {
@@ -103,7 +180,9 @@ class Alphabet extends FlxSpriteGroup {
 				}
 
 				// var letter:AlphaCharacter = new AlphaCharacter(30 * loopNum, 0);
-				var letter:AlphaCharacter = new AlphaCharacter(xPos, 0, size);
+				var letter:AlphaCharacter = new AlphaCharacter(xPos, 55 * yMulti, size);
+				letter.row = curRow;
+				letter.lastSprite = lastSprite;
 
 				if (isBold)
 					letter.createBold(character);
@@ -250,7 +329,9 @@ class AlphaCharacter extends FlxSprite {
 
 	public function new(x:Float, y:Float, size:Float) {
 		super(x, y);
-		if (sparrow == null) sparrow = Paths.getSparrowAtlas('alphabet');
+		if (sparrow == null) {
+			sparrow = Paths.getSparrowAtlas('alphabet');
+		}
 		frames = sparrow;
 
 		setGraphicSize(Std.int(width * size));
@@ -265,6 +346,16 @@ class AlphaCharacter extends FlxSprite {
 		updateHitbox();
 	}
 
+	public function createBlank(letter:String) {
+		width = 0;
+		height = 0;
+		if (letter == " ") {
+			width = 40 * size;
+		}
+		y += row * 60;
+		visible = false;
+	}
+
 	public function createLetter(letter:String):Void {
 		var letterCase:String = "lowercase";
 		if (letter.toLowerCase() != letter) {
@@ -274,7 +365,6 @@ class AlphaCharacter extends FlxSprite {
 		animation.addByPrefix(letter, letter + " " + letterCase, 24);
 		animation.play(letter);
 		updateHitbox();
-
 		y = (110 - height);
 		y += row * 60;
 
@@ -329,4 +419,6 @@ class AlphaCharacter extends FlxSprite {
 		animation.play(letter);
 		updateHitbox();
 	}
+
+	public var lastSprite:AlphaCharacter;
 }

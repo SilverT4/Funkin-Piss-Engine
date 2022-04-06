@@ -58,24 +58,34 @@ class DialogueBoxEditor extends FlxState {
 
         if (FlxG.keys.justPressed.BACKSPACE) {
             curText = curText.substring(0, curText.length - 1);
-            dBox.text.setText(curText);
+            dBox.text.remFromText();
         }
 
         if (FlxG.keys.justPressed.SPACE) {
             curText += " ";
-            dBox.text.setText(curText);
-        }
-
-        if (FlxG.keys.justPressed.ENTER) {
-            curText += "\n";
-            dBox.text.setText(curText);
+            dBox.text.addToText(" ");
         }
 
         if (FlxG.keys.justPressed.ANY) {
             if (letters.indexOf(FlxG.keys.getIsDown()[0].ID.toString().toLowerCase()) != -1) {
-                curText += FlxG.keys.getIsDown()[0].ID.toString();
-                dBox.text.setText(curText);
+                if (FlxG.keys.pressed.SHIFT) {
+                    curText += FlxG.keys.getIsDown()[0].ID.toString().toUpperCase();
+                    dBox.text.addToText(FlxG.keys.getIsDown()[0].ID.toString().toUpperCase());
+                }
+                else {
+                    curText += FlxG.keys.getIsDown()[0].ID.toString().toLowerCase();
+                    dBox.text.addToText(FlxG.keys.getIsDown()[0].ID.toString().toLowerCase());
+                }
             }
+        }
+
+        if (!FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.ENTER) {
+            curText += "\n";
+            dBox.text.addToText("\n");
+        }
+
+        if (FlxG.keys.pressed.CONTROL && FlxG.keys.justPressed.ENTER) {
+            dBox.text.setText(curText);
         }
     }
 }

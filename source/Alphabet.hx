@@ -90,14 +90,16 @@ class Alphabet extends FlxSpriteGroup {
 		}
 	}
 
+	public var box:FlxSprite;
+
 	public function addToText(character:String) {
 		//it works?
 		//when adding text use this instead of setText() to prevent lag drop
 
 		updateText(text + character);
 
-		if (lastSprite == null)
-			lastSprite = new AlphaCharacter(0, 0, size);
+		if (lastSprite == null && box != null)
+			lastSprite = new AlphaCharacter(box.x, 420, size);
 
 		#if (haxe >= "4.0.0")
 		var isNumber:Bool = AlphaCharacter.numbers.contains(character);

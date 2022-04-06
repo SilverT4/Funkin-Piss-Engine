@@ -195,6 +195,17 @@ class CoolUtil {
 		return daList;
 	}
 
+	public static function splitDialogue(s:String) {
+		var str = s.split('\n');
+
+		for (i in 0...str.length) {
+			str[i] = str[i].trim();
+			str[i] = str[i].replace('\\n', '\n');
+		}
+
+		return str;
+	}
+
 	public static function readYAML(path:String) {
 		#if sys
 		return Yaml.read(path);

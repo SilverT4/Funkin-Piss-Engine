@@ -12,7 +12,7 @@ import flixel.util.FlxTimer;
 
 using StringTools;
 
-class NonWeebWeekDialogueBox extends FlxSpriteGroup {
+class DialogueBoxOg extends FlxSpriteGroup {
 	public var box:FlxSprite;
 
 	var curCharacter:String = '';
@@ -30,59 +30,60 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 
 	var handSelect:FlxSprite;
 	var bgFade:FlxSprite;
+	var hasDialog:Bool;
 
-	public function new(?dialogueList:Array<String>) {
+	public function new(?dialogueList:Array<String>, ?hasDialog = true) {
 		super();
 
-		if (dialogueList != null) {
-			box = new FlxSprite(0, 45);
+		this.hasDialog = hasDialog;
 
-			var hasDialog = false;
-	
-			hasDialog = true;
-			box.frames = Paths.getSparrowAtlas('dialogue/speech_bubble_talking');
-			box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
-			box.animation.addByIndices('normal', 'speech bubble normal', [0, 5, 10, 15], "", 6);
-			box.setGraphicSize(Std.int(box.width * 0.9));
-	
-			this.dialogueList = dialogueList;
-	
-			if (!hasDialog)
-				return;
-	
-			/*
-				portraitLeft = new FlxSprite(-20, 40);
-				portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait');
-				portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
-				portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
-				portraitLeft.updateHitbox();
-				portraitLeft.scrollFactor.set();
-				add(portraitLeft);
-				portraitLeft.visible = false;
-	
-				portraitRight = new FlxSprite(0, 40);
-				portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait');
-				portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
-				portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
-				portraitRight.updateHitbox();
-				portraitRight.scrollFactor.set();
-				add(portraitRight);
-				portraitRight.visible = false;
-			 */
-	
+		box = new FlxSprite(0, 45);
+		
+		box.frames = Paths.getSparrowAtlas('dialogue/speech_bubble_talking');
+		box.animation.addByPrefix('normalOpen', 'Speech Bubble Normal Open', 24, false);
+		box.animation.addByIndices('normal', 'speech bubble normal', [0, 5, 10, 15], "", 6);
+		box.setGraphicSize(Std.int(box.width * 0.9));
+
+		/*
+			portraitLeft = new FlxSprite(-20, 40);
+			portraitLeft.frames = Paths.getSparrowAtlas('weeb/senpaiPortrait');
+			portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
+			portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
+			portraitLeft.updateHitbox();
+			portraitLeft.scrollFactor.set();
+			add(portraitLeft);
+			portraitLeft.visible = false;
+
+			portraitRight = new FlxSprite(0, 40);
+			portraitRight.frames = Paths.getSparrowAtlas('weeb/bfPortrait');
+			portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
+			portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
+			portraitRight.updateHitbox();
+			portraitRight.scrollFactor.set();
+			add(portraitRight);
+			portraitRight.visible = false;
+			*/
+
 			box.animation.play('normalOpen');
 			// box.setGraphicSize(Std.int(box.width * PlayState.daPixelZoom * 0.9));
 			box.updateHitbox();
 			box.y = FlxG.height - box.frameHeight;
 			box.scrollFactor.set();
-			if (dialogueList[0].contains(":dad:")) {
-				box.flipX = true;
-			}
 			add(box);
 	
 			box.screenCenter(X);
 			box.x += 40;
 			// portraitLeft.screenCenter(X);
+
+		if (dialogueList != null) {
+			if (!hasDialog)
+				return;
+
+			this.dialogueList = dialogueList;
+
+			if (dialogueList[0].contains(":dad:")) {
+				box.flipX = true;
+			}
 	
 			dialogue = new Alphabet(0, 80, "", false, true);
 			// dialogue.x = 90;
@@ -97,6 +98,10 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 	var dialogueStarted:Bool = false;
 
 	override function update(elapsed:Float) {
+		if (!hasDialog) {
+			dialogueOpened = false;
+			dialogueStarted = false;
+		}
 		if (box.animation.curAnim != null) {
 			if (box.animation.curAnim.name == 'normalOpen' && box.animation.curAnim.finished) {
 				box.animation.play('normal');
@@ -109,7 +114,7 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 			dialogueStarted = true;
 		}
 
-		if (FlxG.keys.justPressed.ANY && dialogueStarted == true) {
+		if (FlxG.keys.justPressed.ANY && dialogueStarted) {
 			remove(dialogue);
 
 			FlxG.sound.play(Paths.sound('dialogueClose'), 0.8);
@@ -149,6 +154,7 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 		if (theDialog != null)
 			remove(theDialog);
 
+		/*
 		// this adds breaks to text so you dont have to lazy bitch
 		// also needs to be rewritten
 		var textLength = 0;
@@ -171,8 +177,9 @@ class NonWeebWeekDialogueBox extends FlxSpriteGroup {
 				dialogueList[0] += s + " ";
 			}
 		}
+		*/
 
-		theDialog = new Alphabet(box.x - 20, 420, dialogueList[0], false, true, 0.7);
+		theDialog = new Alphabet(box.x + 40, 420, dialogueList[0], false, true, 0.7);
 		add(theDialog);
 
 		switch (curCharacter) {

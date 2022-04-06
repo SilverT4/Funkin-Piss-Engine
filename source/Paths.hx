@@ -1,5 +1,6 @@
 package;
 
+import sys.FileSystem;
 import flixel.FlxG;
 import flixel.FlxSprite;
 import flixel.graphics.FlxGraphic;
@@ -52,6 +53,26 @@ class Paths {
 		}
 
 		return getPreloadPath(file);
+	}
+
+	public static function getSongFolder(songName:String):String {
+		var song = songName.toLowerCase();
+
+		for (file in FileSystem.readDirectory("mods/songs/")) {
+			var path = haxe.io.Path.join(["mods/songs/", file]);
+			if (FileSystem.isDirectory(path) && file == song) {
+				return path + "/";
+			}
+		}
+		for (file in FileSystem.readDirectory("assets/songs/")) {
+			var path = haxe.io.Path.join(["assets/songs/", file]);
+			if (FileSystem.isDirectory(path)) {
+				if (FileSystem.isDirectory(path) && file == song) {
+					return path + "/";
+				}
+			}
+		}
+		return null;
 	}
 
 	static public function getLibraryPath(file:String, library = "preload") {

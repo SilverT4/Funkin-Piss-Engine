@@ -520,7 +520,7 @@ class PlayState extends MusicBeatState {
 		doof.scrollFactor.set();
 		doof.finishThing = startCountdown;
 
-		db = new NonWeebWeekDialogueBox(dialogue);
+		db = new DialogueBoxOg(dialogue);
 		// db.x += 70;
 		// db.y = FlxG.height * 0.5;
 		db.scrollFactor.set();
@@ -921,7 +921,7 @@ class PlayState extends MusicBeatState {
 		});
 	}
 
-	function normalDialogueIntro(?dialogueBox:NonWeebWeekDialogueBox):Void {
+	function normalDialogueIntro(?dialogueBox:DialogueBoxOg):Void {
 		try {
 			var black:FlxSprite = new FlxSprite(-100, -100).makeGraphic(FlxG.width * 2, FlxG.height * 2, FlxColor.BLACK);
 			black.scrollFactor.set();
@@ -3663,7 +3663,7 @@ class PlayState extends MusicBeatState {
 
 	var iconCrown:FlxSprite;
 
-	var db:NonWeebWeekDialogueBox;
+	var db:DialogueBoxOg;
 }
 
 /*		⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌

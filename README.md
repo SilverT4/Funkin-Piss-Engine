@@ -24,15 +24,16 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 
 *Message to motherfuckers from gamaverse: this engine supports html5 partially, have fun on trying to ~~port~~ steal someone's mod to your garbage site <3*
 ## Nice Stuff / Features
-* 6K Mania Support
 * Multiplayer
 * Action Notes
 * Custom Skins (no need to change character in chart editor!)
 * Make mods without touching code
+* 6K Mania Support
 * Modcharts
 * Configs are in YAML instead of JSON so it is easier to read them
 * Dialogue Cutscenes (not finished, still meh)
 * [Lua Support](https://github.com/Paidyy/Funkin-PEngine/wiki/Lua-Documentation)
+* Latest version downloader/installer
 * And some fixes to Vanilla
 ## Credits
 ### PEngine

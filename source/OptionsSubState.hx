@@ -122,6 +122,7 @@ class OptionsPrefencesSubState extends OptionSubState {
 			new OptionItem('Background Dimness: ' + Options.bgDimness),
 			new OptionItem('Discord Rich Presence', true, Options.discordRPC, value -> Options.discordRPC = value),
 			new OptionItem('Disable Crash Handler', true, Options.disableCrashHandler, value -> Options.disableCrashHandler = value),
+			new OptionItem('Update Checker', true, Options.updateChecker, value -> Options.updateChecker = value),
 			new OptionItem('BF Skin'),
 			new OptionItem('GF Skin'),
 			new OptionItem('Dad Skin')

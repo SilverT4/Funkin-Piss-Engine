@@ -22,7 +22,8 @@ class Options {
 		"customDad",
 		"customDadPath",
 		"disableCrashHandler",
-		"downscroll"
+		"downscroll",
+		"updateChecker"
 	];
 
 	// MAIN
@@ -33,6 +34,7 @@ class Options {
 	public static var discordRPC:Bool = true;
 	public static var disableCrashHandler:Bool = false;
 	public static var downscroll:Bool = false;
+	public static var updateChecker:Bool = true;
 
 	// SKINS
 	public static var customGf = false;

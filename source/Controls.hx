@@ -60,7 +60,7 @@ class Controls {
 
     /**
      * Check if specific key is pressed
-     * @param keyType the type of the key ex. `UP` is for `UP` arrow and `UI_UP` is for going up in menu
+     * @param keyType the type of the key ex. `UP` is for up arrow and `UI_UP` is for going up in menu
      * @param action the status of `keyType` to check if is `true`
      */
     public static function check(keyType:KeyType, ?action:FlxInputState = JUST_PRESSED) {

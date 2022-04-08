@@ -210,11 +210,6 @@ class Note extends FlxSprite {
 			}
 
 			updateHitbox();
-
-			x -= width / 2;
-
-			if (daStage.startsWith('school'))
-				x += 30;
 		}
 	}
 
@@ -341,6 +336,13 @@ class Note extends FlxSprite {
 		if (tooLate) {
 			if (alpha > 0.3)
 				alpha = 0.3;
+		}
+
+		if (isSustainNote) {
+			offset.x = -(width / 1.3);
+
+			if (daStage.startsWith('school'))
+				offset.x = -(width / 0.9);
 		}
 
 		if (PlayState.currentPlaystate.downscroll) {

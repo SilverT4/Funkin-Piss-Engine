@@ -2009,10 +2009,12 @@ class PlayState extends MusicBeatState {
 					daNote.active = true;
 				}
 
-				if (!daNote.isSustainNote)
-					daNote.x = strumNote.x;
-				else
+				daNote.x = strumNote.x;
+				
+				/*
+				if (daNote.isSustainNote)
 					daNote.x = strumNote.x + (strumNote.width / 2.9);
+				*/
 
 				if (downscroll)
 					daNote.y = (noteStrumLinePos[1] + (Conductor.songPosition - daNote.strumTime) * (0.45 * FlxMath.roundDecimal(curSpeed, 2)));

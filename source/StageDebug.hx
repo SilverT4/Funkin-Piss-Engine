@@ -326,7 +326,7 @@ class StageDebug extends FlxState {
 		}
  
         if (FlxG.keys.justPressed.ESCAPE) {
-			FlxG.switchState(new MainMenuState());
+			LoadingState.loadAndSwitchState(new PlayState());
 		}
 
         super.update(elapsed);

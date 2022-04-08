@@ -246,7 +246,7 @@ class AnimationDebug extends FlxState {
 		}
 
 		if (FlxG.keys.justPressed.ESCAPE) {
-			FlxG.switchState(new MainMenuState());
+			LoadingState.loadAndSwitchState(new PlayState());
 		}
 
 		var upP = FlxG.keys.anyJustPressed([UP]);

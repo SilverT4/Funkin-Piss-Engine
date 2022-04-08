@@ -91,7 +91,7 @@ class DialogueBoxEditor extends FlxState {
         }
 
         if (Controls.check(BACK)) {
-            FlxG.switchState(new MainMenuState());
+            LoadingState.loadAndSwitchState(new PlayState());
         }
     }
 }

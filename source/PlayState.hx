@@ -1793,10 +1793,7 @@ class PlayState extends MusicBeatState {
 
 		luaSetVariable("curSection", PlayState.SONG.notes[Std.int(curStep / 16)]);
 
-		// elapsed on 145 fps is 0.004 to 0.009
-		// elapsed on 60 fps is 0.013 to 0.017
-		// needs to be improved kinda
-		var fixedCumSpeed = elapsed * 2.8;
+		var fixedCumSpeed = CoolUtil.bound(elapsed * 3.2);
 
 		if (generatedMusic && PlayState.SONG.notes[Std.int(curStep / 16)] != null) {
 			if (PlayState.SONG.notes[Std.int(curStep / 16)].centerCamera) {
@@ -2579,80 +2576,71 @@ class PlayState extends MusicBeatState {
 		}
 	}
 
-	function isKeyPressedForNoteData(noteData:Int = 0, ?pressType:String = ""):Bool {
-		var input:FlxInputState;
-		switch (pressType) {
-			case "P":
-				input = FlxInputState.JUST_PRESSED;
-			case "R":
-				input = FlxInputState.JUST_RELEASED;
-			default:
-				input = FlxInputState.PRESSED;
-		}
+	function isKeyPressedForNoteData(noteData:Int = 0, ?pressType:FlxInputState = PRESSED):Bool {
 		if (SONG.whichK == 4) {
 			switch noteData {
 				case 0:
-					return Controls.check(LEFT, input);
+					return Controls.check(LEFT, pressType);
 				case 1:
-					return Controls.check(DOWN, input);
+					return Controls.check(DOWN, pressType);
 				case 2:
-					return Controls.check(UP, input);
+					return Controls.check(UP, pressType);
 				case 3:
-					return Controls.check(RIGHT, input);
+					return Controls.check(RIGHT, pressType);
 			}
 		}
 		else if (SONG.whichK == 6) {
 			switch noteData {
 				case 0:
 					switch (pressType) {
-						case "P":
+						case JUST_PRESSED:
 							return FlxG.keys.justPressed.S;
-						case "R":
+						case JUST_RELEASED:
 							return FlxG.keys.justReleased.S;
 						default:
 							return FlxG.keys.pressed.S;
 					}
 				case 1:
 					switch (pressType) {
-						case "P":
+						case JUST_PRESSED:
 							return FlxG.keys.justPressed.D;
-						case "R":
+						case JUST_RELEASED:
 							return FlxG.keys.justReleased.D;
 						default:
 							return FlxG.keys.pressed.D;
 					}
 				case 2:
 					switch (pressType) {
-						case "P":
+						case JUST_PRESSED:
 							return FlxG.keys.justPressed.F;
-						case "R":
+						case JUST_RELEASED:
 							return FlxG.keys.justReleased.F;
 						default:
 							return FlxG.keys.pressed.F;
 					}
 				case 3:
 					switch (pressType) {
-						case "P":
+						case JUST_PRESSED:
 							return FlxG.keys.justPressed.J;
-						case "R":
+						case JUST_RELEASED:
 							return FlxG.keys.justReleased.J;
 						default:
 							return FlxG.keys.pressed.J;
 					}
 				case 4:
 					switch (pressType) {
-						case "P":
+						case JUST_PRESSED:
 							return FlxG.keys.justPressed.K;
-						case "R":
+						case JUST_RELEASED:
 							return FlxG.keys.justReleased.K;
 						default:
 							return FlxG.keys.pressed.K;
 					}
 				case 5:
 					switch (pressType) {
-						case "P":
+						case JUST_PRESSED:
 							return FlxG.keys.justPressed.L;
-						case "R":
+						case JUST_RELEASED:
 							return FlxG.keys.justReleased.L;
 						default:
 							return FlxG.keys.pressed.L;
@@ -2662,7 +2650,7 @@ class PlayState extends MusicBeatState {
 		return false;
 	}
 
-	function isAnyNoteKeyPressed(?pressType:String = "") {
+	function isAnyNoteKeyPressed(?pressType:FlxInputState = PRESSED) {
 		var controlArray:Array<Bool> = [
 			isKeyPressedForNoteData(0, pressType), 
 			isKeyPressedForNoteData(1, pressType), 
@@ -2674,22 +2662,38 @@ class PlayState extends MusicBeatState {
 		return controlArray.contains(true);
 	}
 
-	function isEveryNoteKeyPressed() {
+	var noteHoldTime = new Map<Int, Float>();
+
+	function isSpamming() {
+		if (blockSpamChecker)
+			return false;
+		var justPressedArr = [];
 		for (index in 0...SONG.whichK) {
-			if (!isKeyPressedForNoteData(index, ""))
-				return false;
+			justPressedArr.push(false);
+			if (noteHoldTime.get(index) <= 0.4 && noteHoldTime.get(index) != 0)
+				justPressedArr[index] = true;
 		}
-		return true;
+		return !justPressedArr.contains(false);
 	}
 
 	private function keyShit():Void {
+		for (index in 0...SONG.whichK) {
+			if (!isKeyPressedForNoteData(index, PRESSED))
+				noteHoldTime.set(index, 0);
+			else
+				if (noteHoldTime != null) {
+					noteHoldTime.set(index, noteHoldTime.get(index) + 1 * FlxG.elapsed);
+				}
+				else
+					noteHoldTime.set(index, 1);
+		}
 		var charStunned = false;
 		if (playAs == "bf") {
 			charStunned = bf.stunned;
 		} else {
 			charStunned = dad.stunned;
 		}
-		if (isAnyNoteKeyPressed("P") && !charStunned && generatedMusic) {
+		if (isAnyNoteKeyPressed(JUST_PRESSED) && !charStunned && generatedMusic) {
 			if (playAs == "bf") {
 				bf.holdTimer = 0;
 			} else {
@@ -2727,7 +2731,20 @@ class PlayState extends MusicBeatState {
 				}
 			});
 
-			if (!(possibleNoteDatas.contains(false) && isEveryNoteKeyPressed())) {
+			var truePossibleNoteDatas:Array<Bool> = [];
+
+			for (k in possibleNoteDatas)
+				if (k == true)
+					truePossibleNoteDatas.push(k);
+
+			if (truePossibleNoteDatas.length == SONG.whichK) {
+				blockSpamChecker = true;
+				new FlxTimer().start(1 / 60, function(tmr:FlxTimer) {
+					blockSpamChecker = false;
+				});
+			}
+
+			if (!isSpamming()) {
 				if (possibleNotes.length > 0) {
 					var daNote = possibleNotes[0];
 	
@@ -2740,7 +2757,7 @@ class PlayState extends MusicBeatState {
 					if (possibleNotes.length >= 2) {
 						if (possibleNotes[0].strumTime == possibleNotes[1].strumTime) {
 							for (coolNote in possibleNotes) {
-								if (isKeyPressedForNoteData(coolNote.noteData, "P"))
+								if (isKeyPressedForNoteData(coolNote.noteData, JUST_PRESSED))
 									goodNoteHit(coolNote, null, false);
 								else {
 									var inIgnoreList:Bool = false;
@@ -2755,31 +2772,26 @@ class PlayState extends MusicBeatState {
 							}
 						}
 						else if (possibleNotes[0].noteData == possibleNotes[1].noteData) {
-							noteCheck(isKeyPressedForNoteData(daNote.noteData, "P"), daNote);
+							noteCheck(isKeyPressedForNoteData(daNote.noteData, JUST_PRESSED), daNote);
 						}
 						else {
 							for (coolNote in possibleNotes) {
-								noteCheck(isKeyPressedForNoteData(coolNote.noteData, "P"), coolNote);
+								noteCheck(isKeyPressedForNoteData(coolNote.noteData, JUST_PRESSED), coolNote);
 							}
 						}
 					}
 					else // regular notes?
 					{
-						noteCheck(isKeyPressedForNoteData(daNote.noteData, "P"), daNote);
+						noteCheck(isKeyPressedForNoteData(daNote.noteData, JUST_PRESSED), daNote);
 					}
 				}
 				else {
 					badNoteCheck();
 				}
 			} else {
-				health -= 0.01;
-				/*
-				if (playAs == "bf")
-					health -= 0.01;
-				else
-					health += 0.01;
-				*/
-				//trace("spam detected");
+				if (possibleNotes.length != 0) {
+					health -= 0.15;
+				}
 			}
 		}
 
@@ -2799,7 +2811,7 @@ class PlayState extends MusicBeatState {
 					}
 				}
 				if (daNote.tooLate && !daNote.wasGoodHit) {
-					if (isKeyPressedForNoteData(daNote.noteData, "P")) {
+					if (isKeyPressedForNoteData(daNote.noteData, JUST_PRESSED)) {
 						goodNoteHit(daNote, null, false);
 					}
 				}
@@ -2822,22 +2834,22 @@ class PlayState extends MusicBeatState {
 
 		if (playAs == "bf") {
 			bfStrumLineNotes.forEach(function(spr:FlxSprite) {
-				if (isKeyPressedForNoteData(spr.ID, "P") && spr.animation.curAnim.name != 'confirm') {
+				if (isKeyPressedForNoteData(spr.ID, JUST_PRESSED) && spr.animation.curAnim.name != 'confirm') {
 					strumPlayAnim(spr.ID, "bf", "pressed");
 					sendMultiplayerMessage("SNP::" + spr.ID);
 				}
-				if (isKeyPressedForNoteData(spr.ID, "R")) {
+				if (isKeyPressedForNoteData(spr.ID, JUST_RELEASED)) {
 					strumPlayAnim(spr.ID, "bf", "static");
 					sendMultiplayerMessage("SNR::" + spr.ID);
 				}
 			});
 		} else {
 			dadStrumLineNotes.forEach(function(spr:FlxSprite) {
-				if (isKeyPressedForNoteData(spr.ID, "P") && spr.animation.curAnim.name != 'confirm') {
+				if (isKeyPressedForNoteData(spr.ID, JUST_PRESSED) && spr.animation.curAnim.name != 'confirm') {
 					strumPlayAnim(spr.ID, "dad", "pressed");
 					sendMultiplayerMessage("SNP::" + spr.ID);
 				}
-				if (isKeyPressedForNoteData(spr.ID, "R")) {
+				if (isKeyPressedForNoteData(spr.ID, JUST_RELEASED)) {
 					strumPlayAnim(spr.ID, "dad", "static");
 					sendMultiplayerMessage("SNR::" + spr.ID);
 				}
@@ -3666,6 +3678,8 @@ class PlayState extends MusicBeatState {
 	var iconCrown:FlxSprite;
 
 	var db:DialogueBoxOg;
+
+	var blockSpamChecker:Bool;
 }
 
 /*		⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌

@@ -303,13 +303,11 @@ class Alphabet extends FlxSpriteGroup {
 	}
 
 	override function update(elapsed:Float) {
-		var fixedCumSpeed = elapsed * 6.9;
-
 		if (isMenuItem) {
 			var scaledY = FlxMath.remapToRange(targetY, 0, 1, 0, 1.3);
 
-			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), fixedCumSpeed);
-			x = FlxMath.lerp(x, (targetY * 20) + 90, fixedCumSpeed);
+			y = FlxMath.lerp(y, (scaledY * 120) + (FlxG.height * 0.48), CoolUtil.bound(elapsed * 11));
+			x = FlxMath.lerp(x, (targetY * 20) + 90, CoolUtil.bound(elapsed * 11));
 		}
 
 		super.update(elapsed);

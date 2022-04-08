@@ -50,6 +50,12 @@ class CoolUtil {
         	File.saveContent(path, content);
     }
 
+	//taken from psych dont kill me
+	//also this returns value that will be the same in every framerate
+	public static function bound(value:Float, ?min:Float = 0, ?max:Float = 1):Float {
+		return Math.max(min, Math.min(max, value));
+	}
+
 	/**
 	 * :)
 	 */

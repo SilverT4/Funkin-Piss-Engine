@@ -228,6 +228,8 @@ class TitleState extends MusicBeatState {
 		FlxG.switchState(new DialogueBoxEditor());
 		#elseif STAGE
 		FlxG.switchState(new StageDebug("stage"));
+		#elseif SPLASHSTATE
+		FlxG.switchState(new Splash.SplashColorState());
 		#end
 
 		// credGroup.add(credTextShit);

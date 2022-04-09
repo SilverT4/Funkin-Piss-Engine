@@ -1,5 +1,6 @@
 package;
 
+import Splash.SplashColor;
 import flixel.tweens.misc.NumTween;
 import flixel.tweens.misc.VarTween;
 import flixel.group.FlxSpriteGroup;
@@ -2376,53 +2377,53 @@ class PlayState extends MusicBeatState {
 			case 4:
 				switch (whaNote.noteData) {
 					case 0:
-						splash.animation.play('left', false, false, 0);
+						splash.play(SplashColor.LEFT);
 					case 1:
-						splash.animation.play('down', false, false, 0);
+						splash.play(SplashColor.DOWN);
 					case 2: 
-						splash.animation.play('up', false, false, 0);
+						splash.play(SplashColor.UP);
 					case 3:
-						splash.animation.play('right', false, false, 0);
+						splash.play(SplashColor.RIGHT);
 				}
 			case 5:
 				switch (whaNote.noteData) {
 					case 0:
-						splash.animation.play('left', false, false, 0);
+						splash.play(SplashColor.LEFT);
 					case 1:
-						splash.animation.play('down', false, false, 0);
+						splash.play(SplashColor.DOWN);
 					case 2:
-						splash.animation.play('up', false, false, 0);
+						splash.play(SplashColor.THING);
 					case 3: 
-						splash.animation.play('up', false, false, 0);
+						splash.play(SplashColor.UP);
 					case 4:
-						splash.animation.play('right', false, false, 0);
+						splash.play(SplashColor.RIGHT);
 				}
 			case 6:
 				splash.setGraphicSize(Std.int(splash.width * 0.75));
 				splash.updateHitbox();
 				switch (whaNote.noteData) {
 					case 0:
-						splash.animation.play('left', false, false, 0);
+						splash.play(SplashColor.LEFT);
 					case 1:
-						splash.animation.play('up', false, false, 0);
+						splash.play(SplashColor.UP);
 					case 2:
-						splash.animation.play('right', false, false, 0);
+						splash.play(SplashColor.RIGHT);
 					case 3:
-						splash.animation.play('left', false, false, 0);
+						splash.play(SplashColor.LEFT);
 					case 4:
-						splash.animation.play('down', false, false, 0);
+						splash.play(SplashColor.DOWN);
 					case 5:
-						splash.animation.play('right', false, false, 0);
+						splash.play(SplashColor.RIGHT);
 				}
 		}
 
 		switch (SONG.whichK) {
-			case 4:
+			case 4, 5:
 				splash.offset.set(
 					whaNote.width - (whaNote.width / 4), 
 					whaNote.width
 				);
-			default:
+			case 6:
 				splash.offset.set(
 					whaNote.width + (whaNote.width / SONG.whichK), 
 					whaNote.width + (whaNote.width / (SONG.whichK / 1.5))

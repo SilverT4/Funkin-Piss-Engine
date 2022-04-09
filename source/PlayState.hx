@@ -2739,7 +2739,7 @@ class PlayState extends MusicBeatState {
 
 			if (truePossibleNoteDatas.length == SONG.whichK) {
 				blockSpamChecker = true;
-				new FlxTimer().start(1 / 60, function(tmr:FlxTimer) {
+				new FlxTimer().start(1, function(tmr:FlxTimer) {
 					blockSpamChecker = false;
 				});
 			}
@@ -2788,7 +2788,8 @@ class PlayState extends MusicBeatState {
 				else {
 					badNoteCheck();
 				}
-			} else {
+			}
+			else if (isSpamming()) {
 				if (possibleNotes.length != 0) {
 					health -= 0.15;
 				}

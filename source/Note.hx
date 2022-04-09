@@ -62,6 +62,8 @@ class Note extends FlxSprite {
 		switch (whichK) {
 			case 4:
 				return 160 * 0.7;
+			case 5:
+				return 160 * 0.7;
 			case 6:
 				return 160 * 0.55;
 			default:
@@ -103,69 +105,17 @@ class Note extends FlxSprite {
 			default:
 				noteAsset();
 		}
+
+		setNotePrefix();
 		
 		x += getSwagWidth(PlayState.SONG.whichK) * noteData;
-		if (PlayState.SONG.whichK == 6) {
-			switch (noteData) {
-				case 0:
-					animation.play('purpleScroll');
-				case 1:
-					animation.play('greenScroll');
-				case 2:
-					animation.play('redScroll');
-				
-				case 3:
-					animation.play('purpleScroll');
-				case 4:
-					animation.play('blueScroll');
-				case 5:
-					animation.play('redScroll');
-			}
-		} else {
-			switch (noteData) {
-				case 0:
-					animation.play('purpleScroll');
-				case 1:
-					animation.play('blueScroll');
-				case 2:
-					animation.play('greenScroll');
-				case 3:
-					animation.play('redScroll');
-			}
-		}
+		animation.play(notePrefix + "Scroll");
 
 		// trace(prevNote);
 
 		if (isSustainNote && prevNote != null) {
 			if (prevNote.isSustainNote) {
-				if (PlayState.SONG.whichK == 6) {
-					switch (noteData) {
-						case 0:
-							prevNote.animation.play('purplehold');
-						case 1:
-							prevNote.animation.play('greenhold');
-						case 2:
-							prevNote.animation.play('redhold');
-						
-						case 3:
-							prevNote.animation.play('purplehold');
-						case 4:
-							prevNote.animation.play('bluehold');
-						case 5:
-							prevNote.animation.play('redhold');
-					}
-				} else {
-					switch (prevNote.noteData) {
-						case 0:
-							prevNote.animation.play('purplehold');
-						case 1:
-							prevNote.animation.play('bluehold');
-						case 2:
-							prevNote.animation.play('greenhold');
-						case 3:
-							prevNote.animation.play('redhold');
-					}
-				}
+				prevNote.animation.play(notePrefix + "hold");
 
 				if (PlayState.SONG.whichK == 6) {
 					prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed * PlayState.SONG.whichK / 4.7);
@@ -180,34 +130,7 @@ class Note extends FlxSprite {
 			alpha = 0.6;
 
 			x += width / 2;
-			if (PlayState.SONG.whichK == 6) {
-				switch (noteData) {
-					case 0:
-						animation.play('purpleholdend');
-					case 1:
-						animation.play('greenholdend');
-					case 2:
-						animation.play('redholdend');
-					
-					case 3:
-						animation.play('purpleholdend');
-					case 4:
-						animation.play('blueholdend');
-					case 5:
-						animation.play('redholdend');
-				}
-			} else {
-				switch (noteData) {
-					case 0:
-						animation.play('purpleholdend');
-					case 1:
-						animation.play('blueholdend');
-					case 2:
-						animation.play('greenholdend');
-					case 3:
-						animation.play('redholdend');
-				}
-			}
+			animation.play(notePrefix + "holdend");
 
 			updateHitbox();
 		}
@@ -221,16 +144,19 @@ class Note extends FlxSprite {
 			animation.addByPrefix('redScroll', 'red0');
 			animation.addByPrefix('blueScroll', 'blue0');
 			animation.addByPrefix('purpleScroll', 'purple0');
+			animation.addByPrefix('thingScroll', 'thing0');
 
 			animation.addByPrefix('purpleholdend', 'pruple end hold');
 			animation.addByPrefix('greenholdend', 'green hold end');
 			animation.addByPrefix('redholdend', 'red hold end');
 			animation.addByPrefix('blueholdend', 'blue hold end');
+			animation.addByPrefix('thingholdend', 'thing hold end');
 
 			animation.addByPrefix('purplehold', 'purple hold piece');
 			animation.addByPrefix('greenhold', 'green hold piece');
 			animation.addByPrefix('redhold', 'red hold piece');
 			animation.addByPrefix('bluehold', 'blue hold piece');
+			animation.addByPrefix('thinghold', 'thing hold piece');
 
 			if (PlayState.SONG.whichK == 6) {
 				setGraphicSize(Std.int(width * 0.55));
@@ -273,16 +199,19 @@ class Note extends FlxSprite {
 					animation.addByPrefix('redScroll', 'red0');
 					animation.addByPrefix('blueScroll', 'blue0');
 					animation.addByPrefix('purpleScroll', 'purple0');
+					animation.addByPrefix('thingScroll', 'thing0');
 	
 					animation.addByPrefix('purpleholdend', 'pruple end hold');
 					animation.addByPrefix('greenholdend', 'green hold end');
 					animation.addByPrefix('redholdend', 'red hold end');
 					animation.addByPrefix('blueholdend', 'blue hold end');
+					animation.addByPrefix('thingholdend', 'thing hold end');
 	
 					animation.addByPrefix('purplehold', 'purple hold piece');
 					animation.addByPrefix('greenhold', 'green hold piece');
 					animation.addByPrefix('redhold', 'red hold piece');
 					animation.addByPrefix('bluehold', 'blue hold piece');
+					animation.addByPrefix('thinghold', 'thing hold piece');
 					
 					if (PlayState.SONG.whichK == 6) {
 						setGraphicSize(Std.int(width * 0.55));
@@ -353,4 +282,50 @@ class Note extends FlxSprite {
 	}
 
 	public var missedSongPosition:Bool = false;
+
+	public function setNotePrefix() {
+		switch (PlayState.SONG.whichK) {
+			case 4:
+				switch (noteData) {
+					case 0:
+						notePrefix = 'purple';
+					case 1:
+						notePrefix = 'blue';
+					case 2:
+						notePrefix = 'green';
+					case 3:
+						notePrefix = 'red';
+				}
+			case 5:
+				switch (noteData) {
+					case 0:
+						notePrefix = 'purple';
+					case 1:
+						notePrefix = 'blue';
+					case 2:
+						notePrefix = 'thing';
+					case 3:
+						notePrefix = 'green';
+					case 4:
+						notePrefix = 'red';
+				}
+			case 6:
+				switch (noteData) {
+					case 0:
+						notePrefix = 'purple';
+					case 1:
+						notePrefix = 'green';
+					case 2:
+						notePrefix = 'red';
+					case 3:
+						notePrefix = 'purple';
+					case 4:
+						notePrefix = 'blue';
+					case 5:
+						notePrefix = 'red';
+				}
+		}
+	}
+
+	public var notePrefix:String;
 }

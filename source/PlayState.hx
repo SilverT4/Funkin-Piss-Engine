@@ -1258,6 +1258,76 @@ class PlayState extends MusicBeatState {
 		
 							switch (Math.abs(i)) {
 								case 0:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.add('static', [0]);
+									babyArrow.animation.add('pressed', [4, 8], 12, false);
+									babyArrow.animation.add('confirm', [12, 16], 24, false);
+								case 1:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.add('static', [1]);
+									babyArrow.animation.add('pressed', [5, 9], 12, false);
+									babyArrow.animation.add('confirm', [13, 17], 24, false);
+								case 2:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.add('static', [2]);
+									babyArrow.animation.add('pressed', [6, 10], 12, false);
+									babyArrow.animation.add('confirm', [14, 18], 12, false);
+								case 3:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.add('static', [3]);
+									babyArrow.animation.add('pressed', [7, 11], 12, false);
+									babyArrow.animation.add('confirm', [15, 19], 24, false);
+							}
+		
+						default:
+							babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+							babyArrow.animation.addByPrefix('green', 'arrowUP');
+							babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
+							babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
+							babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
+		
+							babyArrow.antialiasing = true;
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
+		
+							switch (Math.abs(i)) {
+								case 0:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowLEFT');
+									babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
+								case 1:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowDOWN');
+									babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
+								case 2:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowUP');
+									babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
+								case 3:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
+									babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
+							}
+					}
+				case 5:
+					switch (stage.name) {
+						/*
+						case 'school' | 'schoolEvil':
+							babyArrow.loadGraphic(Paths.image('pixelUI/arrows-pixels', "shared"), true, 17, 17);
+							babyArrow.animation.add('green', [6]);
+							babyArrow.animation.add('red', [7]);
+							babyArrow.animation.add('blue', [5]);
+							babyArrow.animation.add('purplel', [4]);
+		
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * daPixelZoom));
+							babyArrow.updateHitbox();
+							babyArrow.antialiasing = false;
+		
+							switch (Math.abs(i)) {
+								case 0:
 									babyArrow.x += Note.getSwagWidth(SONG.whichK) * 0;
 									babyArrow.animation.add('static', [0]);
 									babyArrow.animation.add('pressed', [4, 8], 12, false);
@@ -1278,6 +1348,8 @@ class PlayState extends MusicBeatState {
 									babyArrow.animation.add('pressed', [7, 11], 12, false);
 									babyArrow.animation.add('confirm', [15, 19], 24, false);
 							}
+
+						*/
 		
 						default:
 							babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
@@ -1285,28 +1357,34 @@ class PlayState extends MusicBeatState {
 							babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
 							babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
 							babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
+							babyArrow.animation.addByPrefix('thing', 'arrowTHING');
 		
 							babyArrow.antialiasing = true;
 							babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
 		
 							switch (Math.abs(i)) {
 								case 0:
-									babyArrow.x += Note.getSwagWidth(SONG.whichK) * 0;
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * Math.abs(i);
 									babyArrow.animation.addByPrefix('static', 'arrowLEFT');
 									babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
 									babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
 								case 1:
-									babyArrow.x += Note.getSwagWidth(SONG.whichK) * 1;
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * Math.abs(i);
 									babyArrow.animation.addByPrefix('static', 'arrowDOWN');
 									babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
 									babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
 								case 2:
-									babyArrow.x += Note.getSwagWidth(SONG.whichK) * 2;
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * Math.abs(i);
+									babyArrow.animation.addByPrefix('static', 'arrowTHING');
+									babyArrow.animation.addByPrefix('pressed', 'thing press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'thing confirm', 24, false);
+								case 3:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * Math.abs(i);
 									babyArrow.animation.addByPrefix('static', 'arrowUP');
 									babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
 									babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
-								case 3:
-									babyArrow.x += Note.getSwagWidth(SONG.whichK) * 3;
+								case 4:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
 									babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
 									babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
 									babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
@@ -2043,41 +2121,15 @@ class PlayState extends MusicBeatState {
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
 
-					var altAnim:String = "";
+					var altAnim:Bool = false;
 
 					if (SONG.notes[Math.floor(curStep / 16)] != null) {
 						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
-							altAnim = '-alt';
+							altAnim = true;
 					}
 
 					if (daNote.noteData != -1) {
-						if (SONG.whichK == 6) {
-							switch (Math.abs(daNote.noteData)) {
-								case 0:
-									dad.playAnim('singLEFT' + altAnim, true);
-								case 1:
-									dad.playAnim('singUP' + altAnim, true);
-								case 2:
-									dad.playAnim('singRIGHT' + altAnim, true);
-								case 3:
-									dad.playAnim('singLEFT' + altAnim, true);
-								case 4:
-									dad.playAnim('singDOWN' + altAnim, true);
-								case 5:
-									dad.playAnim('singRIGHT' + altAnim, true);
-							}
-						} else {
-							switch (Math.abs(daNote.noteData)) {
-								case 0:
-									dad.playAnim('singLEFT' + altAnim, true);
-								case 1:
-									dad.playAnim('singDOWN' + altAnim, true);
-								case 2:
-									dad.playAnim('singUP' + altAnim, true);
-								case 3:
-									dad.playAnim('singRIGHT' + altAnim, true);
-							}
-						}
+						dad.playAnim(getAnimName(Std.int(Math.abs(daNote.noteData)), false, altAnim), true);
 					}
 
 					if (dad.curCharacter == "tankman") {
@@ -2101,41 +2153,15 @@ class PlayState extends MusicBeatState {
 					if (SONG.song != 'Tutorial')
 						camZooming = true;
 
-					var altAnim:String = "";
+					var altAnim:Bool = false;
 
 					if (SONG.notes[Math.floor(curStep / 16)] != null) {
 						if (SONG.notes[Math.floor(curStep / 16)].altAnim)
-							altAnim = '-alt';
+							altAnim = true;
 					}
 
 					if (daNote.noteData != -1) {
-						if (SONG.whichK == 6) {
-							switch (Math.abs(daNote.noteData)) {
-								case 0:
-									bf.playAnim('singLEFT' + altAnim, true);
-								case 1:
-									bf.playAnim('singUP' + altAnim, true);
-								case 2:
-									bf.playAnim('singRIGHT' + altAnim, true);
-								case 3:
-									bf.playAnim('singLEFT' + altAnim, true);
-								case 4:
-									bf.playAnim('singDOWN' + altAnim, true);
-								case 5:
-									bf.playAnim('singRIGHT' + altAnim, true);
-							}
-						} else {
-							switch (Math.abs(daNote.noteData)) {
-								case 0:
-									bf.playAnim('singLEFT' + altAnim, true);
-								case 1:
-									bf.playAnim('singDOWN' + altAnim, true);
-								case 2:
-									bf.playAnim('singUP' + altAnim, true);
-								case 3:
-									bf.playAnim('singRIGHT' + altAnim, true);
-							}
-						}
+						bf.playAnim(getAnimName(Std.int(Math.abs(daNote.noteData)), false, altAnim), true);
 					}
 
 					bf.holdTimer = 0;
@@ -2346,35 +2372,48 @@ class PlayState extends MusicBeatState {
 		splash.scrollFactor.set();
 		splash.cameras = [camHUD];
 
-		if (SONG.whichK == 6) {
-			splash.setGraphicSize(Std.int(splash.width * 0.75));
-			splash.updateHitbox();
-			switch (whaNote.noteData) {
-				case 0:
-					splash.animation.play('left', false, false, 0);
-				case 1:
-					splash.animation.play('up', false, false, 0);
-				case 2:
-					splash.animation.play('right', false, false, 0);
-				case 3:
-					splash.animation.play('left', false, false, 0);
-				case 4:
-					splash.animation.play('down', false, false, 0);
-				case 5:
-					splash.animation.play('right', false, false, 0);
-			}
-		}
-		else {
-			switch (whaNote.noteData) {
-				case 0:
-					splash.animation.play('left', false, false, 0);
-				case 1:
-					splash.animation.play('down', false, false, 0);
-				case 2: 
-					splash.animation.play('up', false, false, 0);
-				case 3:
-					splash.animation.play('right', false, false, 0);
-			}
+		switch (SONG.whichK) {
+			case 4:
+				switch (whaNote.noteData) {
+					case 0:
+						splash.animation.play('left', false, false, 0);
+					case 1:
+						splash.animation.play('down', false, false, 0);
+					case 2: 
+						splash.animation.play('up', false, false, 0);
+					case 3:
+						splash.animation.play('right', false, false, 0);
+				}
+			case 5:
+				switch (whaNote.noteData) {
+					case 0:
+						splash.animation.play('left', false, false, 0);
+					case 1:
+						splash.animation.play('down', false, false, 0);
+					case 2:
+						splash.animation.play('up', false, false, 0);
+					case 3: 
+						splash.animation.play('up', false, false, 0);
+					case 4:
+						splash.animation.play('right', false, false, 0);
+				}
+			case 6:
+				splash.setGraphicSize(Std.int(splash.width * 0.75));
+				splash.updateHitbox();
+				switch (whaNote.noteData) {
+					case 0:
+						splash.animation.play('left', false, false, 0);
+					case 1:
+						splash.animation.play('up', false, false, 0);
+					case 2:
+						splash.animation.play('right', false, false, 0);
+					case 3:
+						splash.animation.play('left', false, false, 0);
+					case 4:
+						splash.animation.play('down', false, false, 0);
+					case 5:
+						splash.animation.play('right', false, false, 0);
+				}
 		}
 
 		switch (SONG.whichK) {
@@ -2577,75 +2616,95 @@ class PlayState extends MusicBeatState {
 	}
 
 	function isKeyPressedForNoteData(noteData:Int = 0, ?pressType:FlxInputState = PRESSED):Bool {
-		if (SONG.whichK == 4) {
-			switch noteData {
-				case 0:
-					return Controls.check(LEFT, pressType);
-				case 1:
-					return Controls.check(DOWN, pressType);
-				case 2:
-					return Controls.check(UP, pressType);
-				case 3:
-					return Controls.check(RIGHT, pressType);
-			}
-		}
-		else if (SONG.whichK == 6) {
-			switch noteData {
-				case 0:
-					switch (pressType) {
-						case JUST_PRESSED:
-							return FlxG.keys.justPressed.S;
-						case JUST_RELEASED:
-							return FlxG.keys.justReleased.S;
-						default:
-							return FlxG.keys.pressed.S;
-					}
-				case 1:
-					switch (pressType) {
-						case JUST_PRESSED:
-							return FlxG.keys.justPressed.D;
-						case JUST_RELEASED:
-							return FlxG.keys.justReleased.D;
-						default:
-							return FlxG.keys.pressed.D;
-					}
-				case 2:
-					switch (pressType) {
-						case JUST_PRESSED:
-							return FlxG.keys.justPressed.F;
-						case JUST_RELEASED:
-							return FlxG.keys.justReleased.F;
-						default:
-							return FlxG.keys.pressed.F;
-					}
-				case 3:
-					switch (pressType) {
-						case JUST_PRESSED:
-							return FlxG.keys.justPressed.J;
-						case JUST_RELEASED:
-							return FlxG.keys.justReleased.J;
-						default:
-							return FlxG.keys.pressed.J;
-					}
-				case 4:
-					switch (pressType) {
-						case JUST_PRESSED:
-							return FlxG.keys.justPressed.K;
-						case JUST_RELEASED:
-							return FlxG.keys.justReleased.K;
-						default:
-							return FlxG.keys.pressed.K;
-					}
-				case 5:
-					switch (pressType) {
-						case JUST_PRESSED:
-							return FlxG.keys.justPressed.L;
-						case JUST_RELEASED:
-							return FlxG.keys.justReleased.L;
-						default:
-							return FlxG.keys.pressed.L;
-					}
-			}
+		switch (SONG.whichK) {
+			case 4:
+				switch noteData {
+					case 0:
+						return Controls.check(LEFT, pressType);
+					case 1:
+						return Controls.check(DOWN, pressType);
+					case 2:
+						return Controls.check(UP, pressType);
+					case 3:
+						return Controls.check(RIGHT, pressType);
+				}
+			case 5:
+				switch noteData {
+					case 0:
+						return Controls.check(LEFT, pressType);
+					case 1:
+						return Controls.check(DOWN, pressType);
+					case 2:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.SPACE;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.SPACE;
+							default:
+								return FlxG.keys.pressed.SPACE;
+						}
+					case 3:
+						return Controls.check(UP, pressType);
+					case 4:
+						return Controls.check(RIGHT, pressType);
+				}
+			case 6:
+				switch noteData {
+					case 0:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.S;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.S;
+							default:
+								return FlxG.keys.pressed.S;
+						}
+					case 1:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.D;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.D;
+							default:
+								return FlxG.keys.pressed.D;
+						}
+					case 2:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.F;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.F;
+							default:
+								return FlxG.keys.pressed.F;
+						}
+					case 3:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.J;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.J;
+							default:
+								return FlxG.keys.pressed.J;
+						}
+					case 4:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.K;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.K;
+							default:
+								return FlxG.keys.pressed.K;
+						}
+					case 5:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.L;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.L;
+							default:
+								return FlxG.keys.pressed.L;
+						}
+				}
 		}
 		return false;
 	}
@@ -2910,32 +2969,46 @@ class PlayState extends MusicBeatState {
 
 				var whichAnimationToPlay = null;
 
-				if (SONG.whichK == 6) {
-					switch (direction) {
-						case 0:
-							whichAnimationToPlay = 'singLEFTmiss';
-						case 1:
-							whichAnimationToPlay = 'singUPmiss';
-						case 2:
-							whichAnimationToPlay = 'singRIGHTmiss';
-						case 3:
-							whichAnimationToPlay = 'singLEFTmiss';
-						case 4:
-							whichAnimationToPlay = 'singDOWNmiss';
-						case 5:
-							whichAnimationToPlay = 'singRIGHTmiss';
-					}
-				} else {
-					switch (direction) {
-						case 0:
-							whichAnimationToPlay = 'singLEFTmiss';
-						case 1:
-							whichAnimationToPlay = 'singDOWNmiss';
-						case 2:
-							whichAnimationToPlay = 'singUPmiss';
-						case 3:
-							whichAnimationToPlay = 'singRIGHTmiss';
-					}
+				switch (SONG.whichK) {
+					case 4:
+						switch (direction) {
+							case 0:
+								whichAnimationToPlay = 'singLEFTmiss';
+							case 1:
+								whichAnimationToPlay = 'singDOWNmiss';
+							case 2:
+								whichAnimationToPlay = 'singUPmiss';
+							case 3:
+								whichAnimationToPlay = 'singRIGHTmiss';
+						}
+					case 5:
+						switch (direction) {
+							case 0:
+								whichAnimationToPlay = 'singLEFTmiss';
+							case 1:
+								whichAnimationToPlay = 'singDOWNmiss';
+							case 2:
+								whichAnimationToPlay = 'singDOWNmiss';
+							case 3:
+								whichAnimationToPlay = 'singUPmiss';
+							case 4:
+								whichAnimationToPlay = 'singRIGHTmiss';
+						}
+					case 6:
+						switch (direction) {
+							case 0:
+								whichAnimationToPlay = 'singLEFTmiss';
+							case 1:
+								whichAnimationToPlay = 'singUPmiss';
+							case 2:
+								whichAnimationToPlay = 'singRIGHTmiss';
+							case 3:
+								whichAnimationToPlay = 'singLEFTmiss';
+							case 4:
+								whichAnimationToPlay = 'singDOWNmiss';
+							case 5:
+								whichAnimationToPlay = 'singRIGHTmiss';
+						}
 				}
 				
 				if (whichAnimationToPlay != null) {
@@ -2965,6 +3038,58 @@ class PlayState extends MusicBeatState {
 		sendMultiplayerMessage('MISN::${misses}');
 	}
 
+	function getAnimName(noteData:Int, ?miss:Bool = false, ?alt:Bool = false) {
+		var suffix = "";
+		if (miss) {
+			suffix += "miss";
+		}
+		if (alt) {
+			suffix += "-alt";
+		}
+		switch (SONG.whichK) {
+			case 4:
+				switch (noteData) {
+					case 0:
+						return 'singLEFT$suffix';
+					case 1:
+						return 'singDOWN$suffix';
+					case 2:
+						return 'singUP$suffix';
+					case 3:
+						return 'singRIGHT$suffix';
+				}
+			case 5:
+				switch (noteData) {
+					case 0:
+						return 'singLEFT$suffix';
+					case 1:
+						return 'singDOWN$suffix';
+					case 2:
+						return 'singDOWN$suffix';
+					case 3:
+						return 'singUP$suffix';
+					case 4:
+						return 'singRIGHT$suffix';
+				}
+			case 6:
+				switch (noteData) {
+					case 0:
+						return 'singLEFT$suffix';
+					case 1:
+						return 'singUP$suffix';
+					case 2:
+						return 'singRIGHT$suffix';
+					case 3:
+						return 'singLEFT$suffix';
+					case 4:
+						return 'singDOWN$suffix';
+					case 5:
+						return 'singRIGHT$suffix';
+				}
+		}
+		return null;
+	}
+
 	function badNoteCheck(?withNote:Bool = false) {
 		// just double pasting this shit cuz fuk u
 		// REDO THIS SYSTEM!
@@ -2973,49 +3098,14 @@ class PlayState extends MusicBeatState {
 
 		var whichAnimationToPlay = null;
 
-		if (isKeyPressedForNoteData(0))
-			if (!Options.ghostTapping)
-				noteMiss(0);
-			else if (!withNote)
-				whichAnimationToPlay = 'singLEFTmiss';
-		if (isKeyPressedForNoteData(1))
-			if (!Options.ghostTapping)
-				noteMiss(1);
-			else if (!withNote)
-				if (SONG.whichK == 6) {
-					whichAnimationToPlay = 'singUPmiss';
-				} else {
-					whichAnimationToPlay = 'singDOWNmiss';
-				}
-		if (isKeyPressedForNoteData(2))
-			if (!Options.ghostTapping)
-				noteMiss(2);
-			else if (!withNote)
-				if (SONG.whichK == 6) {
-					whichAnimationToPlay = 'singRIGHTmiss';
-				} else {
-					whichAnimationToPlay = 'singUPmiss';
-				}
-		if (isKeyPressedForNoteData(3))
-			if (!Options.ghostTapping)
-				noteMiss(3);
-			else if (!withNote)
-				if (SONG.whichK == 6) {
-					whichAnimationToPlay = 'singLEFTmiss';
-				} else {
-					whichAnimationToPlay = 'singRIGHTmiss';
-				}
-		if (isKeyPressedForNoteData(4))
-			if (!Options.ghostTapping)
-				noteMiss(4);
-			else if (!withNote)
-				whichAnimationToPlay = 'singDOWNmiss';
-		if (isKeyPressedForNoteData(5))
-			if (!Options.ghostTapping)
-				noteMiss(5);
-			else if (!withNote)
-				whichAnimationToPlay = 'singRIGHTmiss';
-		
+		for (index in 0...SONG.whichK) {
+			if (isKeyPressedForNoteData(index))
+				if (!Options.ghostTapping)
+					noteMiss(index);
+				else if (!withNote)
+					whichAnimationToPlay = getAnimName(index, true);
+		}
+
 		if (whichAnimationToPlay != null) {
 			if (playAs == "bf") {
 				bf.playAnim(whichAnimationToPlay, true);
@@ -3042,47 +3132,15 @@ class PlayState extends MusicBeatState {
 		});
 
 		if (note != null) {
-			var whichAnimationToPlay = null;
-	
-			if (SONG.whichK == 6) {
-				switch (note.noteData) {
-					case 0:
-						whichAnimationToPlay = 'singLEFT';
-					case 1:
-						whichAnimationToPlay = 'singUP';
-					case 2:
-						whichAnimationToPlay = 'singRIGHT';
-					case 3:
-						whichAnimationToPlay = 'singLEFT';
-					case 4:
-						whichAnimationToPlay = 'singDOWN';
-					case 5:
-						whichAnimationToPlay = 'singRIGHT';
-				}
-			} else {
-				switch (note.noteData) {
-					case 0:
-						whichAnimationToPlay = 'singLEFT';
-					case 1:
-						whichAnimationToPlay = 'singDOWN';
-					case 2:
-						whichAnimationToPlay = 'singUP';
-					case 3:
-						whichAnimationToPlay = 'singRIGHT';
-				}
+			if (noteHitAsDad) {
+				dad.playAnim(getAnimName(note.noteData), true);
+				
+				strumPlayAnim(note.noteData, "dad", 'confirm');
 			}
-	
-			if (whichAnimationToPlay != null) {
-				if (noteHitAsDad) {
-					dad.playAnim(whichAnimationToPlay, true);
-					
-					strumPlayAnim(note.noteData, "dad", 'confirm');
-				}
-				else {
-					bf.playAnim(whichAnimationToPlay, true);
-					
-					strumPlayAnim(note.noteData, "bf", 'confirm');
-				}
+			else {
+				bf.playAnim(getAnimName(note.noteData), true);
+				
+				strumPlayAnim(note.noteData, "bf", 'confirm');
 			}
 
 			note.wasGoodHit = true;
@@ -3132,47 +3190,15 @@ class PlayState extends MusicBeatState {
 				health += 0.004;
 			}
 
-			var whichAnimationToPlay = null;
-
-			if (SONG.whichK == 6) {
-				switch (note.noteData) {
-					case 0:
-						whichAnimationToPlay = 'singLEFT';
-					case 1:
-						whichAnimationToPlay = 'singUP';
-					case 2:
-						whichAnimationToPlay = 'singRIGHT';
-					case 3:
-						whichAnimationToPlay = 'singLEFT';
-					case 4:
-						whichAnimationToPlay = 'singDOWN';
-					case 5:
-						whichAnimationToPlay = 'singRIGHT';
-				}
-			} else {
-				switch (note.noteData) {
-					case 0:
-						whichAnimationToPlay = 'singLEFT';
-					case 1:
-						whichAnimationToPlay = 'singDOWN';
-					case 2:
-						whichAnimationToPlay = 'singUP';
-					case 3:
-						whichAnimationToPlay = 'singRIGHT';
-				}
+			if (noteHitAsDad) {
+				dad.playAnim(getAnimName(note.noteData), true);
+				
+				strumPlayAnim(note.noteData, "dad", 'confirm');
 			}
-
-			if (whichAnimationToPlay != null) {
-				if (noteHitAsDad) {
-					dad.playAnim(whichAnimationToPlay, true);
-					
-					strumPlayAnim(note.noteData, "dad", 'confirm');
-				}
-				else {
-					bf.playAnim(whichAnimationToPlay, true);
-					
-					strumPlayAnim(note.noteData, "bf", 'confirm');
-				}
+			else {
+				bf.playAnim(getAnimName(note.noteData), true);
+				
+				strumPlayAnim(note.noteData, "bf", 'confirm');
 			}
 
 			note.wasGoodHit = true;

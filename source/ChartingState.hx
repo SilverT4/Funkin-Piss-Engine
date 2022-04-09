@@ -319,7 +319,7 @@ class ChartingState extends MusicBeatState {
 		stepperSpeed.value = _song.speed;
 		stepperSpeed.name = 'song_speed';
 
-		var maniaList = ["4K", "5K", "6K"];
+		var maniaList = ["4K", "5K", "6K", "7K"];
 		var whichKMenu = new UIDropDownMenu(stepperSpeed.x, stepperSpeed.y + stepperSpeed.width + 17, maniaList, function onSelect(s, i) {
 			_song.whichK = Std.parseInt(s);
 			setBGgrid();

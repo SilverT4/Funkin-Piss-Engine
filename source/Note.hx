@@ -50,6 +50,7 @@ class Note extends FlxSprite {
 	public var wasInSongPosition:Bool = false;
 
 	//OTHER
+	public static var sizeShit = 0.7;
 	public var prevNote:Note;
 
 	public var noteScore:Float = 1;
@@ -60,19 +61,30 @@ class Note extends FlxSprite {
 
 	public static function getSwagWidth(?whichK:Int = 4):Float {
 		switch (whichK) {
-			case 4:
-				return 160 * 0.7;
-			case 5:
-				return 160 * 0.7;
+			case 4, 5:
+				return 160 * sizeShit;
 			case 6:
-				return 160 * 0.55;
+				return 160 * sizeShit;
+			case 7:
+				return 160 * sizeShit;
 			default:
-				return 160 * 0.7;
+				return 160 * sizeShit;
 		}
 	}
 
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?action:String, ?actionValue:String) {
 		super();
+
+		switch (PlayState.SONG.whichK) {
+			case 4, 5:
+				Note.sizeShit = 0.7;
+			case 6:
+				Note.sizeShit = 0.55;
+			case 7:
+				Note.sizeShit = 0.5;
+			default:
+				Note.sizeShit = 0.7;
+		}
 
 		if (prevNote == null)
 			prevNote = this;
@@ -117,10 +129,11 @@ class Note extends FlxSprite {
 			if (prevNote.isSustainNote) {
 				prevNote.animation.play(notePrefix + "hold");
 
-				if (PlayState.SONG.whichK == 6) {
-					prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed * PlayState.SONG.whichK / 4.7);
-				} else {
-					prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed);
+				switch (PlayState.SONG.whichK) {
+					case 6, 7:
+						prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed * PlayState.SONG.whichK / 4.7);
+					default:
+						prevNote.scale.y *= (Conductor.stepCrochet / 100 * 1.5 * PlayState.SONG.speed);
 				}
 				prevNote.updateHitbox();
 				// prevNote.setGraphicSize();
@@ -158,11 +171,7 @@ class Note extends FlxSprite {
 			animation.addByPrefix('bluehold', 'blue hold piece');
 			animation.addByPrefix('thinghold', 'thing hold piece');
 
-			if (PlayState.SONG.whichK == 6) {
-				setGraphicSize(Std.int(width * 0.55));
-			} else {
-				setGraphicSize(Std.int(width * 0.7));
-			}
+			setGraphicSize(Std.int(width * Note.sizeShit));
 			updateHitbox();
 			antialiasing = true;
 		} else {
@@ -213,11 +222,7 @@ class Note extends FlxSprite {
 					animation.addByPrefix('bluehold', 'blue hold piece');
 					animation.addByPrefix('thinghold', 'thing hold piece');
 					
-					if (PlayState.SONG.whichK == 6) {
-						setGraphicSize(Std.int(width * 0.55));
-					} else {
-						setGraphicSize(Std.int(width * 0.7));
-					}
+					setGraphicSize(Std.int(width * Note.sizeShit));
 					updateHitbox();
 					antialiasing = true;
 			}
@@ -322,6 +327,23 @@ class Note extends FlxSprite {
 					case 4:
 						notePrefix = 'blue';
 					case 5:
+						notePrefix = 'red';
+				}
+			case 7:
+				switch (noteData) {
+					case 0:
+						notePrefix = 'purple';
+					case 1:
+						notePrefix = 'green';
+					case 2:
+						notePrefix = 'red';
+					case 3:
+						notePrefix = 'thing';
+					case 4:
+						notePrefix = 'purple';
+					case 5:
+						notePrefix = 'blue';
+					case 6:
 						notePrefix = 'red';
 				}
 		}

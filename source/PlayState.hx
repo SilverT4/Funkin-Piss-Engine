@@ -275,6 +275,7 @@ class PlayState extends MusicBeatState {
 
 		trace("Current Week: " + storyWeek);
 		trace("Current Mania Mode: " + SONG.whichK + "K");
+		Note.setSizeVar();
 
 		bfStrumLine = new Array<Array<Float>>();
 		dadStrumLine = new Array<Array<Float>>();
@@ -1288,7 +1289,7 @@ class PlayState extends MusicBeatState {
 							babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
 		
 							babyArrow.antialiasing = true;
-							babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.sizeShit));
 		
 							switch (Math.abs(i)) {
 								case 0:
@@ -1361,7 +1362,7 @@ class PlayState extends MusicBeatState {
 							babyArrow.animation.addByPrefix('thing', 'arrowTHING');
 		
 							babyArrow.antialiasing = true;
-							babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.7));
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.sizeShit));
 		
 							switch (Math.abs(i)) {
 								case 0:
@@ -1401,7 +1402,7 @@ class PlayState extends MusicBeatState {
 							babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
 		
 							babyArrow.antialiasing = true;
-							babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.55));
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.sizeShit));
 		
 							switch (Math.abs(i)) {
 								case 0:
@@ -1448,7 +1449,7 @@ class PlayState extends MusicBeatState {
 							babyArrow.animation.addByPrefix('thing', 'arrowTHING');
 		
 							babyArrow.antialiasing = true;
-							babyArrow.setGraphicSize(Std.int(babyArrow.width * 0.5));
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.sizeShit));
 		
 							switch (Math.abs(i)) {
 								case 0:
@@ -1484,6 +1485,121 @@ class PlayState extends MusicBeatState {
 									babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
 									babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
 								case 6:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
+									babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
+							}
+					}
+				case 8:
+					switch (stage.name) {
+						default:
+							babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+							babyArrow.animation.addByPrefix('green', 'arrowUP');
+							babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
+							babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
+							babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
+		
+							babyArrow.antialiasing = true;
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.sizeShit));
+	
+							switch (Math.abs(i)) {
+								case 0:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowLEFT');
+									babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
+								case 1:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowDOWN');
+									babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
+								case 2:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowUP');
+									babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
+								case 3:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
+									babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
+								case 4:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowLEFT');
+									babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
+								case 5:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowDOWN');
+									babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
+								case 6:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowUP');
+									babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
+								case 7:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
+									babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
+							}
+					}
+				case 9:
+					switch (stage.name) {
+						default:
+							babyArrow.frames = Paths.getSparrowAtlas('NOTE_assets');
+							babyArrow.animation.addByPrefix('green', 'arrowUP');
+							babyArrow.animation.addByPrefix('blue', 'arrowDOWN');
+							babyArrow.animation.addByPrefix('purple', 'arrowLEFT');
+							babyArrow.animation.addByPrefix('red', 'arrowRIGHT');
+		
+							babyArrow.antialiasing = true;
+							babyArrow.setGraphicSize(Std.int(babyArrow.width * Note.sizeShit));
+	
+							switch (Math.abs(i)) {
+								case 0:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowLEFT');
+									babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
+								case 1:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowDOWN');
+									babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
+								case 2:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowUP');
+									babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
+								case 3:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
+									babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'right confirm', 24, false);
+								case 4:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowTHING');
+									babyArrow.animation.addByPrefix('pressed', 'thing press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'thing confirm', 24, false);
+								case 5:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowLEFT');
+									babyArrow.animation.addByPrefix('pressed', 'left press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'left confirm', 24, false);
+								case 6:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowDOWN');
+									babyArrow.animation.addByPrefix('pressed', 'down press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'down confirm', 24, false);
+								case 7:
+									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
+									babyArrow.animation.addByPrefix('static', 'arrowUP');
+									babyArrow.animation.addByPrefix('pressed', 'up press', 24, false);
+									babyArrow.animation.addByPrefix('confirm', 'up confirm', 24, false);
+								case 8:
 									babyArrow.x += Note.getSwagWidth(SONG.whichK) * i;
 									babyArrow.animation.addByPrefix('static', 'arrowRIGHT');
 									babyArrow.animation.addByPrefix('pressed', 'right press', 24, false);
@@ -2426,6 +2542,9 @@ class PlayState extends MusicBeatState {
 		splash.scrollFactor.set();
 		splash.cameras = [camHUD];
 
+		splash.setGraphicSize(Std.int(splash.width * Note.sizeShit));
+		splash.updateHitbox();
+
 		switch (SONG.whichK) {
 			case 4:
 				switch (whaNote.noteData) {
@@ -2452,8 +2571,6 @@ class PlayState extends MusicBeatState {
 						splash.play(SplashColor.RIGHT);
 				}
 			case 6:
-				splash.setGraphicSize(Std.int(splash.width * 0.75));
-				splash.updateHitbox();
 				switch (whaNote.noteData) {
 					case 0:
 						splash.play(SplashColor.LEFT);
@@ -2469,8 +2586,6 @@ class PlayState extends MusicBeatState {
 						splash.play(SplashColor.RIGHT);
 				}
 			case 7:
-				splash.setGraphicSize(Std.int(splash.width * 0.75));
-				splash.updateHitbox();
 				switch (whaNote.noteData) {
 					case 0:
 						splash.play(SplashColor.LEFT);
@@ -2485,6 +2600,46 @@ class PlayState extends MusicBeatState {
 					case 5:
 						splash.play(SplashColor.DOWN);
 					case 6:
+						splash.play(SplashColor.RIGHT);
+				}
+			case 8:
+				switch (whaNote.noteData) {
+					case 0:
+						splash.play(SplashColor.LEFT);
+					case 1:
+						splash.play(SplashColor.DOWN);
+					case 2: 
+						splash.play(SplashColor.UP);
+					case 3:
+						splash.play(SplashColor.RIGHT);
+					case 4:
+						splash.play(SplashColor.LEFT);
+					case 5:
+						splash.play(SplashColor.DOWN);
+					case 6: 
+						splash.play(SplashColor.UP);
+					case 7:
+						splash.play(SplashColor.RIGHT);
+				}
+			case 9:
+				switch (whaNote.noteData) {
+					case 0:
+						splash.play(SplashColor.LEFT);
+					case 1:
+						splash.play(SplashColor.DOWN);
+					case 2: 
+						splash.play(SplashColor.UP);
+					case 3:
+						splash.play(SplashColor.RIGHT);
+					case 4:
+						splash.play(SplashColor.THING);
+					case 5:
+						splash.play(SplashColor.LEFT);
+					case 6:
+						splash.play(SplashColor.DOWN);
+					case 7: 
+						splash.play(SplashColor.UP);
+					case 8:
 						splash.play(SplashColor.RIGHT);
 				}
 		}
@@ -2844,19 +2999,174 @@ class PlayState extends MusicBeatState {
 								return FlxG.keys.pressed.L;
 						}
 				}
+			case 8:
+				switch noteData {
+					case 0:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.A;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.A;
+							default:
+								return FlxG.keys.pressed.A;
+						}
+					case 1:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.S;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.S;
+							default:
+								return FlxG.keys.pressed.S;
+						}
+					case 2:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.D;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.D;
+							default:
+								return FlxG.keys.pressed.D;
+						}
+					case 3:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.F;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.F;
+							default:
+								return FlxG.keys.pressed.F;
+						}
+					case 4:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.H;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.H;
+							default:
+								return FlxG.keys.pressed.H;
+						}
+					case 5:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.J;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.J;
+							default:
+								return FlxG.keys.pressed.J;
+						}
+					case 6:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.K;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.K;
+							default:
+								return FlxG.keys.pressed.K;
+						}
+					case 7:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.L;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.L;
+							default:
+								return FlxG.keys.pressed.L;
+						}
+				}
+			case 9:
+				switch noteData {
+					case 0:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.A;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.A;
+							default:
+								return FlxG.keys.pressed.A;
+						}
+					case 1:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.S;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.S;
+							default:
+								return FlxG.keys.pressed.S;
+						}
+					case 2:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.D;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.D;
+							default:
+								return FlxG.keys.pressed.D;
+						}
+					case 3:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.F;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.F;
+							default:
+								return FlxG.keys.pressed.F;
+						}
+					case 4:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.SPACE;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.SPACE;
+							default:
+								return FlxG.keys.pressed.SPACE;
+						}
+					case 5:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.H;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.H;
+							default:
+								return FlxG.keys.pressed.H;
+						}
+					case 6:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.J;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.J;
+							default:
+								return FlxG.keys.pressed.J;
+						}
+					case 7:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.K;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.K;
+							default:
+								return FlxG.keys.pressed.K;
+						}
+					case 8:
+						switch (pressType) {
+							case JUST_PRESSED:
+								return FlxG.keys.justPressed.L;
+							case JUST_RELEASED:
+								return FlxG.keys.justReleased.L;
+							default:
+								return FlxG.keys.pressed.L;
+						}
+				}
 		}
 		return false;
 	}
 
 	function isAnyNoteKeyPressed(?pressType:FlxInputState = PRESSED) {
-		var controlArray:Array<Bool> = [
-			isKeyPressedForNoteData(0, pressType), 
-			isKeyPressedForNoteData(1, pressType), 
-			isKeyPressedForNoteData(2, pressType), 
-			isKeyPressedForNoteData(3, pressType),
-			isKeyPressedForNoteData(4, pressType), 
-			isKeyPressedForNoteData(5, pressType)
-		];
+		var controlArray:Array<Bool> = [];
+		for (index in 0...SONG.whichK) {
+			controlArray.push(isKeyPressedForNoteData(index, pressType));
+		}
 		return controlArray.contains(true);
 	}
 
@@ -3194,6 +3504,46 @@ class PlayState extends MusicBeatState {
 					case 5:
 						return 'singDOWN$suffix';
 					case 6:
+						return 'singRIGHT$suffix';
+				}
+			case 8:
+				switch (noteData) {
+					case 0:
+						return 'singLEFT$suffix';
+					case 1:
+						return 'singDOWN$suffix';
+					case 2:
+						return 'singUP$suffix';
+					case 3:
+						return 'singRIGHT$suffix';
+					case 4:
+						return 'singLEFT$suffix';
+					case 5:
+						return 'singDOWN$suffix';
+					case 6:
+						return 'singUP$suffix';
+					case 7:
+						return 'singRIGHT$suffix';
+				}
+			case 9:
+				switch (noteData) {
+					case 0:
+						return 'singLEFT$suffix';
+					case 1:
+						return 'singDOWN$suffix';
+					case 2:
+						return 'singUP$suffix';
+					case 3:
+						return 'singRIGHT$suffix';
+					case 4:
+						return 'singDOWN$suffix';
+					case 5:
+						return 'singLEFT$suffix';
+					case 6:
+						return 'singDOWN$suffix';
+					case 7:
+						return 'singUP$suffix';
+					case 8:
 						return 'singRIGHT$suffix';
 				}
 		}

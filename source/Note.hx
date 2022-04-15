@@ -60,21 +60,10 @@ class Note extends FlxSprite {
 	public static var RED_NOTE:Int = 3;
 
 	public static function getSwagWidth(?whichK:Int = 4):Float {
-		switch (whichK) {
-			case 4, 5:
-				return 160 * sizeShit;
-			case 6:
-				return 160 * sizeShit;
-			case 7:
-				return 160 * sizeShit;
-			default:
-				return 160 * sizeShit;
-		}
+		return 160 * sizeShit;
 	}
 
-	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?action:String, ?actionValue:String) {
-		super();
-
+	public static function setSizeVar() {
 		switch (PlayState.SONG.whichK) {
 			case 4, 5:
 				Note.sizeShit = 0.7;
@@ -82,9 +71,19 @@ class Note extends FlxSprite {
 				Note.sizeShit = 0.55;
 			case 7:
 				Note.sizeShit = 0.5;
+			case 8:
+				Note.sizeShit = 0.45;
+			case 9:
+				Note.sizeShit = 0.4;
 			default:
 				Note.sizeShit = 0.7;
 		}
+	}
+
+	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?action:String, ?actionValue:String) {
+		super();
+
+		setSizeVar();
 
 		if (prevNote == null)
 			prevNote = this;
@@ -344,6 +343,46 @@ class Note extends FlxSprite {
 					case 5:
 						notePrefix = 'blue';
 					case 6:
+						notePrefix = 'red';
+				}
+			case 8:
+				switch (noteData) {
+					case 0:
+						notePrefix = 'purple';
+					case 1:
+						notePrefix = 'blue';
+					case 2:
+						notePrefix = 'green';
+					case 3:
+						notePrefix = 'red';
+					case 4:
+						notePrefix = 'purple';
+					case 5:
+						notePrefix = 'blue';
+					case 6:
+						notePrefix = 'green';
+					case 7:
+						notePrefix = 'red';
+				}
+			case 9:
+				switch (noteData) {
+					case 0:
+						notePrefix = 'purple';
+					case 1:
+						notePrefix = 'blue';
+					case 2:
+						notePrefix = 'green';
+					case 3:
+						notePrefix = 'red';
+					case 4:
+						notePrefix = 'thing';
+					case 5:
+						notePrefix = 'purple';
+					case 6:
+						notePrefix = 'blue';
+					case 7:
+						notePrefix = 'green';
+					case 8:
 						notePrefix = 'red';
 				}
 		}

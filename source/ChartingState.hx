@@ -228,10 +228,6 @@ class ChartingState extends MusicBeatState {
 		Conductor.changeBPM(_song.bpm);
 		Conductor.mapBPMChanges(_song);
 
-		bpmTxt = new FlxText(1000, 50, 0, "", 16);
-		bpmTxt.scrollFactor.set();
-		add(bpmTxt);
-
 		// touching this variable fucks up grid placement
 		strumLine = new FlxSprite(0, 50).makeGraphic(Std.int(FlxG.width / 2), 4);
 		add(strumLine);
@@ -251,7 +247,12 @@ class ChartingState extends MusicBeatState {
 		UI_box.resize(300, 400);
 		UI_box.x = FlxG.width / 2;
 		UI_box.y = 20;
+		UI_box.x += GRID_SIZE * 3;
 		add(UI_box);
+
+		bpmTxt = new FlxText(UI_box.x + UI_box.width + 10, 50, 0, "", 12);
+		bpmTxt.scrollFactor.set();
+		add(bpmTxt);
 
 		addSongUI();
 		addEditorUI();
@@ -272,7 +273,14 @@ class ChartingState extends MusicBeatState {
 		gridBG.x -= GRID_SIZE;
 		if (_song.whichK > 4) {
 			gridBG.x -= GRID_SIZE * (_song.whichK - 2);
+			if (_song.whichK == 5) {
+				gridBG.x += GRID_SIZE;
+			}
+			if (_song.whichK > 5) {
+				gridBG.x -= GRID_SIZE * (_song.whichK - 6);
+			}
 		}
+		gridBG.x += GRID_SIZE * 3;
 		updateHeads();
 		gridBlackLine = new FlxSprite(gridBG.x + (gridBG.width / 2) + (GRID_SIZE / 2)).makeGraphic(2, Std.int(gridBG.height), FlxColor.BLACK);
 		gridBlackLine2 = new FlxSprite(gridBG.x + GRID_SIZE).makeGraphic(2, Std.int(gridBG.height), FlxColor.BLACK);
@@ -668,6 +676,7 @@ class ChartingState extends MusicBeatState {
 		return daPos;
 	}
 	override function update(elapsed:Float) {
+		FlxG.mouse.visible = true;
 		curStep = recalculateSteps();
 
 		Conductor.songPosition = FlxG.sound.music.time;
@@ -1081,6 +1090,11 @@ class ChartingState extends MusicBeatState {
 			} else {
 				note.x = Math.floor((daNoteInfo - _song.whichK + 2) * GRID_SIZE);
 			}
+			note.x += GRID_SIZE * (_song.whichK - 1);
+			if (_song.whichK > 5) {
+				note.x -= GRID_SIZE * ((_song.whichK - 5) * 2);
+			}
+			
 			note.y = Math.floor(getYfromStrum((daStrumTime - sectionStartTime()) % (Conductor.stepCrochet * _song.notes[curSection].lengthInSteps)));
 
 			curRenderedNotes.add(note);
@@ -1177,12 +1191,15 @@ class ChartingState extends MusicBeatState {
 
 	private function addNote():Void {
 		var noteStrum = getStrumTime(dummyArrow.y) + sectionStartTime();
+
 		var noteData = 0;
-		if (_song.whichK == 4) {
-			noteData = Math.floor(FlxG.mouse.x / GRID_SIZE);
-		} else {
-			noteData = Math.floor(FlxG.mouse.x / GRID_SIZE) + (_song.whichK - 2);
+		noteData -= 3;
+		noteData += Math.floor(FlxG.mouse.x / GRID_SIZE);
+
+		if (_song.whichK > 4) {
+			noteData += (_song.whichK - 4) * 2;
 		}
+
 		var noteSus = 0;
 
 		if (FlxG.keys.pressed.ALT) {

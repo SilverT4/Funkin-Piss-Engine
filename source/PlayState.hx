@@ -186,34 +186,56 @@ class PlayState extends MusicBeatState {
 	 * `confirm` - on pressed note
 	 */
 	public function strumPlayAnim(noteData:Int, as:String, animation:String = "static") {
+		var sprite:FlxSprite = null;
 		if (as == "dad") {
 			dadStrumLineNotes.forEach(function(spr:FlxSprite) {
 				if (Math.abs(noteData) == spr.ID) {
-					spr.animation.play(animation, true);
-
-					spr.centerOffsets();
-					if (spr.animation.curAnim.name == "confirm" && !stage.name.startsWith('school')) {
-						spr.offset.x -= 13;
-						spr.offset.y -= 13;
-					}
-					return;
+					sprite = spr;
 				}
 			});
 		} 
 		else {
 			bfStrumLineNotes.forEach(function(spr:FlxSprite) {
 				if (Math.abs(noteData) == spr.ID) {
-					spr.animation.play(animation, true);
-
-					spr.centerOffsets();
-					if (spr.animation.curAnim.name == "confirm" && !stage.name.startsWith('school')) {
-						spr.offset.x -= 13;
-						spr.offset.y -= 13;
-					}
-					return;
+					sprite = spr;
 				}
 			});
 		}
+		
+		if (sprite != null) {
+			
+			var isThing = false;
+			if (SONG.whichK == 5 && Math.abs(noteData) == 2 || SONG.whichK == 7 && Math.abs(noteData) == 3 || SONG.whichK == 9 && Math.abs(noteData) == 4) isThing = true;
+			/* not using it because it fucking doesnt work
+			var confirmOffset = (isThing ? 7 : sprite.width / 8) * (Note.sizeShit >= 0.7 ? 1 : Note.sizeShit + 0.3);
+			*/
+			var offset = 0.0;
+
+			sprite.animation.play(animation, true);
+
+			sprite.centerOffsets();
+
+			if (isThing == false && (sprite.animation.curAnim.name == "confirm")) {
+				switch (SONG.whichK) {
+					case 6:
+						offset += 0.5;
+					case 7:
+						offset += 4;
+					case 8:
+						offset += 4.5;
+					case 9:
+						offset += 8;
+				}
+			}
+	
+			if (sprite.animation.curAnim.name == "confirm" && !stage.name.startsWith('school')) {
+				offset += 17;
+			}
+
+			sprite.offset.x -= offset;
+			sprite.offset.y -= offset;
+		}
+
 	}
 
 	/*
@@ -694,7 +716,7 @@ class PlayState extends MusicBeatState {
 		// cameras = [FlxG.cameras.list[1]];
 		startingSong = true;
 
-		if (isStoryMode) {
+		if (isStoryMode || forceDialogueBox) {
 			switch (curSong.toLowerCase()) {
 				case "winter-horrorland":
 					var blackScreen:FlxSprite = new FlxSprite(0, 0).makeGraphic(Std.int(FlxG.width * 2), Std.int(FlxG.height * 2), FlxColor.BLACK);
@@ -2542,7 +2564,7 @@ class PlayState extends MusicBeatState {
 		splash.scrollFactor.set();
 		splash.cameras = [camHUD];
 
-		splash.setGraphicSize(Std.int(splash.width * Note.sizeShit));
+		splash.setGraphicSize(Std.int(splash.width * (Note.sizeShit + 0.3)));
 		splash.updateHitbox();
 
 		switch (SONG.whichK) {
@@ -2653,7 +2675,12 @@ class PlayState extends MusicBeatState {
 			case 6, 7:
 				splash.offset.set(
 					whaNote.width + (whaNote.width / 6), 
-					whaNote.width + (whaNote.width / (6 / 1.5))
+					whaNote.width + (whaNote.width / (6 / (SONG.whichK == 6 ? 1.5 : 2.0)))
+				);
+			case 8, 9:
+				splash.offset.set(
+					whaNote.width + (whaNote.width * 1.4 / (SONG.whichK == 9 ? 2.0 : 3.0)), 
+					whaNote.width + (whaNote.width * 1.4 / (SONG.whichK == 9 ? 1.5 : 2.0))
 				);
 		}
 
@@ -3952,19 +3979,24 @@ class PlayState extends MusicBeatState {
 		persistentUpdate = false;
 		persistentDraw = true;
 
-		openSubState(new PauseSubState(bf.getScreenPosition().x, bf.getScreenPosition().y, skipTween));
-
-		#if desktop
-		DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
-		#end
-
-		if (FlxG.sound.music != null) {
-			FlxG.sound.music.pause();
-			vocals.pause();
+		if (FlxG.random.bool(0.3)) {
+			FlxG.switchState(new GitarooPause());
 		}
+		else {
+			openSubState(new PauseSubState(bf.getScreenPosition().x, bf.getScreenPosition().y, skipTween));
 
-		if (!startTimer.finished)
-			startTimer.active = false;
+			#if desktop
+			DiscordClient.changePresence(detailsPausedText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
+			#end
+	
+			if (FlxG.sound.music != null) {
+				FlxG.sound.music.pause();
+				vocals.pause();
+			}
+	
+			if (!startTimer.finished)
+				startTimer.active = false;
+		}
 	}
 
 	public function changeStage(name:String) {
@@ -4167,6 +4199,8 @@ class PlayState extends MusicBeatState {
 	var db:DialogueBoxOg;
 
 	var blockSpamChecker:Bool;
+
+	public var forceDialogueBox:Bool;
 }
 
 /*		⠀⠀⠀⡯⡯⡾⠝⠘⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢊⠘⡮⣣⠪⠢⡑⡌

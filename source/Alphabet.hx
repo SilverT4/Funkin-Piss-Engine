@@ -373,7 +373,13 @@ class AlphaCharacter extends FlxSprite {
 
 	public function createNumber(letter:String):Void {
 		animation.addByPrefix(letter, letter, 24);
-		y += 60 * size;
+		
+		if (size == 0.7) {
+			y += 20 * size;
+		}
+		else {
+			y += 60 * size;
+		}
 
 		animation.play(letter);
 		updateHitbox();

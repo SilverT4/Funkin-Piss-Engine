@@ -83,6 +83,9 @@ class Note extends FlxSprite {
 	public function new(strumTime:Float, noteData:Int, ?prevNote:Note, ?sustainNote:Bool = false, ?action:String, ?actionValue:String) {
 		super();
 
+		this.noteData = noteData;
+		setNotePrefix();
+
 		setSizeVar();
 
 		if (prevNote == null)
@@ -99,8 +102,6 @@ class Note extends FlxSprite {
 		// MAKE SURE ITS DEFINITELY OFF SCREEN?
 		y -= 2000;
 		this.strumTime = strumTime;
-
-		this.noteData = noteData;
 		
 		daStage = PlayState.currentPlaystate.stage.name;
 
@@ -116,8 +117,6 @@ class Note extends FlxSprite {
 			default:
 				noteAsset();
 		}
-
-		setNotePrefix();
 		
 		x += getSwagWidth(PlayState.SONG.whichK) * noteData;
 		animation.play(notePrefix + "Scroll");
@@ -388,5 +387,5 @@ class Note extends FlxSprite {
 		}
 	}
 
-	public var notePrefix:String;
+	public var notePrefix:String = "blue";
 }

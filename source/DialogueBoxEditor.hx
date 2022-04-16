@@ -113,7 +113,10 @@ class DialogueBoxEditor extends FlxState {
                 for (text in texts) {
                     index++;
                     var formattedText = text.replace("\n", "\\n");
-                    finalDialogueFile += ':${textsProperties[index]}:${formattedText}\n';
+                    finalDialogueFile += ':${textsProperties[index]}:${formattedText}';
+                    if (index < texts.length - 1) {
+                        finalDialogueFile += "\n";
+                    }
                 }
                 CoolUtil.writeToFile(dialoguePath, finalDialogueFile);
             }

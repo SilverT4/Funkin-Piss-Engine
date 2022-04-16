@@ -32,8 +32,10 @@ class MP4Handler extends vlc.VlcBitmap {
 		});
 	}
 
+	public var blockInput = false;
+
 	function update(e:Event) {
-		if ((FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE) && isPlaying)
+		if ((FlxG.keys.justPressed.ENTER || FlxG.keys.justPressed.SPACE) && isPlaying && blockInput == false)
 			finishVideo();
 
 		if (FlxG.sound.muted || FlxG.sound.volume <= 0)

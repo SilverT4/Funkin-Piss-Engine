@@ -362,6 +362,7 @@ class Checkbox extends AnimatedSprite {
 
 	public function triggerChecked() {
 		checked = !checked;
+		trace("checking " + checked);
 		hitCallback(checked);
 		if (checked)
 			playAnim("selecting");

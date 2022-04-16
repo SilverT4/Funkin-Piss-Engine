@@ -230,6 +230,8 @@ class TitleState extends MusicBeatState {
 		FlxG.switchState(new StageDebug("stage"));
 		#elseif SPLASHSTATE
 		FlxG.switchState(new Splash.SplashColorState());
+		#elseif SKELETON
+		FlxG.switchState(new GitarooPause());
 		#end
 
 		// credGroup.add(credTextShit);

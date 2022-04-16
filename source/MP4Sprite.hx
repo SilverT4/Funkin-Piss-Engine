@@ -9,7 +9,7 @@ class MP4Sprite extends FlxSprite {
 	public var readyCallback:Void->Void;
 	public var finishCallback:Void->Void;
 
-	var video:MP4Handler;
+	public var video:MP4Handler;
 
 	public function new(x:Float = 0, y:Float = 0, width:Float = 320, height:Float = 240, autoScale:Bool = true) {
 		super(x, y);

@@ -1,5 +1,6 @@
 package;
 
+import haxe.DynamicAccess;
 import haxe.Json;
 import sys.Http;
 import OptionsSubState.Background;
@@ -78,21 +79,25 @@ class Main extends Sprite {
 		#end
 
 		if (Options.updateChecker) {
-			var request = new Http('https://api.github.com/repos/Paidyy/Funkin-PEngine/releases');
+			var request = new Http('https://api.github.com/repos/Paidyy/Funkin-PEngine/releases/latest');
 			request.setHeader('User-Agent', 'haxe');
 			request.setHeader("Accept", "application/vnd.github.v3+json");
+			request.onData = data -> {
+				try {
+					gitJson = Json.parse(request.responseData);
+					if (gitJson.tag_name != null)
+						if (gitJson.tag_name != Main.ENGINE_VER)
+							Main.outdatedVersion = true;
+				}
+				catch (exc) {
+					trace("could not get github api json: " + exc.details());
+				}
+			};
 			request.request();
-			if (!CoolUtil.isEmpty(request.responseData)) {
-				//trace(request.responseData);
-				gitJson = Json.parse(request.responseData);
-				if (gitJson[0].tag_name != null)
-					if (gitJson[0].tag_name != Main.ENGINE_VER)
-						Main.outdatedVersion = true;
-			}
 		}
 
 		if (Main.outdatedVersion)
-			trace('Running Version: $ENGINE_VER while there\'s a newer Version: ${gitJson[0].tag_name}');
+			trace('Running Version: $ENGINE_VER while there\'s a newer Version: ${gitJson.tag_name}');
 
 		addChild(new Game(gameWidth, gameHeight, initialState, zoom, Options.framerate, Options.framerate, skipSplash, startFullscreen));
 

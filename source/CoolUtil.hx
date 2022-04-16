@@ -20,6 +20,16 @@ import openfl.utils.Assets as OpenFlAssets;
 class CoolUtil {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
 
+	public static function getSongPath(songName:String) {
+		if (FileSystem.exists("mods/songs/" + songName.toLowerCase() + "/")) {
+			return "mods/songs/" + songName.toLowerCase() + "/";
+		} 
+		else if (FileSystem.exists("assets/songs/" + songName.toLowerCase() + "/")) {
+			return "assets/songs/" + songName.toLowerCase() + "/";
+		}
+		return null;
+	}
+
 	public static function getSongJson(songName:String, ?difficulty:Int):SwagSong {
 		var dataFileDifficulty:String = "";
 		switch (difficulty) {

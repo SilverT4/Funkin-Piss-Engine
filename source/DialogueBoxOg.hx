@@ -184,7 +184,6 @@ class DialogueBoxOg extends FlxSpriteGroup {
 
 		switch (curCharacter) {
 			case 'dad':
-				talkingRight = false;
 			/*
 				portraitRight.visible = false; 
 				if (!portraitLeft.visible) {
@@ -193,7 +192,6 @@ class DialogueBoxOg extends FlxSpriteGroup {
 				}
 			 */
 			case 'bf':
-				talkingRight = true;
 				/*
 					portraitLeft.visible = false;
 					if (!portraitRight.visible) {
@@ -212,7 +210,9 @@ class DialogueBoxOg extends FlxSpriteGroup {
 
 	function cleanDialog():Void {
 		var splitName:Array<String> = dialogueList[0].split(":");
-		curCharacter = splitName[1];
+		var splitNameSplit:Array<String> = splitName[1].split(",");
+		curCharacter = splitNameSplit[0];
+		talkingRight = CoolUtil.strToBool(splitNameSplit[1]);
 		dialogueList[0] = dialogueList[0].substr(splitName[1].length + 2).trim();
 	}
 

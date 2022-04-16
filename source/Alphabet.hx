@@ -375,7 +375,7 @@ class AlphaCharacter extends FlxSprite {
 		animation.addByPrefix(letter, letter, 24);
 		
 		if (size == 0.7) {
-			y += 20 * size;
+			y += 100 * size;
 		}
 		else {
 			y += 60 * size;

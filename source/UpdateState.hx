@@ -27,7 +27,7 @@ import flixel.FlxState;
 
 class UpdateState extends FlxState {
 
-    var URL = Main.gitJson[0].assets[0].browser_download_url;
+    var URL = Main.gitJson.assets[0].browser_download_url;
 
     public var file = new ByteArray();
     var request:URLRequest;
@@ -39,20 +39,21 @@ class UpdateState extends FlxState {
         FlxG.sound.music.volume = 0.1;
         
         var verText = new FlxText();
-        verText.text = Main.gitJson[0].name;
+        verText.text = Main.gitJson.name;
         verText.size = 28;
         verText.screenCenter(X);
         verText.y = 20;
         add(verText);
 
         var infoText = new FlxText();
-        infoText.text = Main.gitJson[0].body;
+        infoText.text = Main.gitJson.body;
         infoText.size = 14;
         infoText.screenCenter(X);
         infoText.y = verText.y + verText.height + 20;
         add(infoText);
 
         text = new FlxText();
+        text.text = "Preparing...";
         text.size = 18;
         text.screenCenter(X);
         text.y = (FlxG.height - text.height) - 20;

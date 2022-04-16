@@ -143,11 +143,11 @@ class SplashColorState extends FlxState {
 }
 
 abstract SplashColor(FlxColor) from FlxColor to FlxColor {
-    public static var LEFT = FlxColor.fromString("#FF9AFF");
-    public static var DOWN = FlxColor.fromString("#67FFFF");
-    public static var UP = FlxColor.fromString("#96FFA0");
-    public static var RIGHT = FlxColor.fromString("#FF6C63");
-    public static var THING = FlxColor.fromString("#FFE137");
+    public static var LEFT = FlxColor.fromString("#FF5AFF");
+    public static var DOWN = FlxColor.fromString("#1EFFFF");
+    public static var UP = FlxColor.fromString("#7DFF7F");
+    public static var RIGHT = FlxColor.fromString("#FF4131");
+    public static var THING = FlxColor.fromString("#FFCA00");
 }
 
 class Splash extends FlxSprite {
@@ -156,18 +156,20 @@ class Splash extends FlxSprite {
     public function new(?note:Note, ?debug = false) {
         super();
 
+        alpha = 0.7;
+
         whaNote = note;
 
         frames = Paths.getSparrowAtlas('noteSplashes');
         switch (new FlxRandom().int(1, 4)) {
             case 1:
-                animation.addByPrefix('splash', 'note impact 1 green', 24, false);
+                animation.addByPrefix('splash', 'note impact 1 green', 20, false);
             case 2:
-                animation.addByPrefix('splash', 'note impact 1 red', 24, false);
+                animation.addByPrefix('splash', 'note impact 1 red', 20, false);
             case 3:
-                animation.addByPrefix('splash', 'note impact 1 blue', 24, false);
+                animation.addByPrefix('splash', 'note impact 1 blue', 20, false);
             case 4:
-                animation.addByPrefix('splash', 'note impact 1 purple', 24, false);
+                animation.addByPrefix('splash', 'note impact 1 purple', 20, false);
         }
 
         if (!debug)

@@ -28,7 +28,7 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 * Action Notes
 * Custom Skins (no need to change character in chart editor!)
 * Make mods without touching code
-* 6K Mania Support
+* 5K to 9K Mania Support
 * Modcharts
 * Configs are in YAML instead of JSON so it is easier to read them
 * Dialogue Cutscenes (not finished, still meh)

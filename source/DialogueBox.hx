@@ -78,7 +78,7 @@ class DialogueBox extends FlxSpriteGroup {
 				box.animation.addByPrefix('normalOpen', 'Spirit Textbox spawn', 24, false);
 				box.animation.addByIndices('normal', 'Spirit Textbox spawn', [11], "", 24);
 
-				spiritFace = new FlxSprite(320, 170).loadGraphic(Paths.image('portraits/spiritPortrait'));
+				spiritFace = new FlxSprite(320, 170).loadGraphic(Paths.image('portraits/spirit'));
 				spiritFace.setGraphicSize(Std.int(spiritFace.width * 6));
 		}
 
@@ -89,8 +89,8 @@ class DialogueBox extends FlxSpriteGroup {
 
 		portraitLeft = new FlxSprite(-20, 40);
 		portraitRight = new FlxSprite(0, 40);
-		if (Paths.getSparrowAtlas('portraits/senpaiPortrait') != null || Paths.getSparrowAtlas('portraits/bf-pixelPortrait') != null) {
-			portraitLeft.frames = Paths.getSparrowAtlas('portraits/senpaiPortrait');
+		if (Paths.getSparrowAtlas('portraits/senpai') != null || Paths.getSparrowAtlas('portraits/bf-pixel') != null) {
+			portraitLeft.frames = Paths.getSparrowAtlas('portraits/senpai');
 			portraitLeft.animation.addByPrefix('enter', 'Senpai Portrait Enter', 24, false);
 			portraitLeft.setGraphicSize(Std.int(portraitLeft.width * PlayState.daPixelZoom * 0.9));
 			portraitLeft.updateHitbox();
@@ -98,7 +98,7 @@ class DialogueBox extends FlxSpriteGroup {
 			add(portraitLeft);
 			portraitLeft.visible = false;
 
-			portraitRight.frames = Paths.getSparrowAtlas('portraits/bf-pixelPortrait');
+			portraitRight.frames = Paths.getSparrowAtlas('portraits/bf-pixel');
 			portraitRight.animation.addByPrefix('enter', 'Boyfriend portrait enter', 24, false);
 			portraitRight.setGraphicSize(Std.int(portraitRight.width * PlayState.daPixelZoom * 0.9));
 			portraitRight.updateHitbox();

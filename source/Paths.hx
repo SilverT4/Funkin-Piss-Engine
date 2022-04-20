@@ -1,5 +1,6 @@
 package;
 
+import sys.io.File;
 import sys.FileSystem;
 import flixel.FlxG;
 import flixel.FlxSprite;
@@ -186,6 +187,32 @@ class Paths {
 		#else
 		return Paths.getSparrowAtlas('DADDY_DEAREST');
 		#end
+	}
+
+	/*
+	public static function loadImage(path):Dynamic {
+		if (OpenFlAssets.exists(image(path, null), IMAGE)) {
+			return image(path, null);
+		}
+		else if (FileSystem.exists(path)) {
+			return BitmapData.fromBytes(File.getBytes(path));
+		}
+		return null;
+	}
+	*/
+	
+	static public function isPathCustom(path:String) {
+		return path.contains("mods/");
+	}
+
+	static public function portrait(char:String) {
+		if (OpenFlAssets.exists(image('portraits/${char}'), IMAGE)) {
+			return image('portraits/${char}');
+		}
+		else if (FileSystem.exists('mods/portraits/$char.png')) {
+			return 'mods/portraits/$char.png';
+		}
+		return null;
 	}
 
 	inline static public function font(key:String) {

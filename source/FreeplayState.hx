@@ -269,7 +269,7 @@ class FreeplayState extends MusicBeatState {
 			FlxG.sound.music.volume += 0.5 * FlxG.elapsed;
 		}
 		
-		camBG.zoom = FlxMath.lerp(1, camBG.zoom, CoolUtil.bound(elapsed * 42));
+		camBG.zoom = FlxMath.lerp(1, camBG.zoom, CoolUtil.bound(0.75));
 
 		lerpScore = Math.floor(FlxMath.lerp(lerpScore, intendedScore, 0.4));
 

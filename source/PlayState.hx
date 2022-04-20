@@ -262,6 +262,7 @@ class PlayState extends MusicBeatState {
 	*/
 
 	override public function create() {
+		noteTimers = new Map<Int, FlxTimer>();
 		currentPlaystate = this;
 
 		if (Options.downscroll)
@@ -368,7 +369,7 @@ class PlayState extends MusicBeatState {
 		DiscordClient.changePresence(detailsText, SONG.song + " (" + storyDifficultyText + ")", iconRPC);
 		#end
 
-		var tempStageName;
+		var tempStageName = "";
 
 		if (SONG.stage == null) {
 			switch (SONG.song.toLowerCase()) {
@@ -1950,37 +1951,9 @@ class PlayState extends MusicBeatState {
 		if (Controls.check(PAUSE, JUST_PRESSED) && startedCountdown && canPause && !isMultiplayer) {
 			pauseGame();
 		}
-		if (FlxG.keys.justPressed.EIGHT) {
-			FlxG.switchState(new AnimationDebugCharacterSelector());
-
-			#if desktop
-			DiscordClient.changePresence("Character Editor", null, null, true);
-			#end
-		}
-			
 
 		if (FlxG.keys.justPressed.SEVEN) {
-			FlxG.switchState(new ChartingState());
-
-			#if desktop
-			DiscordClient.changePresence("Chart Editor", null, null, true);
-			#end
-		}
-
-		if (FlxG.keys.justPressed.SIX) {
-			FlxG.switchState(new DebugStageSelector());
-
-			#if desktop
-			DiscordClient.changePresence("Stage Editor", null, null, true);
-			#end
-		}
-
-		if (FlxG.keys.justPressed.FIVE) {
-			FlxG.switchState(new DialogueBoxEditor());
-
-			#if desktop
-			DiscordClient.changePresence("Dialogue Editor", null, null, true);
-			#end
+			FlxG.switchState(new EditorSelector());
 		}
 
 		// FlxG.watch.addQuick('VOL', vocals.amplitudeLeft);
@@ -2340,6 +2313,17 @@ class PlayState extends MusicBeatState {
 						vocals.volume = 1;
 
 					luaCall("onNotePress", ["dad", daNote.noteData]);
+
+					strumPlayAnim(daNote.noteData, "dad", "confirm");
+					
+					if (noteTimers.exists(daNote.noteData)) {
+						noteTimers.get(daNote.noteData).cancel();
+					}
+					var timer = new FlxTimer().start(0.3 / curSpeed, function(tmr:FlxTimer) {
+						strumPlayAnim(daNote.noteData, "dad", "static");
+					});
+					noteTimers.set(daNote.noteData, timer);
+
 					removeNote(daNote);
 				}
 
@@ -2362,6 +2346,16 @@ class PlayState extends MusicBeatState {
 
 					if (SONG.needsVoices)
 						vocals.volume = 1;
+
+					strumPlayAnim(daNote.noteData, "bf", "confirm");
+					
+					if (noteTimers.exists(daNote.noteData)) {
+						noteTimers.get(daNote.noteData).cancel();
+					}
+					var timer = new FlxTimer().start(0.3 / curSpeed, function(tmr:FlxTimer) {
+						strumPlayAnim(daNote.noteData, "bf", "static");
+					});
+					noteTimers.set(daNote.noteData, timer);
 
 					removeNote(daNote);
 				}
@@ -2440,6 +2434,8 @@ class PlayState extends MusicBeatState {
 		//can cause crashes
 		luaCall("onUpdate", [elapsed]);
 	}
+
+	var noteTimers:Map<Int, FlxTimer>;
 
 	public function removeNote(note:Note) {
 		note.kill();

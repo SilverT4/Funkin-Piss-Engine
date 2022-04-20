@@ -215,8 +215,10 @@ class PlayState extends MusicBeatState {
 
 			sprite.centerOffsets();
 
-			if (isThing == false && (sprite.animation.curAnim.name == "confirm")) {
+			if (isThing == false && (sprite.animation.curAnim.name == "confirm") && !stage.name.startsWith('school')) {
 				switch (SONG.whichK) {
+					case 4, 5:
+						offset -= 4;
 					case 6:
 						offset += 0.5;
 					case 7:

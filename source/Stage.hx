@@ -1,5 +1,7 @@
 package;
 
+import haxe.xml.Access;
+import flixel.graphics.frames.FlxAtlasFrames;
 import sys.io.File;
 import sys.FileSystem;
 import yaml.util.ObjectMap.AnyObjectMap;
@@ -214,7 +216,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
                 upperBoppers = new StageAsset(-240, -90, 'upperBop');
                 upperBoppers.frames = Paths.stageSparrow('upperBop', stage);
-                upperBoppers.animation.addByPrefix('bop', "Upper Crowd Bob", 24, false);
+                upperBoppers.animation.addByPrefix('bop', "beatBop", 24, false);
                 upperBoppers.antialiasing = true;
                 upperBoppers.scrollFactor.set(0.33, 0.33);
                 upperBoppers.setGraphicSize(Std.int(upperBoppers.width * 0.85));
@@ -236,7 +238,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
                 bottomBoppers = new StageAsset(-300, 140, 'bottomBop');
                 bottomBoppers.frames = Paths.stageSparrow('bottomBop', stage);
-                bottomBoppers.animation.addByPrefix('bop', 'Bottom Level Boppers', 24, false);
+                bottomBoppers.animation.addByPrefix('bop', 'beatBop', 24, false);
                 bottomBoppers.antialiasing = true;
                 bottomBoppers.scrollFactor.set(0.9, 0.9);
                 bottomBoppers.setGraphicSize(Std.int(bottomBoppers.width * 1));
@@ -250,7 +252,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
                 santa = new StageAsset(-840, 150, 'santa');
                 santa.frames = Paths.stageSparrow('santa', stage);
-                santa.animation.addByPrefix('idle', 'santa idle in fear', 24, false);
+                santa.animation.addByPrefix('bop', 'beatBop', 24, false);
                 santa.antialiasing = true;
                 add(santa);
 			case 'mallEvil':
@@ -557,7 +559,25 @@ class Stage extends FlxTypedGroup<Dynamic> {
 
                         for (image in map.keys()) {
                             var keys:AnyObjectMap = config.get('images').get(image);
-                            var stageSprite = new StageAsset(0, 0, image).loadGraphic(BitmapData.fromBytes(File.getBytes('mods/stages/$stage/images/$image.png')));
+                            var stageSprite = new StageAsset(0, 0, image);
+                            if (FileSystem.exists('mods/stages/$stage/images/$image.xml')) {
+                                stageSprite.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromBytes(File.getBytes('mods/stages/$stage/images/$image.png')), File.getContent('mods/stages/$stage/images/$image.xml'));
+                                var document = new Access(Xml.parse(File.getContent('mods/stages/$stage/images/$image.xml')));
+                                for (ele in document.node.TextureAtlas.elements) {
+                                    if (ele.has.name) {
+                                        var name = ele.att.name.substring(0, ele.att.name.length - 4);
+
+                                        if (name == "beatBop") stageSprite.animation.addByPrefix("bop", "beatBop", 24, false);
+                                        if (name == "idleLoop") {
+                                            stageSprite.animation.addByPrefix("idleLoop", "idleLoop", 24, true);
+                                            stageSprite.animation.play("idleLoop");
+                                        }
+                                    }
+                                }
+                            }
+                            else {
+                                stageSprite.loadGraphic(BitmapData.fromBytes(File.getBytes('mods/stages/$stage/images/$image.png')));
+                            }
                             if (keys != null) {
                                 if (keys.get("x") != null) stageSprite.x = keys.get("x");
                                 if (keys.get("y") != null) stageSprite.y = keys.get("y");
@@ -573,6 +593,14 @@ class Stage extends FlxTypedGroup<Dynamic> {
                 }
 		}
 	}
+
+    public function onBeatHit() {
+        for (stageSprite in this) {
+            if (stageSprite.animation != null && stageSprite.animation.exists("bop")) {
+                stageSprite.animation.play("bop", true);
+            }
+        }
+    }
 
     public function setConfig(path:String) {
 		configPath = path;

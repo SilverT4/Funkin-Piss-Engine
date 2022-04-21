@@ -1,5 +1,6 @@
 package;
 
+import yaml.util.ObjectMap;
 import sys.io.File;
 import sys.FileSystem;
 import yaml.Yaml;
@@ -17,7 +18,7 @@ import flixel.FlxObject;
 import flixel.FlxG;
 import flixel.FlxState;
 
-class StageDebug extends FlxState {
+class StageDebug extends MusicBeatState {
 
     var stageName = "";
     var stage:Stage;
@@ -118,6 +119,7 @@ class StageDebug extends FlxState {
         FlxG.sound.music.stop();
         if (Sound.fromFile(Paths.PEinst('test')) != null) {
             FlxG.sound.playMusic(Sound.fromFile(Paths.PEinst('test')));
+            Conductor.changeBPM(150);
         }
 
         //collission stuff unused | FlxG.worldBounds.set(2147483647, 2147483647);
@@ -189,6 +191,7 @@ class StageDebug extends FlxState {
     }
 
     override function update(elapsed) {
+        Conductor.songPosition = FlxG.sound.music.time;
         FlxG.mouse.visible = true;
 
         if (FlxG.keys.justPressed.A) {
@@ -334,9 +337,16 @@ class StageDebug extends FlxState {
         oldMousePos = [FlxG.mouse.x, FlxG.mouse.y];
     }
 
+    override function beatHit() {
+        stage.onBeatHit();
+        midget.playAnim("idle");
+        gf.dance();
+        dad.playAnim("idle");
+    }
+
     function saveConfig() {
 		if (stage.config != null) {
-			if (!stage.config.exists('images')) {
+			if (stage.config.get('images') == null) {
 				stage.config.set('images', new AnyObjectMap());
 			}
             stage.config.set('zoom', stage.camZoom);
@@ -346,15 +356,16 @@ class StageDebug extends FlxState {
                 stage.config.set('${char.curCharacter}Y', char.y);
             }
 
-			var map:AnyObjectMap = stage.config.get('images');
+            var images = stage.config.get('images');
             for (image in stage) {
-                if (!map.exists(image.name)) {
-                    stage.config.get('images').set(image.name);
+                if (images.get(image.name) == null) {
+                    images.set(image.name, new AnyObjectMap());
                 }
-                stage.config.get('images').get(image.name).set('x', image.x);
-				stage.config.get('images').get(image.name).set('y', image.y);
-                stage.config.get('images').get(image.name).set('size', image.sizeMultiplier);
+                images.get(image.name).set('x', image.x);
+				images.get(image.name).set('y', image.y);
+                images.get(image.name).set('size', image.sizeMultiplier);
             }
+            stage.config.set('images', images);
 			var renderedYaml = Yaml.render(stage.config);
 			CoolUtil.writeToFile(stage.configPath, renderedYaml);
 		}

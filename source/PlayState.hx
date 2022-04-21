@@ -3865,6 +3865,7 @@ class PlayState extends MusicBeatState {
 
 	override function beatHit() {
 		super.beatHit();
+		stage.onBeatHit();
 
 		if (generatedMusic) {
 			notes.sort(FlxSort.byY, FlxSort.DESCENDING);
@@ -3935,11 +3936,6 @@ class PlayState extends MusicBeatState {
 		switch (stage.name) {
 			case 'school':
 				stage.bgGirls.dance();
-
-			case 'mall':
-				stage.upperBoppers.animation.play('bop', true);
-				stage.bottomBoppers.animation.play('bop', true);
-				stage.santa.animation.play('idle', true);
 
 			case 'limo':
 				stage.grpLimoDancers.forEach(function(dancer:BackgroundDancer) {

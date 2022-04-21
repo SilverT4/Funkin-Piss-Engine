@@ -1,5 +1,6 @@
 package;
 
+import openfl.display.BitmapData;
 import flixel.FlxG;
 import flixel.tweens.FlxTween;
 import flixel.FlxObject;
@@ -29,6 +30,41 @@ class LuaShit {
         setVariable("swagSong", PlayState.SONG);
         setVariable("windowWidth", FlxG.width);
         setVariable("windowHeight", FlxG.height);
+
+        Lua_helper.add_callback(lua, "tweenSpriteProperty", function(id:String, variable:String, value:Float = 0, duration:Float = 1) {
+            FlxTween.num(Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(id), variable), value, duration, null, f -> Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(id), variable, f));
+        });
+
+        Lua_helper.add_callback(lua, "setSpriteProperty", function(id:String, variable:String, value:Dynamic) {
+            Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(id), variable, value);
+        });
+
+        Lua_helper.add_callback(lua, "getSpriteProperty", function(id:String, variable:String) {
+            return Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(id), variable);
+        });
+
+        Lua_helper.add_callback(lua, "addSprite", function(id:String, path:String, x:Float, y:Float) {
+            var sprite:FlxSprite = new FlxSprite(x,y);
+            sprite.loadGraphic(BitmapData.fromFile("mods/" + path));
+            PlayState.currentPlaystate.addLuaSprite(id, sprite);
+        });
+
+        Lua_helper.add_callback(lua, "removeSprite", function(id:String) {
+            PlayState.currentPlaystate.luaSprites.get(id).destroy();
+            PlayState.currentPlaystate.luaSprites.remove(id);
+        });
+
+        Lua_helper.add_callback(lua, "getProperty", function(field:String, variable:String) {
+            return Reflect.getProperty(getField(field), variable);
+        });
+
+        Lua_helper.add_callback(lua, "setProperty", function (field:String, variable:String, value:Dynamic) {
+            Reflect.setProperty(getField(field), variable, value);
+        });
+
+        Lua_helper.add_callback(lua, "tweenProperty", function(field:String, variable:String, value:Float = 0, duration:Float = 1) {
+            FlxTween.num(Reflect.getProperty(getField(field), variable), value, duration, null, f -> Reflect.setProperty(getField(field), variable, f));
+        });
 
         // Gets the client setting
         Lua_helper.add_callback(lua, "getSetting", function(setting:String) {
@@ -72,25 +108,25 @@ class LuaShit {
 
         // Sets the size of some sprite
         Lua_helper.add_callback(lua, "setGraphicSize", function (sprite:String, width:Int, height:Int) {
-            var daSprite:FlxSprite = Reflect.field(PlayState.currentPlaystate, sprite);
+            var daSprite:FlxSprite = getField(sprite);
             daSprite.setGraphicSize(width, height);
         });
 
         // Returns the x position of some object
         Lua_helper.add_callback(lua, "getPositionX", function (object:String) {
-            var daSprite:FlxObject = Reflect.field(PlayState.currentPlaystate, object);
+            var daSprite:FlxObject = getField(object);
             return daSprite.x;
         });
 
         // Returns the y position of some object
         Lua_helper.add_callback(lua, "getPositionY", function (object:String) {
-            var daSprite:FlxObject = Reflect.field(PlayState.currentPlaystate, object);
+            var daSprite:FlxObject = getField(object);
             return daSprite.y;
         });
 
         // Sets the position of some object
         Lua_helper.add_callback(lua, "setPosition", function (object:String, x:Int, y:Int) {
-            var daSprite:FlxObject = Reflect.field(PlayState.currentPlaystate, object);
+            var daSprite:FlxObject = getField(object);
             daSprite.setPosition(x, y);
         });
 
@@ -135,32 +171,22 @@ class LuaShit {
 
         // Sets some variable from playstate
         Lua_helper.add_callback(lua, "setVariable", function(object:String, value:Dynamic) {
-            Reflect.setField(PlayState.currentPlaystate, object, value);
+            setField(object, value);
         });
 
         // Returns some variable from playstate
         Lua_helper.add_callback(lua, "getVariable", function(object:String) {
-            return Reflect.field(PlayState.currentPlaystate, object);
-        });
-
-        // Sets some public static variable from playstate
-        Lua_helper.add_callback(lua, "setStaticVariable", function(object:String, value:Dynamic) {
-            Reflect.setField(PlayState, object, value);
-        });
-
-        // Returns some public static variable from playstate
-        Lua_helper.add_callback(lua, "getStaticVariable", function(object:String) {
-            return Reflect.field(PlayState, object);
+            return getField(object);
         });
 
         // Sets the player's health
         Lua_helper.add_callback(lua, "setHealth", function(value:Float) {
-            Reflect.setField(PlayState.currentPlaystate, "health", value);
+            setField("health", value);
         });
 
         // Returns player's health
         Lua_helper.add_callback(lua, "getHealth", function() {
-            return Reflect.field(PlayState.currentPlaystate, "health");
+            return getField("health");
         });
 
         // Sets the camera position
@@ -174,7 +200,7 @@ class LuaShit {
 
         // Tweens the variable
         Lua_helper.add_callback(lua, "tweenVariable", function(object:String, value:Float = 0, duration:Float = 1) {
-            FlxTween.num(Reflect.field(PlayState.currentPlaystate, object), value, duration, null, f -> Reflect.setField(PlayState.currentPlaystate, object, f));
+            FlxTween.num(getField(object), value, duration, null, f -> setField(object, f));
         });
 
         // Tweens the cam angle
@@ -245,6 +271,35 @@ class LuaShit {
         LuaL.dofile(lua, luaPath);
     }
 
+    public function setField(field:String, value:Dynamic) {
+        if (getFieldType(field) == INSTANCE) {
+            Reflect.setField(PlayState.currentPlaystate, field, value);
+        }
+        if (getFieldType(field) == STATIC) {
+            Reflect.setField(PlayState, field, value);
+        }
+    }
+
+    public function getField(field:String):Dynamic {
+        if (getFieldType(field) == INSTANCE) {
+            return Reflect.field(PlayState.currentPlaystate, field);
+        }
+        if (getFieldType(field) == STATIC) {
+            return Reflect.field(PlayState, field);
+        }
+        return null;
+    }
+
+    public function getFieldType(field:String):FieldTypePlayState {
+        if (Reflect.hasField(PlayState.currentPlaystate, field)) {
+            return INSTANCE;
+        }
+        if (Reflect.hasField(PlayState, field)) {
+            return STATIC;
+        }
+        return NOTEXIST;
+    }
+
     public function setVariable(name:String, value:Dynamic) {
 		Convert.toLua(lua, value);
 		Lua.setglobal(lua, name);
@@ -266,6 +321,12 @@ class LuaShit {
     public function close() {
         Lua.close(lua);
     }
+}
+
+enum FieldTypePlayState {
+    NOTEXIST;
+    STATIC;
+    INSTANCE;
 }
 
 class Position {

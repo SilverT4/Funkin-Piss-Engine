@@ -153,8 +153,16 @@ class PlayState extends MusicBeatState {
 	public var currentCameraTween:NumTween;
 	public var currentHUDCameraTween:NumTween;
 
+	public var luaSprites:Map<String, FlxSprite>;
+
+	public function addLuaSprite(name:String, sprite:FlxSprite) {
+		luaSprites.set(name, sprite);
+		add(luaSprites.get(name));
+	}
+
 	public function new(?isMultiplayer = false, ?songPosition:Float) {
 		super();
+		luaSprites = new Map<String, FlxSprite>();
 		playAs = SONG.playAs;
 		if (playAs == null) playAs = "bf";
 		if (isMultiplayer == null) isMultiplayer = false;

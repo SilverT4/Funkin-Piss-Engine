@@ -1,5 +1,9 @@
 package;
 
+import flixel.input.keyboard.FlxKey;
+import openfl.media.Sound;
+import flixel.system.FlxAssets.FlxSoundAsset;
+import flixel.system.FlxSound;
 import openfl.display.BitmapData;
 import flixel.FlxG;
 import flixel.tweens.FlxTween;
@@ -31,16 +35,41 @@ class LuaShit {
         setVariable("windowWidth", FlxG.width);
         setVariable("windowHeight", FlxG.height);
 
-        Lua_helper.add_callback(lua, "tweenSpriteProperty", function(name:String, property:String, value:Float = 0, duration:Float = 1) {
-            FlxTween.num(Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(name), property), value, duration, null, f -> Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(name), property, f));
+        Lua_helper.add_callback(lua, "isKeyJustPressed", function(key:String) {
+            return FlxG.keys.anyJustPressed([FlxKey.fromString(key)]);
         });
 
-        Lua_helper.add_callback(lua, "setSpriteProperty", function(name:String, property:String, value:Dynamic) {
-            Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(name), property, value);
+        Lua_helper.add_callback(lua, "isKeyPressed", function(key:String) {
+            return FlxG.keys.anyPressed([FlxKey.fromString(key)]);
         });
 
-        Lua_helper.add_callback(lua, "getSpriteProperty", function(name:String, property:String) {
-            return Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(name), property);
+        Lua_helper.add_callback(lua, "isKeyJustReleased", function(key:String) {
+            return FlxG.keys.anyJustReleased([FlxKey.fromString(key)]);
+        });
+
+        Lua_helper.add_callback(lua, "isControlJustPressed", function(control:String) {
+            return Controls.check(KeyBind.typeFromString(control), JUST_PRESSED);
+        });
+
+        Lua_helper.add_callback(lua, "isControlPressed", function(control:String) {
+            return Controls.check(KeyBind.typeFromString(control), PRESSED);
+        });
+
+        Lua_helper.add_callback(lua, "isControlJustReleased", function(control:String) {
+            return Controls.check(KeyBind.typeFromString(control), JUST_RELEASED);
+        });
+
+        Lua_helper.add_callback(lua, "cacheSound", function(path:String) {
+            Cache.cacheSound("mods/" + path);
+        });
+
+        Lua_helper.add_callback(lua, "playSound", function(path:String) {
+            if (Cache.sounds.exists("mods/" + path)) {
+                FlxG.sound.play(Cache.sounds.get("mods/" + path));
+            }
+            else {
+                FlxG.sound.play(Sound.fromFile("mods/" + path));
+            }
         });
 
         Lua_helper.add_callback(lua, "addSprite", function(name:String, path:String, x:Float, y:Float) {
@@ -54,6 +83,18 @@ class LuaShit {
             PlayState.currentPlaystate.luaSprites.remove(name);
         });
 
+        Lua_helper.add_callback(lua, "tweenSpriteProperty", function(name:String, property:String, value:Float = 0, duration:Float = 1) {
+            FlxTween.num(Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(name), property), value, duration, null, f -> Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(name), property, f));
+        });
+
+        Lua_helper.add_callback(lua, "setSpriteProperty", function(name:String, property:String, value:Dynamic) {
+            Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(name), property, value);
+        });
+
+        Lua_helper.add_callback(lua, "getSpriteProperty", function(name:String, property:String) {
+            return Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(name), property);
+        });
+
         Lua_helper.add_callback(lua, "getProperty", function(field:String, property:String) {
             return Reflect.getProperty(getField(field), property);
         });
@@ -62,8 +103,8 @@ class LuaShit {
             Reflect.setProperty(getField(field), property, value);
         });
 
-        Lua_helper.add_callback(lua, "tweenProperty", function(field:String, variable:String, value:Float = 0, duration:Float = 1) {
-            FlxTween.num(Reflect.getProperty(getField(field), variable), value, duration, null, f -> Reflect.setProperty(getField(field), variable, f));
+        Lua_helper.add_callback(lua, "tweenProperty", function(field:String, variable:String, value:Float = 0, duration:Float = 1, ?onComplete:String = null) {
+            FlxTween.num(Reflect.getProperty(getField(field), variable), value, duration, {onComplete: (value) -> call(onComplete)}, f -> Reflect.setProperty(getField(field), variable, f));
         });
 
         // Gets the client setting
@@ -306,6 +347,9 @@ class LuaShit {
 	}
 
     public function call(functionName:String, ?args:Array<Dynamic>) {
+        if (functionName == null)
+            return;
+
         Lua.getglobal(lua, functionName);
 
         if (args != null)

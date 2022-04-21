@@ -31,35 +31,35 @@ class LuaShit {
         setVariable("windowWidth", FlxG.width);
         setVariable("windowHeight", FlxG.height);
 
-        Lua_helper.add_callback(lua, "tweenSpriteProperty", function(id:String, variable:String, value:Float = 0, duration:Float = 1) {
-            FlxTween.num(Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(id), variable), value, duration, null, f -> Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(id), variable, f));
+        Lua_helper.add_callback(lua, "tweenSpriteProperty", function(name:String, property:String, value:Float = 0, duration:Float = 1) {
+            FlxTween.num(Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(name), property), value, duration, null, f -> Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(name), property, f));
         });
 
-        Lua_helper.add_callback(lua, "setSpriteProperty", function(id:String, variable:String, value:Dynamic) {
-            Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(id), variable, value);
+        Lua_helper.add_callback(lua, "setSpriteProperty", function(name:String, property:String, value:Dynamic) {
+            Reflect.setProperty(PlayState.currentPlaystate.luaSprites.get(name), property, value);
         });
 
-        Lua_helper.add_callback(lua, "getSpriteProperty", function(id:String, variable:String) {
-            return Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(id), variable);
+        Lua_helper.add_callback(lua, "getSpriteProperty", function(name:String, property:String) {
+            return Reflect.getProperty(PlayState.currentPlaystate.luaSprites.get(name), property);
         });
 
-        Lua_helper.add_callback(lua, "addSprite", function(id:String, path:String, x:Float, y:Float) {
+        Lua_helper.add_callback(lua, "addSprite", function(name:String, path:String, x:Float, y:Float) {
             var sprite:FlxSprite = new FlxSprite(x,y);
             sprite.loadGraphic(BitmapData.fromFile("mods/" + path));
-            PlayState.currentPlaystate.addLuaSprite(id, sprite);
+            PlayState.currentPlaystate.addLuaSprite(name, sprite);
         });
 
-        Lua_helper.add_callback(lua, "removeSprite", function(id:String) {
-            PlayState.currentPlaystate.luaSprites.get(id).destroy();
-            PlayState.currentPlaystate.luaSprites.remove(id);
+        Lua_helper.add_callback(lua, "removeSprite", function(name:String) {
+            PlayState.currentPlaystate.luaSprites.get(name).destroy();
+            PlayState.currentPlaystate.luaSprites.remove(name);
         });
 
-        Lua_helper.add_callback(lua, "getProperty", function(field:String, variable:String) {
-            return Reflect.getProperty(getField(field), variable);
+        Lua_helper.add_callback(lua, "getProperty", function(field:String, property:String) {
+            return Reflect.getProperty(getField(field), property);
         });
 
-        Lua_helper.add_callback(lua, "setProperty", function (field:String, variable:String, value:Dynamic) {
-            Reflect.setProperty(getField(field), variable, value);
+        Lua_helper.add_callback(lua, "setProperty", function (field:String, property:String, value:Dynamic) {
+            Reflect.setProperty(getField(field), property, value);
         });
 
         Lua_helper.add_callback(lua, "tweenProperty", function(field:String, variable:String, value:Float = 0, duration:Float = 1) {

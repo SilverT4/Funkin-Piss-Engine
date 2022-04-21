@@ -31,7 +31,7 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 * 5K to 9K Mania Support
 * Modcharts
 * Configs are in YAML instead of JSON so it is easier to read them
-* Dialogue Cutscenes (not finished, still meh)
+* Dialogue Cutscenes
 * [Lua Support](https://github.com/Paidyy/Funkin-PEngine/wiki/Lua-Documentation)
 * Latest version downloader/installer
 * And some fixes to Vanilla

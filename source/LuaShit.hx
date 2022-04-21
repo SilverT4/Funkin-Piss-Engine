@@ -1,5 +1,9 @@
 package;
 
+import flixel.graphics.frames.FlxAtlasFrames;
+import sys.io.File;
+import sys.FileSystem;
+import Stage.StageAsset;
 import flixel.input.keyboard.FlxKey;
 import openfl.media.Sound;
 import flixel.system.FlxAssets.FlxSoundAsset;
@@ -34,6 +38,45 @@ class LuaShit {
         setVariable("swagSong", PlayState.SONG);
         setVariable("windowWidth", FlxG.width);
         setVariable("windowHeight", FlxG.height);
+
+        Lua_helper.add_callback(lua, "stageSpritePlay", function(sprite:String, animation:String, ?force:Bool = true) {
+            for (sprite in PlayState.currentPlaystate.stage) {
+                if (Std.isOfType(sprite, StageAsset)) {
+                    var stageSprite:StageAsset = sprite;
+                    if (stageSprite.name == sprite) {
+                        stageSprite.animation.play(animation, force);
+                    }
+                }
+            }
+        });
+
+        Lua_helper.add_callback(lua, "stageSpriteGetProperty", function(sprite:String, property:String) {
+            for (sprite in PlayState.currentPlaystate.stage) {
+                if (Std.isOfType(sprite, StageAsset)) {
+                    var stageSprite:StageAsset = sprite;
+                    if (stageSprite.name == sprite) {
+                        return Reflect.getProperty(PlayState.currentPlaystate.stage, property);
+                    }
+                }
+            }
+            return null;
+        });
+
+        Lua_helper.add_callback(lua, "stageSpriteSetProperty", function(sprite:String, property:String, value:Dynamic) {
+            for (sprite in PlayState.currentPlaystate.stage) {
+                if (Std.isOfType(sprite, StageAsset)) {
+                    var stageSprite:StageAsset = sprite;
+                    if (stageSprite.name == sprite) {
+                        Reflect.setProperty(PlayState.currentPlaystate.stage, property, value);
+                    }
+                }
+            }
+            return null;
+        });
+
+        Lua_helper.add_callback(lua, "tweenValue", function(originalValue:Float, value:Float, duration:Float = 1, tweenFunction:String = null) {
+            FlxTween.num(originalValue, value, duration, null, f -> call(tweenFunction, [f]));
+        });
 
         Lua_helper.add_callback(lua, "isKeyJustPressed", function(key:String) {
             return FlxG.keys.anyJustPressed([FlxKey.fromString(key)]);
@@ -74,13 +117,30 @@ class LuaShit {
 
         Lua_helper.add_callback(lua, "addSprite", function(name:String, path:String, x:Float, y:Float) {
             var sprite:FlxSprite = new FlxSprite(x,y);
-            sprite.loadGraphic(BitmapData.fromFile("mods/" + path));
+            if (FileSystem.exists(path.substring(0, path.length - 3) + "xml")) {
+                sprite.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromBytes(File.getBytes("mods/" + path)), File.getContent("mods/" + path));
+            }
+            else {
+                sprite.loadGraphic(BitmapData.fromFile("mods/" + path));
+            }
             PlayState.currentPlaystate.addLuaSprite(name, sprite);
         });
 
         Lua_helper.add_callback(lua, "removeSprite", function(name:String) {
             PlayState.currentPlaystate.luaSprites.get(name).destroy();
             PlayState.currentPlaystate.luaSprites.remove(name);
+        });
+
+        Lua_helper.add_callback(lua, "spriteAnimationAddByPrefix", function(name:String, animationName:String, xmlAnimationName:String, framerate:Int = 24, ?looped:Bool = false) {
+            PlayState.currentPlaystate.luaSprites.get(name).animation.addByPrefix(animationName, xmlAnimationName, framerate, looped);
+        });
+
+        Lua_helper.add_callback(lua, "spriteAnimationAddByIndices", function(name:String, animationName:String, xmlAnimationName:String, indices:Array<Int>, framerate:Int = 24, ?looped:Bool = false) {
+            PlayState.currentPlaystate.luaSprites.get(name).animation.addByIndices(animationName, xmlAnimationName, indices, "", framerate, looped);
+        });
+
+        Lua_helper.add_callback(lua, "spritePlay", function(name:String, animation:String, ?force:Bool = true) {
+            PlayState.currentPlaystate.luaSprites.get(name).animation.play(animation, force);
         });
 
         Lua_helper.add_callback(lua, "tweenSpriteProperty", function(name:String, property:String, value:Float = 0, duration:Float = 1) {

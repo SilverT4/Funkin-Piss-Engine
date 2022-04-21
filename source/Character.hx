@@ -845,6 +845,9 @@ class Character extends AnimatedSprite {
 		if (!animation.curAnim.name.startsWith("sing") && missColorTransform) {
 			resetColorTransform();
 		}
+		if (animation.curAnim.name == 'firstDeath' && animation.curAnim.finished) {
+			playAnim('deathLoop');
+		}
 		if (PlayState.playAs == "bf") {
 			if (!curCharacter.startsWith('bf')) {
 				if (animation.curAnim.name.startsWith('sing')) {

@@ -2182,9 +2182,12 @@ class PlayState extends MusicBeatState {
 			vocals.stop();
 			FlxG.sound.music.stop();
 
-			openSubState(new GameOverSubstate(bf.getScreenPosition().x, bf.getScreenPosition().y));
-
-			// FlxG.switchState(new GameOverState(bf.getScreenPosition().x, bf.getScreenPosition().y));
+			if (playAs == "bf") {
+				openSubState(new GameOverSubstate(bf.getScreenPosition().x, bf.getScreenPosition().y));
+			}
+			else {
+				openSubState(new GameOverSubstate(dad.getScreenPosition().x, dad.getScreenPosition().y));
+			}
 
 			#if desktop
 			// Game Over doesn't get his own variable because it's only used here

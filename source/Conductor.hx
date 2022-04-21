@@ -1,5 +1,7 @@
 package;
 
+import flixel.FlxG;
+import flixel.FlxBasic;
 import Song.SwagSong;
 
 /**
@@ -12,7 +14,7 @@ typedef BPMChangeEvent = {
 	var bpm:Int;
 }
 
-class Conductor {
+class Conductor extends FlxBasic {
 	public static var bpm:Int = 100;
 	public static var crochet:Float = ((60 / bpm) * 1000); // beats in milliseconds
 	public static var stepCrochet:Float = crochet / 4; // steps in milliseconds
@@ -22,6 +24,7 @@ class Conductor {
 	public static var songPosition:Float;
 	public static var lastSongPos:Float;
 	public static var offset:Float = 0;
+	public static var autoSongPosition = false;
 
 	public static var safeFrames:Int = 10;
 	/**
@@ -30,8 +33,6 @@ class Conductor {
 	public static var safeZoneOffset:Float = (safeFrames / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
 
 	public static var bpmChangeMap:Array<BPMChangeEvent> = [];
-
-	public function new() {}
 
 	public static function mapBPMChanges(song:SwagSong) {
 		bpmChangeMap = [];
@@ -62,5 +63,11 @@ class Conductor {
 
 		crochet = ((60 / bpm) * 1000);
 		stepCrochet = crochet / 4;
+	}
+
+	override function update(elapsed:Float) {
+		if (FlxG.sound.music != null && autoSongPosition) {
+			songPosition = FlxG.sound.music.time;
+		}
 	}
 }

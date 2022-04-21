@@ -290,11 +290,14 @@ class AnimationDebug extends FlxState {
 	function saveConfig() {
 		if (char.config != null) {
 			char.config.set('flipX', char.flipX);
-			if (!char.config.exists('animations')) {
+			if (char.config.get('animations') == null) {
 				char.config.set('animations', new AnyObjectMap());
 			}
 			var map:AnyObjectMap = char.config.get('animations');
 			for (key in map.keys()) {
+				if (char.config.get('animations').get(key) == null) {
+					char.config.get('animations').set(key, new AnyObjectMap());
+				}
 				char.config.get('animations').get(key).set('x', char.animOffsets.get(getAnimNameFromKey(char.config, key))[0]);
 				char.config.get('animations').get(key).set('y', char.animOffsets.get(getAnimNameFromKey(char.config, key))[1]);
 			}

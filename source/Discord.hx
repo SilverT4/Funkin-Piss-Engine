@@ -13,25 +13,27 @@ class DiscordClient {
 	public static var isRunning = true;
 
 	public function new() {
-		#if cpp
-		trace("Discord Client starting...");
-		DiscordRpc.start({
-			clientID: "814588678700924999",
-			onReady: onReady,
-			onError: onError,
-			onDisconnected: onDisconnected
-		});
-		isRunning = true;
-		trace("Discord Client started.");
-
-		while (true) {
-			DiscordRpc.process();
-			sleep(2);
-			// trace("Discord Client Update");
+		if (Options.discordRPC == true) {
+			#if cpp
+			trace("Discord Client starting...");
+			DiscordRpc.start({
+				clientID: "814588678700924999",
+				onReady: onReady,
+				onError: onError,
+				onDisconnected: onDisconnected
+			});
+			isRunning = true;
+			trace("Discord Client started.");
+	
+			while (true) {
+				DiscordRpc.process();
+				sleep(2);
+				// trace("Discord Client Update");
+			}
+	
+			shutdown();
+			#end
 		}
-
-		shutdown();
-		#end
 	}
 
 	public static function shutdown() {

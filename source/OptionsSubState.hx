@@ -88,7 +88,7 @@ class OptionsSubState extends FlxSubState {
 			}
 		});
 
-		if (FlxG.keys.justPressed.ENTER) {
+		if (Controls.check(ACCEPT)) {
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 			switch (options[curSelected]) {
 				case '${options[0]}', "Gameplay":
@@ -100,7 +100,7 @@ class OptionsSubState extends FlxSubState {
 			}
 		}
 
-		if (FlxG.keys.justPressed.ESCAPE) {
+		if (Controls.check(BACK)) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			MainMenuState.selectedSomethin = false;
 			PlayState.openSettings = false;
@@ -281,7 +281,7 @@ class OptionSubState extends FlxSubState {
 			}
 		}
 
-		if (FlxG.keys.justPressed.ESCAPE) {
+		if (Controls.check(BACK)) {
 			Options.saveAll();
 			Options.applyAll();
 			closeSubState();
@@ -441,7 +441,7 @@ class OptionsCharacterSubState extends FlxSubState {
 			curSelected += 1;
 		}
 
-        if (FlxG.keys.justPressed.ESCAPE) {
+        if (Controls.check(BACK)) {
 			FlxG.sound.play(Paths.sound('cancelMenu'));
 			closeSubState();
 			FlxG.state.openSubState(new OptionsPrefencesSubState(inGame));
@@ -460,7 +460,7 @@ class OptionsCharacterSubState extends FlxSubState {
                 txt.color = FlxColor.WHITE;
 		});
 
-        if (FlxG.keys.justPressed.ENTER) {
+        if (Controls.check(ACCEPT)) {
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
             if (character_list[curSelected] == "Vanilla") {
                 switch (character) {
@@ -642,7 +642,7 @@ class OptionsControlsSubstate extends FlxSubState {
 			if (Controls.check(UI_LEFT))
 				curTab = 0;
 
-			if (FlxG.keys.justPressed.ESCAPE) {
+			if (Controls.check(BACK)) {
 				Options.saveAll();
 				Options.applyAll();
 				closeSubState();

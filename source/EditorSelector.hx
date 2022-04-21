@@ -77,7 +77,7 @@ class EditorSelector extends FlxState {
 			}
 		});
 
-		if (FlxG.keys.justPressed.ENTER) {
+		if (Controls.check(ACCEPT)) {
 			FlxG.sound.play(Paths.sound('confirmMenu'), 0.7);
 			switch (options[curSelected]) {
                 case 'Chart Editor':

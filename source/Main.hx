@@ -22,7 +22,7 @@ import openfl.events.Event;
 
 class Main extends Sprite {
 	public static inline var ENGINE_NAME:String = "PEngine"; //engine name in case i will change it lmao
-	public static inline var ENGINE_VER = "v0.4b";
+	public static inline var ENGINE_VER = "v0.4";
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -140,6 +140,8 @@ class CrashHandler extends FlxState {
 	}
 
 	override function create() {
+		trace(exception);
+		
 		super.create();
 
 		var bg = new Background(FlxColor.fromString("#696969"));

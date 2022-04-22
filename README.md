@@ -24,7 +24,7 @@ haxelib git linc_clipboard https://github.com/josuigoa/linc_clipboard.git
 
 *Message to motherfuckers from gamaverse: this engine supports html5 partially, have fun on trying to ~~port~~ steal someone's mod to your garbage site <3*
 ## Nice Stuff / Features
-* Multiplayer
+* LAN Multiplayer
 * Action Notes
 * Custom Skins (no need to change character in chart editor!)
 * Make mods without touching code

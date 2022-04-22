@@ -1,0 +1,30 @@
+zoom: 0.9
+images:
+ stage_light:
+  x: 0
+  y: 0
+  size: 1
+ stageback:
+  x: -600
+  y: -200
+  scrollFactorX: 0.9
+  scrollFactorY: 0.9
+  size: 1
+ stagefront:
+  x: -650
+  y: 600
+  scrollFactorX: 0.9
+  scrollFactorY: 0.9
+  size: 1
+ stagecurtains:
+  x: -500
+  y: -300
+  scrollFactorX: 1.3
+  scrollFactorY: 1.3
+  size: 1
+gfX: 400
+gfY: 130
+dadX: 100
+dadY: 100
+bfX: 770
+bfY: 450

@@ -1,0 +1,21 @@
+animations:
+ idle:
+  name: Mom Idle
+ singUP:
+  name: Mom Up Pose
+  x: 14
+  y: 71
+ singDOWN:
+  name: MOM DOWN POSE
+  x: 20
+  y: -160
+ singLEFT:
+  name: Mom Left Pose
+  # ANIMATION IS CALLED MOM LEFT POSE BUT ITS FOR THE RIGHT
+	# CUZ DAVE IS DUMB!
+  x: 250
+  y: -23
+ singRIGHT:
+  name: Mom Pose Left
+  x: 10
+  y: -60

@@ -1,0 +1,36 @@
+animations:
+ idle:
+  name: Pico Idle Dance
+ singUP:
+  name: pico Up note0
+  x: -29
+  y: 27
+ singDOWN:
+  name: Pico Down Note0
+  x: 200
+  y: -70
+ singLEFT:
+  name: Pico Note Right0
+  x: 65
+  y: 9
+ singRIGHT:
+  name: Pico NOTE LEFT0
+  x: -68
+  y: -7
+ singRIGHTmiss:
+  name: Pico NOTE LEFT miss
+  x: -60
+  y: 41
+ singLEFTmiss:
+  name: Pico Note Right Miss
+  x: 62
+  y: 64
+ singUPmiss:
+  name: pico Up note miss
+  x: -19
+  y: 67
+ singDOWNmiss:
+  name: Pico Down Note MISS
+  x: 210
+  y: -28
+flipX: true

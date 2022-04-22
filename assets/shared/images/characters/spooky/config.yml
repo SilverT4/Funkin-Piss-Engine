@@ -1,0 +1,25 @@
+animations:
+ singUP:
+  name: spooky UP NOTE
+  x: -20
+  y: 26
+ singDOWN:
+  name: spooky DOWN note
+  x: -50
+  y: -130
+ singLEFT:
+  name: note sing left
+  x: 130
+  y: -10
+ singRIGHT:
+  name: spooky sing right
+  x: -130
+  y: -14
+ danceLeft:
+  name: spooky dance idle
+  indices: [0, 2, 6]
+  framerate: 12 
+ danceRight:
+  name: spooky dance idle
+  indices: [8, 10, 12, 14]
+  framerate: 12 

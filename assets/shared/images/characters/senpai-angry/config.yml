@@ -1,0 +1,15 @@
+animations:
+ idle:
+  name: Angry Senpai Idle
+ singUP:
+  name: Angry Senpai UP NOTE
+  x: 5
+  y: 37
+ singLEFT:
+  name: Angry Senpai LEFT NOTE
+  x: 40
+ singRIGHT:
+  name: Angry Senpai RIGHT NOTE
+ singDOWN:
+  name: Angry Senpai DOWN NOTE
+  x: 14

@@ -1,0 +1,17 @@
+animations:
+ idle:
+  name: monster idle
+ singUP:
+  name: monster up note
+  x: -20
+  y: 50
+ singDOWN:
+  name: monster down
+  x: -30
+  y: -94
+ singLEFT:
+  name: Monster left note
+  x: -30
+ singRIGHT:
+  name: Monster Right note
+  x: -51

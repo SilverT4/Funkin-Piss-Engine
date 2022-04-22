@@ -1,0 +1,11 @@
+animations:
+ firstDeath:
+  name: BF Dies pixel
+ deathLoop:
+  name: Retry Loop
+  looped: true
+  x: -37
+ deathConfirm:
+  name: RETRY CONFIRM
+  x: -37
+flipX: true

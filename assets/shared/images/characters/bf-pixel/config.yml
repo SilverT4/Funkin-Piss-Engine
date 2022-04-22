@@ -1,0 +1,20 @@
+animations:
+ idle:
+  name: BF IDLE
+ singUP:
+  name: BF UP NOTE
+ singLEFT:
+  name: BF LEFT NOTE
+ singRIGHT:
+  name: BF RIGHT NOTE
+ singDOWN:
+  name: BF DOWN NOTE
+ singUPmiss:
+  name: BF UP MISS
+ singLEFTmiss:
+  name: BF LEFT MISS
+ singRIGHTmiss:
+  name: BF RIGHT MISS
+ singDOWNmiss:
+  name: BF DOWN MISS
+flipX: true

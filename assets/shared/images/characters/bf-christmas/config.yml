@@ -1,0 +1,57 @@
+animations:
+ idle:
+  name: BF idle dance
+  x: -5
+ singUP:
+  name: BF NOTE UP0
+  x: -29
+  y: 27
+ singLEFT:
+  name: BF NOTE LEFT0
+  x: 12
+  y: -6
+ singRIGHT:
+  name: BF NOTE RIGHT0
+  x: -38
+  y: -7
+ singDOWN:
+  name: BF NOTE DOWN0
+  x: -10
+  y: -50
+ singUPmiss:
+  name: BF NOTE UP MISS
+  x: -29
+  y: 27
+ singLEFTmiss:
+  name: BF NOTE LEFT MISS
+  x: 12
+  y: 24
+ singRIGHTmiss:
+  name: BF NOTE RIGHT MISS
+  x: -30
+  y: 21
+ singDOWNmiss:
+  name: BF NOTE DOWN MISS
+  x: -11
+  y: -19
+ hey:
+  name: BF HEY
+  x: 7
+  y: 4
+ firstDeath:
+  name: BF dies
+  x: 37
+  y: 11
+ deathLoop:
+  name: BF Dead Loop
+  x: 37
+  y: 5
+  looped: true
+ deathConfirm:
+  name: BF Dead confirm
+  x: 37
+  y: 69
+ scared:
+  name: BF idle shaking
+  x: -4
+flipX: true

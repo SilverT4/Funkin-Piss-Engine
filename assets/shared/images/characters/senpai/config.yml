@@ -1,0 +1,15 @@
+animations:
+ idle:
+  name: Senpai Idle
+ singUP:
+  name: SENPAI UP NOTE
+  x: 5
+  y: 37
+ singLEFT:
+  name: SENPAI LEFT NOTE
+  x: 40
+ singRIGHT:
+  name: SENPAI RIGHT NOTE
+ singDOWN:
+  name: SENPAI DOWN NOTE
+  x: 14

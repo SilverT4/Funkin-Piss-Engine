@@ -1,0 +1,17 @@
+animations:
+ idle:
+  name: Dad idle dance
+ singUP:
+  name: Dad Sing Note UP
+  x: -6
+  y: 50
+ singRIGHT:
+  name: Dad Sing Note RIGHT
+  y: 27
+ singDOWN:
+  name: Dad Sing Note DOWN
+  y: -30
+ singLEFT:
+  name: Dad Sing Note LEFT
+  x: -10
+  y: 10

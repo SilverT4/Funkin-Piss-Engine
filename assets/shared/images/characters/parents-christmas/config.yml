@@ -1,0 +1,35 @@
+animations:
+ idle:
+  name: Parent Christmas Idle
+ singUP:
+  name: Parent Up Note Dad
+  x: -47
+  y: 24
+ singDOWN:
+  name: Parent Down Note Dad
+  x: -31
+  y: -29
+ singLEFT:
+  name: Parent Left Note Dad
+  x: -30
+  y: 16
+ singRIGHT:
+  name: Parent Right Note Dad
+  x: -1
+  y: 23
+ singUP-alt:
+  name: Parent Up Note Mom
+  x: -47
+  y: 24
+ singDOWN-alt:
+  name: Parent Down Note Mom
+  x: -30
+  y: -27
+ singLEFT-alt:
+  name: Parent Left Note Mom
+  x: -30
+  y: 15
+ singRIGHT-alt:
+  name: Parent Right Note Mom
+  x: -1
+  y: -24

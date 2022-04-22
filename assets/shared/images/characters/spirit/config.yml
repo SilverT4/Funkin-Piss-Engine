@@ -1,0 +1,21 @@
+animations:
+ idle:
+  name: idle spirit_
+  x: -220
+  y: -280
+ singUP:
+  name: up_
+  x: -220
+  y: -240
+ singRIGHT:
+  name: right_
+  x: -220
+  y: -280
+ singLEFT:
+  name: left_
+  x: -200
+  y: -280
+ singDOWN:
+  name: spirit down_
+  x: 170
+  y: 110

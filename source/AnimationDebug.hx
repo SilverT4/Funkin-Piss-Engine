@@ -278,15 +278,6 @@ class AnimationDebug extends FlxState {
 		super.update(elapsed);
 	}
 
-	function getAnimNameFromKey(config, key) {
-		if (config.get('animations').get(key).get('name') != null) {
-			return config.get('animations').get(key).get('name');
-		}
-		else {
-			return key;
-		}
-	}
-
 	function saveConfig() {
 		if (char.config != null) {
 			char.config.set('flipX', char.flipX);
@@ -298,8 +289,8 @@ class AnimationDebug extends FlxState {
 				if (char.config.get('animations').get(key) == null) {
 					char.config.get('animations').set(key, new AnyObjectMap());
 				}
-				char.config.get('animations').get(key).set('x', char.animOffsets.get(getAnimNameFromKey(char.config, key))[0]);
-				char.config.get('animations').get(key).set('y', char.animOffsets.get(getAnimNameFromKey(char.config, key))[1]);
+				char.config.get('animations').get(key).set('x', char.animOffsets.get(key)[0]);
+				char.config.get('animations').get(key).set('y', char.animOffsets.get(key)[1]);
 			}
 			var renderedYaml = Yaml.render(char.config);
 			CoolUtil.writeToFile(char.configPath, renderedYaml);

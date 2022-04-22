@@ -63,7 +63,7 @@ class LuaShit {
 
         Lua_helper.add_callback(lua, "stageSpriteAnimationAddByIndices", function(sprite:String, animationName:String, xmlAnimationName:String, indices:Array<Int>, framerate:Int = 24, ?looped:Bool = false) {
             for (sprite in PlayState.currentPlaystate.stage) {
-                if (Std.isOfType(sprite, StageAsset)) {
+                if (Std.isOfType(sprite, StageAsset)) { 
                     var stageSprite:StageAsset = sprite;
                     if (stageSprite.name == sprite) {
                         stageSprite.animation.addByIndices(animationName, xmlAnimationName, indices, "", framerate, looped);

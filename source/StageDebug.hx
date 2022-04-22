@@ -125,6 +125,9 @@ class StageDebug extends MusicBeatState {
         //collission stuff unused | FlxG.worldBounds.set(2147483647, 2147483647);
 
         stage = new Stage(stageName);
+        if (!FileSystem.exists(stage.configPath)) {
+            FlxG.switchState(new PlayState());
+        }
         FlxG.camera.zoom = stage.camZoom;
         add(stage);
 

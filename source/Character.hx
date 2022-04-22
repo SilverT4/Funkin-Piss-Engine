@@ -34,15 +34,24 @@ class Character extends AnimatedSprite {
 		this.isPlayer = isPlayer;
 		this.debugMode = isDebug;
 
-		var tex:FlxAtlasFrames;
 		antialiasing = true;
+
+		if (curCharacter != 'senpai-angry') {
+			if (!curCharacter.endsWith("-custom")) {
+				if (CoolUtil.isCustomPath(CoolUtil.getCharacterPath(curCharacter))) {
+					frames = Paths.PEgetSparrowAtlas(CoolUtil.getCharacterPath(curCharacter) + '$curCharacter');
+				}
+				else {
+					frames = Paths.getSparrowAtlas('characters/' + curCharacter + '/' + curCharacter);
+				}
+			}
+		}
 
 		switch (curCharacter) {
 			case 'bf-custom':
 				for (file in FileSystem.readDirectory(Options.customBfPath)) {
 					if (file.endsWith(".xml")) {
-						tex = Paths.PEgetSparrowAtlas(Options.customBfPath + file.substring(0, file.length - 4));
-						frames = tex;
+						frames = Paths.PEgetSparrowAtlas(Options.customBfPath + file.substring(0, file.length - 4));
 						break;
 					}
 				}
@@ -106,8 +115,7 @@ class Character extends AnimatedSprite {
 			case 'gf-custom':
 				for (file in FileSystem.readDirectory(Options.customGfPath)) {
 					if (file.endsWith(".xml")) {
-						tex = Paths.PEgetSparrowAtlas(Options.customGfPath + file.substring(0, file.length - 4));
-						frames = tex;
+						frames = Paths.PEgetSparrowAtlas(Options.customGfPath + file.substring(0, file.length - 4));
 						break;
 					}
 				}
@@ -166,8 +174,7 @@ class Character extends AnimatedSprite {
 				// DAD ANIMATION LOADING CODE
 				for (file in FileSystem.readDirectory(Options.customDadPath)) {
 					if (file.endsWith(".xml")) {
-						tex = Paths.PEgetSparrowAtlas(Options.customDadPath + file.substring(0, file.length - 4));
-						frames = tex;
+						frames = Paths.PEgetSparrowAtlas(Options.customDadPath + file.substring(0, file.length - 4));
 						break;
 					}
 				}
@@ -219,8 +226,6 @@ class Character extends AnimatedSprite {
 				playAnim('idle');
 			case 'gf':
 				// GIRLFRIEND CODE
-				tex = Paths.getSparrowAtlas('characters/GF_assets');
-				frames = tex;
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
 				animation.addByPrefix('singLEFT', 'GF left note', 24, false);
 				animation.addByPrefix('singRIGHT', 'GF Right Note', 24, false);
@@ -249,8 +254,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('danceRight');
 			case 'gf-christmas':
-				tex = Paths.getSparrowAtlas('characters/gfChristmas');
-				frames = tex;
 				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
 				animation.addByPrefix('singLEFT', 'GF left note', 24, false);
 				animation.addByPrefix('singRIGHT', 'GF Right Note', 24, false);
@@ -279,8 +282,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('danceRight');
 			case 'gf-car':
-				tex = Paths.getSparrowAtlas('characters/gfCar');
-				frames = tex;
 				animation.addByIndices('singUP', 'GF Dancing Beat Hair blowing CAR', [0], "", 24, false);
 				animation.addByIndices('danceLeft', 'GF Dancing Beat Hair blowing CAR', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'GF Dancing Beat Hair blowing CAR', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24,
@@ -291,8 +292,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('danceRight');
 			case 'gf-pixel':
-				tex = Paths.getSparrowAtlas('characters/gfPixel');
-				frames = tex;
 				animation.addByIndices('singUP', 'GF IDLE', [2], "", 24, false);
 				animation.addByIndices('danceLeft', 'GF IDLE', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'GF IDLE', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
@@ -306,8 +305,6 @@ class Character extends AnimatedSprite {
 				updateHitbox();
 				antialiasing = false;
 			case 'gf-tankmen':
-				tex = Paths.getSparrowAtlas('characters/gfTankmen');
-				frames = tex;
 				animation.addByPrefix('sad', 'GF Crying at Gunpoint ', 24, false);
 				animation.addByIndices('danceLeft', 'GF Dancing at Gunpoint', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
 				animation.addByIndices('danceRight', 'GF Dancing at Gunpoint', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
@@ -319,8 +316,6 @@ class Character extends AnimatedSprite {
 				playAnim('danceRight');
 			case 'dad':
 				// DAD ANIMATION LOADING CODE
-				tex = Paths.getSparrowAtlas('characters/DADDY_DEAREST');
-				frames = tex;
 				animation.addByPrefix('idle', 'Dad idle dance', 24, false);
 				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
 				animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24);
@@ -335,8 +330,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('idle');
 			case 'spooky':
-				tex = Paths.getSparrowAtlas('characters/spooky_kids_assets');
-				frames = tex;
 				animation.addByPrefix('singUP', 'spooky UP NOTE', 24, false);
 				animation.addByPrefix('singDOWN', 'spooky DOWN note', 24, false);
 				animation.addByPrefix('singLEFT', 'note sing left', 24, false);
@@ -354,9 +347,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('danceRight');
 			case 'mom':
-				tex = Paths.getSparrowAtlas('characters/Mom_Assets');
-				frames = tex;
-
 				animation.addByPrefix('idle', "Mom Idle", 24, false);
 				animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
 				animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);
@@ -373,9 +363,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('idle');
 			case 'mom-car':
-				tex = Paths.getSparrowAtlas('characters/momCar');
-				frames = tex;
-
 				animation.addByPrefix('idle', "Mom Idle", 24, false);
 				animation.addByPrefix('singUP', "Mom Up Pose", 24, false);
 				animation.addByPrefix('singDOWN', "MOM DOWN POSE", 24, false);
@@ -392,8 +379,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('idle');
 			case 'monster':
-				tex = Paths.getSparrowAtlas('characters/Monster_Assets');
-				frames = tex;
 				animation.addByPrefix('idle', 'monster idle', 24, false);
 				animation.addByPrefix('singUP', 'monster up note', 24, false);
 				animation.addByPrefix('singDOWN', 'monster down', 24, false);
@@ -407,8 +392,6 @@ class Character extends AnimatedSprite {
 				setOffset("singDOWN", -30, -40);
 				playAnim('idle');
 			case 'monster-christmas':
-				tex = Paths.getSparrowAtlas('characters/monsterChristmas');
-				frames = tex;
 				animation.addByPrefix('idle', 'monster idle', 24, false);
 				animation.addByPrefix('singUP', 'monster up note', 24, false);
 				animation.addByPrefix('singDOWN', 'monster down', 24, false);
@@ -422,8 +405,6 @@ class Character extends AnimatedSprite {
 				setOffset("singDOWN", -40, -94);
 				playAnim('idle');
 			case 'pico':
-				tex = Paths.getSparrowAtlas('characters/Pico_FNF_assetss');
-				frames = tex;
 				animation.addByPrefix('idle', "Pico Idle Dance", 24);
 				animation.addByPrefix('singUP', 'pico Up note0', 24, false);
 				animation.addByPrefix('singDOWN', 'Pico Down Note0', 24, false);
@@ -458,8 +439,6 @@ class Character extends AnimatedSprite {
 
 				flipX = true;
 			case 'bf':
-				var tex = Paths.getSparrowAtlas('characters/BOYFRIEND');
-				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
 				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
@@ -494,8 +473,6 @@ class Character extends AnimatedSprite {
 
 				flipX = true;
 			case 'bf-christmas':
-				var tex = Paths.getSparrowAtlas('characters/bfChristmas');
-				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
 				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
@@ -522,8 +499,6 @@ class Character extends AnimatedSprite {
 
 				flipX = true;
 			case 'bf-car':
-				var tex = Paths.getSparrowAtlas('characters/bfCar');
-				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
 				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
@@ -547,8 +522,6 @@ class Character extends AnimatedSprite {
 
 				flipX = true;
 			case 'bf-holding-gf':
-				var tex = Paths.getSparrowAtlas('characters/bfAndGF');
-				frames = tex;
 				animation.addByPrefix('idle', 'BF idle dance w gf0', 24, false);
 				animation.addByPrefix('singUP', 'BF NOTE UP0', 24, false);
 				animation.addByPrefix('singLEFT', 'BF NOTE LEFT0', 24, false);
@@ -573,8 +546,6 @@ class Character extends AnimatedSprite {
 
 				flipX = true;
 			case 'bf-holding-gf-dead':
-				var tex = Paths.getSparrowAtlas('characters/bfHoldingGF-DEAD');
-				frames = tex;
 				animation.addByPrefix('firstDeath', "BF Dies with GF", 24, false);
 				animation.addByPrefix('deathLoop', "BF Dead with GF Loop", 24, true);
 				animation.addByPrefix('deathConfirm', "RETRY confirm holding gf", 24, false);
@@ -587,7 +558,6 @@ class Character extends AnimatedSprite {
 				
 				flipX = true;
 			case 'bf-pixel':
-				frames = Paths.getSparrowAtlas('characters/bfPixel');
 				animation.addByPrefix('idle', 'BF IDLE', 24, false);
 				animation.addByPrefix('singUP', 'BF UP NOTE', 24, false);
 				animation.addByPrefix('singLEFT', 'BF LEFT NOTE', 24, false);
@@ -620,7 +590,6 @@ class Character extends AnimatedSprite {
 
 				flipX = true;
 			case 'bf-pixel-dead':
-				frames = Paths.getSparrowAtlas('characters/bfPixelsDEAD');
 				animation.addByPrefix('singUP', "BF Dies pixel", 24, false);
 				animation.addByPrefix('firstDeath', "BF Dies pixel", 24, false);
 				animation.addByPrefix('deathLoop', "Retry Loop", 24, true);
@@ -637,8 +606,6 @@ class Character extends AnimatedSprite {
 				antialiasing = false;
 				flipX = true;
 			case 'senpai':
-				// frames = Paths.getSparrowAtlas('weeb/senpai');
-				frames = Paths.getSparrowAtlas('characters/senpai');
 				animation.addByPrefix('idle', 'Senpai Idle', 24, false);
 				animation.addByPrefix('singUP', 'SENPAI UP NOTE', 24, false);
 				animation.addByPrefix('singLEFT', 'SENPAI LEFT NOTE', 24, false);
@@ -677,7 +644,6 @@ class Character extends AnimatedSprite {
 
 				antialiasing = false;
 			case 'spirit':
-				frames = Paths.getPackerAtlas('characters/spirit');
 				animation.addByPrefix('idle', "idle spirit_", 24, false);
 				animation.addByPrefix('singUP', "up_", 24, false);
 				animation.addByPrefix('singRIGHT', "right_", 24, false);
@@ -697,7 +663,6 @@ class Character extends AnimatedSprite {
 
 				antialiasing = false;
 			case 'parents-christmas':
-				frames = Paths.getSparrowAtlas('characters/mom_dad_christmas_assets');
 				animation.addByPrefix('idle', 'Parent Christmas Idle', 24, false);
 				animation.addByPrefix('singUP', 'Parent Up Note Dad', 24, false);
 				animation.addByPrefix('singDOWN', 'Parent Down Note Dad', 24, false);
@@ -721,7 +686,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('idle');
 			case 'tankman':
-				frames = Paths.getSparrowAtlas('characters/tankmanCaptain');
 				animation.addByPrefix('idle', "Tankman Idle Dance instance 1", 24);
 				animation.addByPrefix('singUP', "Tankman UP note instance 1", 24);
 				animation.addByPrefix('singRIGHT', "Tankman Note Left instance 1", 24);
@@ -742,7 +706,6 @@ class Character extends AnimatedSprite {
 
 				playAnim('idle');
 			case "pico-speaker":
-				frames = Paths.getSparrowAtlas('characters/picoSpeaker');
 				animation.addByPrefix('picoShoot1', "Pico shoot 1", 24);
 				animation.addByPrefix('picoShoot2', "Pico shoot 2", 24);
 				animation.addByPrefix('picoShoot3', "Pico shoot 3", 24);
@@ -762,54 +725,59 @@ class Character extends AnimatedSprite {
 
 				playAnim('picoShoot1');
 			default:
-				frames = Paths.PEgetSparrowAtlas('mods/characters/$curCharacter/$curCharacter');
+				//ass
+		}
 
-				var idleAnim = null;
+		var idleAnim = null;
 
-				setConfig('mods/characters/$curCharacter/config.yml');
+		setConfig(CoolUtil.getCharacterPath(curCharacter) + 'config.yml');
 
-				if (config != null) {
-					// take a shot everytime you see != null here
-					var map:AnyObjectMap = config.get('animations');
-					if (config.exists('animations')) {
-						for (anim in map.keys()) {
-							var values:AnyObjectMap = config.get('animations').get(anim);
-							//trace(anim, values.get('x'), values.get('y'), values.get('frames'), values.get('looped'), values.get('name'), values.get('isIdle'));
-							var _name = anim;
-							var _frames = 24;
-							var _looped = false;
-							var _x = 0;
-							var _y = 0;
-							if (values != null) {
-								if (values.get('x') != null)
-									_x = values.get('x');
-								if (values.get('y') != null)
-									_y = values.get('y');
-								if (values.get('frames') != null)
-									_frames = values.get('frames');
-								if (values.get('looped') != null)
-									_looped = values.get('looped');
-								if (values.get('name') != null)
-									_name = values.get('name');
-								if (values.get('isIdle') == true)
-									idleAnim = _name;
-							}
-							
-							animation.addByPrefix(_name, anim, _frames, _looped);
-							setOffset(_name, _x, _y);
-						}
+		if (FileSystem.exists(configPath)) {
+			if (config != null) {
+				// take a shot everytime you see != null here
+				if (config.get('animations')) {
+					for (anim => offsets in animOffsets) {
+
 					}
-					if (idleAnim != null) {
-						playAnim(idleAnim);
-					}
-					flipX = true;
-					if (Std.string(config.get('flipX')) == "true") {
-						flipX = true;
-					} else if (Std.string(config.get('flipX')) == "false") {
-						flipX = false;
-					}
-					//note to self: without converting data values with Std.[type] it will always return null
 				}
+				var map:AnyObjectMap = config.get('animations');
+				if (config.exists('animations')) {
+					for (anim in map.keys()) {
+						var values:AnyObjectMap = config.get('animations').get(anim);
+						//trace(anim, values.get('x'), values.get('y'), values.get('frames'), values.get('looped'), values.get('name'), values.get('isIdle'));
+						var _name = anim;
+						var _frames = 24;
+						var _looped = false;
+						var _x = 0;
+						var _y = 0;
+						if (values != null) {
+							if (values.get('x') != null)
+								_x = values.get('x');
+							if (values.get('y') != null)
+								_y = values.get('y');
+							if (values.get('frames') != null)
+								_frames = values.get('frames');
+							if (values.get('looped') != null)
+								_looped = values.get('looped');
+							if (values.get('name') != null)
+								_name = values.get('name');
+							if (values.get('isIdle') == true)
+								idleAnim = _name;
+						}
+						
+						animation.addByPrefix(_name, anim, _frames, _looped);
+						setOffset(_name, _x, _y);
+					}
+				}
+				if (idleAnim != null) {
+					playAnim(idleAnim);
+				}
+				if (Std.string(config.get('flipX')) == "true") {
+					flipX = true;
+				} else if (Std.string(config.get('flipX')) == "false") {
+					flipX = false;
+				}
+			}
 		}
 
 		dance();

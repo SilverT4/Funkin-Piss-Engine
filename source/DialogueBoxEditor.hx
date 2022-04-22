@@ -49,7 +49,7 @@ class DialogueBoxEditor extends FlxState {
         super();
 
         if (PlayState.SONG != null) {
-            dialoguePath = CoolUtil.getSongPath(PlayState.SONG.song) + "dialogue.txt";
+            dialoguePath = CoolUtil.getSongPath(PlayState.SONG.song, true) + "dialogue.txt";
 
             if (FileSystem.exists(dialoguePath)) {
                 var fileContent = File.getContent(dialoguePath);

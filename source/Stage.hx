@@ -25,8 +25,7 @@ class Stage extends FlxTypedGroup<Dynamic> {
         "mall",
         "mallEvil",
         "school",
-        "schoolEvil",
-        "tank"
+        "schoolEvil"
     ];
     public var name:String;
     public var camZoom:Float = 0.9;
@@ -78,6 +77,9 @@ class Stage extends FlxTypedGroup<Dynamic> {
 		super();
 
         name = stage;
+
+        var prefixPath = FileSystem.exists('assets/stages/$stage/') ? 'assets/stages/$stage/' : 'mods/stages/$stage/';
+        setConfig(prefixPath + 'config.yml');
 
 		switch (stage) {
             case 'stage':
@@ -532,66 +534,63 @@ class Stage extends FlxTypedGroup<Dynamic> {
 				bgTank4.scrollFactor.set(1.6, 1);
 				bgTank5.scrollFactor.set(1.1, 1);
             */
-            default:
-                if (FileSystem.exists('mods/stages/$stage/')) {
-                    setConfig('mods/stages/$stage/config.yml');
-                    
-                    if (config != null) {
+		}
 
-                        if (config.get("zoom") != null) camZoom = Std.parseFloat(Std.string(config.get("zoom")));
+        if (FileSystem.exists(configPath)) {
+            if (config != null) {
+                if (config.get("zoom") != null) camZoom = Std.parseFloat(Std.string(config.get("zoom")));
 
-                        //These values will be changed in the future, sorry for making it look ugly asf
-                        if (config.get("gfX") != null) gfX = Std.parseFloat(Std.string(config.get("gfX")));
-                        if (config.get("gfY") != null) gfY = Std.parseFloat(Std.string(config.get("gfY")));
-                        if (config.get("dadX") != null) dadX = Std.parseFloat(Std.string(config.get("dadX")));
-                        if (config.get("dadY") != null) dadY = Std.parseFloat(Std.string(config.get("dadY")));
-                        if (config.get("bfX") != null) bfX = Std.parseFloat(Std.string(config.get("bfX")));
-                        if (config.get("bfY") != null) bfY = Std.parseFloat(Std.string(config.get("bfY")));
+                //These values will be changed in the future, sorry for making it look ugly asf
+                if (config.get("gfX") != null) gfX = Std.parseFloat(Std.string(config.get("gfX")));
+                if (config.get("gfY") != null) gfY = Std.parseFloat(Std.string(config.get("gfY")));
+                if (config.get("dadX") != null) dadX = Std.parseFloat(Std.string(config.get("dadX")));
+                if (config.get("dadY") != null) dadY = Std.parseFloat(Std.string(config.get("dadY")));
+                if (config.get("bfX") != null) bfX = Std.parseFloat(Std.string(config.get("bfX")));
+                if (config.get("bfY") != null) bfY = Std.parseFloat(Std.string(config.get("bfY")));
 
-                        if (config.get("bfScrollFactorX") != null) bfScrollFactorX = Std.parseFloat(Std.string(config.get("bfScrollFactorX")));
-                        if (config.get("dadScrollFactorX") != null) dadScrollFactorX = Std.parseFloat(Std.string(config.get("dadScrollFactorX")));
-                        if (config.get("gfScrollFactorX") != null) gfScrollFactorX = Std.parseFloat(Std.string(config.get("gfScrollFactorX")));
-                        if (config.get("bfScrollFactorY") != null) bfScrollFactorY = Std.parseFloat(Std.string(config.get("bfScrollFactorY")));
-                        if (config.get("dadScrollFactorY") != null) dadScrollFactorY = Std.parseFloat(Std.string(config.get("dadScrollFactorY")));
-                        if (config.get("gfScrollFactorY") != null) gfScrollFactorY = Std.parseFloat(Std.string(config.get("gfScrollFactorY")));
+                if (config.get("bfScrollFactorX") != null) bfScrollFactorX = Std.parseFloat(Std.string(config.get("bfScrollFactorX")));
+                if (config.get("dadScrollFactorX") != null) dadScrollFactorX = Std.parseFloat(Std.string(config.get("dadScrollFactorX")));
+                if (config.get("gfScrollFactorX") != null) gfScrollFactorX = Std.parseFloat(Std.string(config.get("gfScrollFactorX")));
+                if (config.get("bfScrollFactorY") != null) bfScrollFactorY = Std.parseFloat(Std.string(config.get("bfScrollFactorY")));
+                if (config.get("dadScrollFactorY") != null) dadScrollFactorY = Std.parseFloat(Std.string(config.get("dadScrollFactorY")));
+                if (config.get("gfScrollFactorY") != null) gfScrollFactorY = Std.parseFloat(Std.string(config.get("gfScrollFactorY")));
 
-                        var map:AnyObjectMap = config.get('images');
+                var map:AnyObjectMap = config.get('images');
 
-                        for (image in map.keys()) {
-                            var keys:AnyObjectMap = config.get('images').get(image);
-                            var stageSprite = new StageAsset(0, 0, image);
-                            if (FileSystem.exists('mods/stages/$stage/images/$image.xml')) {
-                                stageSprite.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromBytes(File.getBytes('mods/stages/$stage/images/$image.png')), File.getContent('mods/stages/$stage/images/$image.xml'));
-                                var document = new Access(Xml.parse(File.getContent('mods/stages/$stage/images/$image.xml')));
-                                for (ele in document.node.TextureAtlas.elements) {
-                                    if (ele.has.name) {
-                                        var name = ele.att.name.substring(0, ele.att.name.length - 4);
+                for (image in map.keys()) {
+                    var keys:AnyObjectMap = config.get('images').get(image);
+                    var stageSprite = new StageAsset(0, 0, image);
+                    if (FileSystem.exists('${prefixPath}images/$image.xml')) {
+                        stageSprite.frames = FlxAtlasFrames.fromSparrow(BitmapData.fromBytes(File.getBytes('${prefixPath}images/$image.png')), File.getContent('${prefixPath}images/$image.xml'));
+                        var document = new Access(Xml.parse(File.getContent('${prefixPath}images/$image.xml')));
+                        for (ele in document.node.TextureAtlas.elements) {
+                            if (ele.has.name) {
+                                var name = ele.att.name.substring(0, ele.att.name.length - 4);
 
-                                        if (name == "beatBop") stageSprite.animation.addByPrefix("bop", "beatBop", 24, false);
-                                        if (name == "idleLoop") {
-                                            stageSprite.animation.addByPrefix("idleLoop", "idleLoop", 24, true);
-                                            stageSprite.animation.play("idleLoop");
-                                        }
-                                    }
+                                if (name == "beatBop") stageSprite.animation.addByPrefix("bop", "beatBop", 24, false);
+                                if (name == "idleLoop") {
+                                    stageSprite.animation.addByPrefix("idleLoop", "idleLoop", 24, true);
+                                    stageSprite.animation.play("idleLoop");
                                 }
                             }
-                            else {
-                                stageSprite.loadGraphic(BitmapData.fromBytes(File.getBytes('mods/stages/$stage/images/$image.png')));
-                            }
-                            if (keys != null) {
-                                if (keys.get("x") != null) stageSprite.x = keys.get("x");
-                                if (keys.get("y") != null) stageSprite.y = keys.get("y");
-                                if (keys.get("size") != null) {
-                                    stageSprite.setAssetSize(keys.get("size"));
-                                }
-                                if (keys.get("scrollFactorX") != null) stageSprite.scrollFactor.x = keys.get("scrollFactorX");
-                                if (keys.get("scrollFactorY") != null) stageSprite.scrollFactor.y = keys.get("scrollFactorY");
-                            }
-                            add(stageSprite);
                         }
                     }
+                    else {
+                        stageSprite.loadGraphic(BitmapData.fromBytes(File.getBytes('${prefixPath}images/$image.png')));
+                    }
+                    if (keys != null) {
+                        if (keys.get("x") != null) stageSprite.x = keys.get("x");
+                        if (keys.get("y") != null) stageSprite.y = keys.get("y");
+                        if (keys.get("size") != null) {
+                            stageSprite.setAssetSize(keys.get("size"));
+                        }
+                        if (keys.get("scrollFactorX") != null) stageSprite.scrollFactor.x = keys.get("scrollFactorX");
+                        if (keys.get("scrollFactorY") != null) stageSprite.scrollFactor.y = keys.get("scrollFactorY");
+                    }
+                    add(stageSprite);
                 }
-		}
+            }
+        }
 	}
 
     public function onBeatHit() {

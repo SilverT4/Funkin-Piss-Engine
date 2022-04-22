@@ -20,12 +20,32 @@ import openfl.utils.Assets as OpenFlAssets;
 class CoolUtil {
 	public static var difficultyArray:Array<String> = ['EASY', "NORMAL", "HARD"];
 
-	public static function getSongPath(songName:String) {
+	public static function getSongPath(songName:String, ?dataFolder = false) {
 		if (FileSystem.exists("mods/songs/" + songName.toLowerCase() + "/")) {
 			return "mods/songs/" + songName.toLowerCase() + "/";
+		}
+		else if (FileSystem.exists("assets/" + (dataFolder ? 'data' : 'songs') + "/" + songName.toLowerCase() + "/")) {
+			return "assets/" + (dataFolder ? 'data' : 'songs') + "/" + songName.toLowerCase() + "/";
+		}
+		return null;
+	}
+
+	public static function getStagePath(stageName:String) {
+		if (FileSystem.exists("mods/stages/" + stageName.toLowerCase() + "/")) {
+			return "mods/stages/" + stageName.toLowerCase() + "/";
 		} 
-		else if (FileSystem.exists("assets/songs/" + songName.toLowerCase() + "/")) {
-			return "assets/songs/" + songName.toLowerCase() + "/";
+		else if (FileSystem.exists("assets/stages/" + stageName.toLowerCase() + "/")) {
+			return "assets/stages/" + stageName.toLowerCase() + "/";
+		}
+		return null;
+	}
+
+	public static function getCharacterPath(characterName:String) {
+		if (FileSystem.exists("mods/characters/" + characterName + "/")) {
+			return "mods/characters/" + characterName + "/";
+		}
+		else if (FileSystem.exists("assets/shared/images/characters/" + characterName + "/")) {
+			return "assets/shared/images/characters/" + characterName + "/";
 		}
 		return null;
 	}
@@ -243,7 +263,14 @@ class CoolUtil {
 	}
 
 	public static function getCharacters():Array<String> {
-		var list = CoolUtil.coolTextFile(Paths.txt('characterList'));
+		var list = [];
+		var assets_song_path = "assets/shared/images/characters/";
+		for (file in FileSystem.readDirectory(assets_song_path)) {
+			var path = haxe.io.Path.join([assets_song_path, file]);
+			if (FileSystem.isDirectory(path)) {
+				list.push(file);
+			}
+		}
 		var mods_characters_path = "mods/characters/";
 		for (char in FileSystem.readDirectory(mods_characters_path)) {
 			var path = Path.join([mods_characters_path, char]);
@@ -283,6 +310,13 @@ class CoolUtil {
 
 	public static function isEmpty(d:Dynamic):Bool {
 		if (d == "" || d == 0 || d == null || d == "0" || d == "null" || d == "empty" || d == "none") {
+			return true;
+		}
+		return false;
+	}
+
+	public static function isCustomPath(arg0:String) {
+		if (arg0.startsWith("mods/")) {
 			return true;
 		}
 		return false;

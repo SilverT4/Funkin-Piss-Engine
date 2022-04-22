@@ -367,6 +367,7 @@ class StageDebug extends MusicBeatState {
             }
             stage.config.set('images', images);
 			var renderedYaml = Yaml.render(stage.config);
+            trace("saving config to: " + stage.configPath);
 			CoolUtil.writeToFile(stage.configPath, renderedYaml);
 		}
 	}

@@ -82,31 +82,6 @@ class Stage extends FlxTypedGroup<Dynamic> {
         setConfig(prefixPath + 'config.yml');
 
 		switch (stage) {
-            case 'stage':
-                camZoom = 0.9;
-
-                var bg:StageAsset = new StageAsset(-600, -200, 'stageback').loadGraphic(Paths.stageImage('stageback', stage));
-                bg.antialiasing = true;
-                bg.scrollFactor.set(0.9, 0.9);
-                bg.active = false;
-                add(bg);
-
-                var stageFront:StageAsset = new StageAsset(-650, 600, 'stagefront').loadGraphic(Paths.stageImage('stagefront', stage));
-                stageFront.setGraphicSize(Std.int(stageFront.width * 1.1));
-                stageFront.updateHitbox();
-                stageFront.antialiasing = true;
-                stageFront.scrollFactor.set(0.9, 0.9);
-                stageFront.active = false;
-                add(stageFront);
-
-                var stageCurtains:StageAsset = new StageAsset(-500, -300, 'stagecurtains').loadGraphic(Paths.stageImage('stagecurtains', stage));
-                stageCurtains.setGraphicSize(Std.int(stageCurtains.width * 0.9));
-                stageCurtains.updateHitbox();
-                stageCurtains.antialiasing = true;
-                stageCurtains.scrollFactor.set(1.3, 1.3);
-                stageCurtains.active = false;
-
-                add(stageCurtains);
 			case 'spooky':
                 camZoom = 1;
                 var hallowTex = Paths.stageSparrow('halloween_bg', stage);

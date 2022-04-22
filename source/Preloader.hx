@@ -1,4 +1,4 @@
-package ;
+package;
  
 import flixel.system.FlxBasePreloader;
 import openfl.display.Sprite;
@@ -25,11 +25,9 @@ class Preloader extends FlxBasePreloader
         this._width = Lib.current.stage.stageWidth;
         this._height = Lib.current.stage.stageHeight;
          
-        var ratio:Float = this._width / 2560; //This allows us to scale assets depending on the size of the screen.
-         
         logo = new Sprite();
-        logo.addChild(new Bitmap(new LogoImage(0,0))); //Sets the graphic of the sprite to a Bitmap object, which uses our embedded BitmapData class.
-        logo.scaleX = logo.scaleY = ratio;
+        logo.addChild(new Bitmap(new LogoImage(this._width, this._height))); //Sets the graphic of the sprite to a Bitmap object, which uses our embedded BitmapData class.
+        logo.scaleX = logo.scaleY = (this._width / logo.width);
         logo.x = ((this._width) / 2) - ((logo.width) / 2);
         logo.y = (this._height / 2) - ((logo.height) / 2);
         addChild(logo); //Adds the graphic to the NMEPreloader's buffer.
@@ -39,6 +37,7 @@ class Preloader extends FlxBasePreloader
      
     override function update(Percent:Float):Void 
     {
+        /*
         if(Percent < 69)
         {
             logo.scaleX += Percent / 1920;
@@ -51,6 +50,7 @@ class Preloader extends FlxBasePreloader
             logo.x = ((this._width) / 2) - ((logo.width) / 2);
             logo.y = (this._height / 2) - ((logo.height) / 2);
         }
+        */
         
         super.update(Percent);
     }

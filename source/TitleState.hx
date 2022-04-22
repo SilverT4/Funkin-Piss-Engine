@@ -1,5 +1,6 @@
 package;
 
+import Main.Notification;
 import UpdateState.OutdatedState;
 #if cpp
 import Discord.DiscordClient;

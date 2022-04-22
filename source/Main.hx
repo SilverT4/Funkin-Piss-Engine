@@ -1,5 +1,12 @@
 package;
 
+import openfl.events.TimerEvent;
+import openfl.events.EventType;
+import openfl.utils.Timer;
+import flixel.util.FlxTimer;
+import flixel.tweens.FlxTween;
+import openfl.text.TextFormat;
+import openfl.text.TextField;
 import haxe.DynamicAccess;
 import haxe.Json;
 import sys.Http;
@@ -26,6 +33,7 @@ class Main extends Sprite {
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
+	public static var instance:Main;
 
 	var initialState:Class<FlxState> = TitleState; // The FlxState the game starts with.
 	var zoom:Float = -1; // If -1, zoom is automatically calculated to fit the window dimensions.
@@ -43,6 +51,7 @@ class Main extends Sprite {
 
 	public function new() {
 		super();
+		instance = this;
 
 		if (stage != null) {
 			init();
@@ -104,7 +113,6 @@ class Main extends Sprite {
 		#if !mobile
 		addChild(new EFPS());
 		#end
-
 	}
 
 	public static var gitJson:Dynamic = null;
@@ -212,6 +220,32 @@ class CrashHandler extends FlxState {
 					FlxG.camera.scroll.y -= 20;
 			}
 		}
+	}
+}
+
+class Notification extends TextField {
+	public function new(text:String, ?color:Int = FlxColor.RED) {
+		super();
+
+		selectable = false;
+		defaultTextFormat = new TextFormat("_sans", 24, color);
+		this.text = text;
+
+		this.x = (FlxG.width - width) / 2;
+		this.y = FlxG.height - 100;
+	}
+	public function show() {
+		/*
+		Main.instance.addChild(this);
+
+		var timer = new Timer(2000, 1);
+		timer.addEventListener(TimerEvent.TIMER_COMPLETE, event -> {
+			FlxTween.num(alpha, 0.0, 1, {onComplete: f -> {
+				Main.instance.removeChild(this);
+			}}, f -> alpha = f);
+		});
+		timer.start();
+		*/
 	}
 }
 

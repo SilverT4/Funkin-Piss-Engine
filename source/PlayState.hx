@@ -1,5 +1,6 @@
 package;
 
+import Main.Notification;
 import Splash.SplashColor;
 import flixel.tweens.misc.NumTween;
 import flixel.tweens.misc.VarTween;
@@ -155,9 +156,17 @@ class PlayState extends MusicBeatState {
 
 	public var luaSprites:Map<String, FlxSprite>;
 
+	public var createNotif:Notification;
+
 	public function addLuaSprite(name:String, sprite:FlxSprite) {
 		luaSprites.set(name, sprite);
 		add(luaSprites.get(name));
+	}
+
+	public static function thisWithNotification(notif:Notification):PlayState {
+		var playstate = new PlayState();
+		playstate.createNotif = notif;
+		return playstate;
 	}
 
 	public function new(?isMultiplayer = false, ?songPosition:Float) {
@@ -802,6 +811,10 @@ class PlayState extends MusicBeatState {
 		}
 
 		super.create();
+
+		if (createNotif != null) {
+			createNotif.show();
+		}
 	}
 
 	public function updateChar(char:Dynamic) {

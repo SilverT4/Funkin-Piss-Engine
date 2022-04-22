@@ -247,7 +247,7 @@ class Character extends AnimatedSprite {
 						var values:AnyObjectMap = config.get('animations').get(anim);
 						//trace(anim, values.get('x'), values.get('y'), values.get('frames'), values.get('looped'), values.get('name'), values.get('isIdle'));
 						var _name = "";
-						var _frames = 24;
+						var _framerate = 24;
 						var _looped = false;
 						var _x = 0;
 						var _y = 0;
@@ -257,8 +257,8 @@ class Character extends AnimatedSprite {
 								_x = values.get('x');
 							if (values.get('y') != null)
 								_y = values.get('y');
-							if (values.get('frames') != null)
-								_frames = values.get('frames');
+							if (values.get('framerate') != null)
+								_framerate = values.get('framerate');
 							if (values.get('looped') != null)
 								_looped = values.get('looped');
 							if (values.get('name') != null)
@@ -271,11 +271,11 @@ class Character extends AnimatedSprite {
 						
 						if (values.exists("indices")) {
 							if (values.get('indices') != null) {
-								animation.addByIndices(anim, _name, _indices, "", _frames, _looped);
+								animation.addByIndices(anim, _name, _indices, "", _framerate, _looped);
 							}
 						}
 						else {
-							animation.addByPrefix(anim, _name, _frames, _looped);
+							animation.addByPrefix(anim, _name, _framerate, _looped);
 						}
 						setOffset(anim, _x, _y);
 					}

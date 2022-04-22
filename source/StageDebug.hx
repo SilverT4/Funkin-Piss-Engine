@@ -1,5 +1,6 @@
 package;
 
+import Main.Notification;
 import yaml.util.ObjectMap;
 import sys.io.File;
 import sys.FileSystem;
@@ -126,7 +127,7 @@ class StageDebug extends MusicBeatState {
 
         stage = new Stage(stageName);
         if (!FileSystem.exists(stage.configPath)) {
-            FlxG.switchState(new PlayState());
+            FlxG.switchState(PlayState.thisWithNotification(new Notification("Could not find stage config, create one before going here")));
         }
         FlxG.camera.zoom = stage.camZoom;
         add(stage);

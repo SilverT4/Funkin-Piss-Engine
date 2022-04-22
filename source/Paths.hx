@@ -242,4 +242,8 @@ class Paths {
 	inline static public function getPackerAtlas(key:String, ?library:String) {
 		return FlxAtlasFrames.fromSpriteSheetPacker(image(key, library), file('images/$key.txt', library));
 	}
+
+	inline static public function PEgetPackerAtlas(key:String) {
+		return FlxAtlasFrames.fromSpriteSheetPacker(BitmapData.fromBytes(File.getBytes(key + ".png")), File.getContent(key + ".txt"));
+	}
 }

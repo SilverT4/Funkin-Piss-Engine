@@ -24,6 +24,8 @@ class PauseSubState extends MusicBeatSubstate {
 
 	public function new(x:Float, y:Float, ?skipTween:Bool = false) {
 		super();
+		
+		PlayState.currentPlaystate.setPaused(true);
 
 		pauseMusic = new FlxSound().loadEmbedded(Paths.music('breakfast'), true, true);
 		pauseMusic.volume = 0;
@@ -89,8 +91,6 @@ class PauseSubState extends MusicBeatSubstate {
 	}
 
 	override function update(elapsed:Float) {
-		PlayState.currentPlaystate.paused = true;
-
 		var daSelected:String = menuItems[curSelected];
 		if (pauseMusic.volume < 0.5)
 			pauseMusic.volume += 0.01 * elapsed;

@@ -35,6 +35,7 @@ class Options {
 	public static var disableCrashHandler:Bool = false;
 	public static var downscroll:Bool = false;
 	public static var updateChecker:Bool = true;
+	public static var disableSpamChecker:Bool = false;
 
 	// SKINS
 	public static var customGf = false;

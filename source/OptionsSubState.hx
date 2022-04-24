@@ -183,7 +183,8 @@ class OptionsGameplaySubState extends OptionSubState {
 		var items = [
 			new OptionItem("Controls"),
 			new OptionItem("Ghost Tapping", true, Options.ghostTapping, value -> Options.ghostTapping = value),
-			new OptionItem("Downscroll", true, Options.downscroll, value -> Options.downscroll = value)
+			new OptionItem("Downscroll", true, Options.downscroll, value -> Options.downscroll = value),
+			new OptionItem("Disable Spam Checker (pussy mode)", true, Options.disableSpamChecker, value -> Options.disableSpamChecker = value)
 		];
 		super(items, inGame);
 	}

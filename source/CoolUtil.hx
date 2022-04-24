@@ -41,11 +41,23 @@ class CoolUtil {
 	}
 
 	public static function getCharacterPath(characterName:String) {
-		if (FileSystem.exists("mods/characters/" + characterName + "/")) {
-			return "mods/characters/" + characterName + "/";
+		if (!characterName.endsWith("-custom")) {
+			if (FileSystem.exists("mods/characters/" + characterName + "/")) {
+				return "mods/characters/" + characterName + "/";
+			}
+			else if (FileSystem.exists("assets/shared/images/characters/" + characterName + "/")) {
+				return "assets/shared/images/characters/" + characterName + "/";
+			}
 		}
-		else if (FileSystem.exists("assets/shared/images/characters/" + characterName + "/")) {
-			return "assets/shared/images/characters/" + characterName + "/";
+		else {
+			switch (characterName) {
+				case 'bf-custom':
+					return Options.customBfPath;
+				case 'gf-custom':
+					return Options.customGfPath;
+				case 'dad-custom':
+					return Options.customDadPath;
+			}
 		}
 		return null;
 	}

@@ -1,5 +1,10 @@
 package;
 
+import flixel.tweens.FlxTween;
+import flixel.tweens.motion.QuadMotion;
+import flixel.tweens.misc.AngleTween;
+import flixel.tweens.FlxTween.FlxTweenManager;
+import flixel.tweens.FlxTween.TweenOptions;
 import Main.Notification;
 import Splash.SplashColor;
 import flixel.tweens.misc.NumTween;
@@ -34,7 +39,6 @@ import flixel.math.FlxRect;
 import flixel.system.FlxSound;
 import flixel.text.FlxText;
 import flixel.tweens.FlxEase;
-import flixel.tweens.FlxTween;
 import flixel.ui.FlxBar;
 import flixel.util.FlxColor;
 import flixel.util.FlxSort;
@@ -758,7 +762,7 @@ class PlayState extends MusicBeatState {
 							remove(blackScreen);
 							FlxTween.tween(FlxG.camera, {zoom: camZoom}, 2.5, {
 								ease: FlxEase.quadInOut,
-								onComplete: function(twn:FlxTween) {
+								onComplete: function(twn:flixel.tweens.FlxTween) {
 									startCountdown();
 								}
 							});
@@ -1063,7 +1067,7 @@ class PlayState extends MusicBeatState {
 					add(ready);
 					FlxTween.tween(ready, {y: ready.y += 100, alpha: 0}, Conductor.crochet / 1000, {
 						ease: FlxEase.cubeInOut,
-						onComplete: function(twn:FlxTween) {
+						onComplete: function(twn:flixel.tweens.FlxTween) {
 							ready.destroy();
 						}
 					});
@@ -1080,7 +1084,7 @@ class PlayState extends MusicBeatState {
 					add(set);
 					FlxTween.tween(set, {y: set.y += 100, alpha: 0}, Conductor.crochet / 1000, {
 						ease: FlxEase.cubeInOut,
-						onComplete: function(twn:FlxTween) {
+						onComplete: function(twn:flixel.tweens.FlxTween) {
 							set.destroy();
 						}
 					});
@@ -1108,7 +1112,7 @@ class PlayState extends MusicBeatState {
 					if (curNoteAsset != "default") {
 						FlxTween.tween(go, {y: go.y += 100, alpha: 0}, Conductor.crochet / 1000, {
 							ease: FlxEase.cubeInOut,
-							onComplete: function(twn:FlxTween) {
+							onComplete: function(twn:flixel.tweens.FlxTween) {
 								go.destroy();
 							}
 						});
@@ -1707,7 +1711,7 @@ class PlayState extends MusicBeatState {
 			stage.tankRolling.angle = 0;
 			FlxTween.angle(stage.tankRolling, stage.tankRolling.angle, stage.tankRolling.angle + 35, 15);
 			FlxTween.quadMotion(stage.tankRolling, stage.tankRolling.x, stage.tankRolling.y, 250, -5, 1520, stage.tankRolling.y - 100, 15, true, {
-				onComplete: function(twn:FlxTween) {
+				onComplete: function(twn:flixel.tweens.FlxTween) {
 					isTankRolling = false;
 					stage.tankRolling.kill();
 				}
@@ -1719,7 +1723,7 @@ class PlayState extends MusicBeatState {
 		if (openSettings && canPause && startedCountdown) {
 			persistentUpdate = false;
 			persistentDraw = true;
-			paused = true;
+			setPaused(true);
 			openSubState(new OptionsSubState(true));
 		}
 		else {
@@ -1730,7 +1734,7 @@ class PlayState extends MusicBeatState {
 
 				if (!startTimer.finished)
 					startTimer.active = true;
-				paused = false;
+				setPaused(false);
 
 				#if cpp
 				if (startTimer.finished) {
@@ -1828,7 +1832,7 @@ class PlayState extends MusicBeatState {
 		vocals.play();
 	}
 
-	public var paused:Bool = false;
+	private var paused:Bool = false;
 	var startedCountdown:Bool = false;
 	var canPause:Bool = true;
 
@@ -2198,7 +2202,7 @@ class PlayState extends MusicBeatState {
 
 			persistentUpdate = false;
 			persistentDraw = false;
-			paused = true;
+			setPaused(true);
 
 			vocals.stop();
 			FlxG.sound.music.stop();
@@ -2852,7 +2856,7 @@ class PlayState extends MusicBeatState {
 					add(numScore);
 	
 				FlxTween.tween(numScore, {alpha: 0}, 0.2, {
-					onComplete: function(tween:FlxTween) {
+					onComplete: function(tween:flixel.tweens.FlxTween) {
 						numScore.destroy();
 					},
 					startDelay: Conductor.crochet * 0.002
@@ -2873,7 +2877,7 @@ class PlayState extends MusicBeatState {
 			});
 	
 			FlxTween.tween(comboSpr, {alpha: 0}, 0.2, {
-				onComplete: function(tween:FlxTween) {
+				onComplete: function(tween:flixel.tweens.FlxTween) {
 					coolText.destroy();
 					comboSpr.destroy();
 	
@@ -3222,6 +3226,9 @@ class PlayState extends MusicBeatState {
 	var noteHoldTime = new Map<Int, Float>();
 
 	function isSpamming() {
+		if (Options.disableSpamChecker) {
+			return false;
+		}
 		if (blockSpamChecker)
 			return false;
 		var justPressedArr = [];
@@ -3991,6 +3998,13 @@ class PlayState extends MusicBeatState {
 		}
 
 		luaCall("beatHit");
+	}
+
+	public function setPaused(b:Bool) {
+		paused = b;
+		FlxTween.globalManager.forEach(tween -> {
+			tween.active = !paused;
+		});
 	}
 
 	public function pauseGame(?skipTween:Bool = false) {

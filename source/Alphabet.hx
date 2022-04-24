@@ -417,6 +417,10 @@ class AlphaCharacter extends FlxSprite {
 
 				y += 20 * size;
 				x -= 40 * size;
+			case "(", ")":
+				animation.addByPrefix(letter, letter, 24);
+
+				y += 60 * size;
 			default:
 				animation.addByPrefix(letter, letter, 24);
 

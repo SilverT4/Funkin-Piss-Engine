@@ -36,205 +36,34 @@ class Character extends AnimatedSprite {
 
 		antialiasing = true;
 
-		if (!curCharacter.endsWith("-custom")) {
-			if (CoolUtil.isCustomPath(CoolUtil.getCharacterPath(curCharacter))) {
-				if (FileSystem.exists(CoolUtil.getCharacterPath(curCharacter) + curCharacter + ".txt")) {
-					frames = Paths.PEgetPackerAtlas(CoolUtil.getCharacterPath(curCharacter) + curCharacter);
+		if (CoolUtil.isCustomPath(CoolUtil.getCharacterPath(curCharacter))) {
+			var path = CoolUtil.getCharacterPath(curCharacter) + curCharacter;
+			if (path.startsWith("mods/skins/")) {
+				var spltPath = path.split("/");
+				spltPath[spltPath.length - 1] = spltPath[spltPath.length - 2];
+				path = "";
+				for (index in 0...spltPath.length) {
+					path += spltPath[index] + "/";
 				}
-				else {
-					frames = Paths.PEgetSparrowAtlas(CoolUtil.getCharacterPath(curCharacter) + curCharacter);
-				}
+				path = path.substring(0, path.length - 1);
+			}
+			if (FileSystem.exists(path + ".txt")) {
+				frames = Paths.PEgetPackerAtlas(path);
 			}
 			else {
-				if (FileSystem.exists(CoolUtil.getCharacterPath(curCharacter) + curCharacter + ".txt")) {
-					frames = Paths.getPackerAtlas('characters/' + curCharacter + '/' + curCharacter);
-				}
-				else {
-					frames = Paths.getSparrowAtlas('characters/' + curCharacter + '/' + curCharacter);
-				}
+				frames = Paths.PEgetSparrowAtlas(path);
+			}
+		}
+		else {
+			if (FileSystem.exists(CoolUtil.getCharacterPath(curCharacter) + curCharacter + ".txt")) {
+				frames = Paths.getPackerAtlas('characters/' + curCharacter + '/' + curCharacter);
+			}
+			else {
+				frames = Paths.getSparrowAtlas('characters/' + curCharacter + '/' + curCharacter);
 			}
 		}
 
-		switch (curCharacter) {
-			case 'bf-custom':
-				for (file in FileSystem.readDirectory(Options.customBfPath)) {
-					if (file.endsWith(".xml")) {
-						frames = Paths.PEgetSparrowAtlas(Options.customBfPath + file.substring(0, file.length - 4));
-						break;
-					}
-				}
-				addPrefixAlternative('idle', 'BF idle dance', 24, false);
-				addPrefixAlternative('singUP', 'BF NOTE UP0', 24, false);
-				addPrefixAlternative('singLEFT', 'BF NOTE LEFT0', 24, false);
-				addPrefixAlternative('singRIGHT', 'BF NOTE RIGHT0', 24, false);
-				addPrefixAlternative('singDOWN', 'BF NOTE DOWN0', 24, false);
-				addPrefixAlternative('singUPmiss', 'BF NOTE UP MISS', 24, false);
-				addPrefixAlternative('singLEFTmiss', 'BF NOTE LEFT MISS', 24, false);
-				addPrefixAlternative('singRIGHTmiss', 'BF NOTE RIGHT MISS', 24, false);
-				addPrefixAlternative('singDOWNmiss', 'BF NOTE DOWN MISS', 24, false);
-				addPrefixAlternative('hey', 'BF HEY', 24, false);
-				addPrefixAlternative('firstDeath', "BF dies", 24, false);
-				addPrefixAlternative('deathLoop', "BF Dead Loop", 24, true);
-				addPrefixAlternative('deathConfirm', "BF Dead confirm", 24, false);
-				addPrefixAlternative('scared', 'BF idle shaking', 24, true);
-
-				setOffset('idle', -5);
-				setOffset("singUP", -29, 27);
-				setOffset("singRIGHT", -38, -7);
-				setOffset("singLEFT", 12, -6);
-				setOffset("singDOWN", -10, -50);
-				setOffset("singUPmiss", -29, 27);
-				setOffset("singRIGHTmiss", -30, 21);
-				setOffset("singLEFTmiss", 12, 24);
-				setOffset("singDOWNmiss", -11, -19);
-				setOffset("hey", 7, 4);
-				setOffset('firstDeath', 37, 11);
-				setOffset('deathLoop', 37, 5);
-				setOffset('deathConfirm', 37, 69);
-				setOffset('scared', -4);
-
-				setConfig(Options.customBfPath + "config.yml");
-
-				flipX = true;
-
-				if (config != null) {
-					if (config.get('animations') != null) {
-						for (name in animationsFromAlt) {
-							if (config.get('animations').get(name) != null) {
-								var x = 0;
-								var y = 0;
-								if (Std.string(config.get('animations').get(name).get('X')) != "null") {
-									x = config.get('animations').get(name).get('X');
-								}
-								if (Std.string(config.get('animations').get(name).get('Y')) != "null") {
-									y = config.get('animations').get(name).get('Y');
-								}
-								setOffset(name, x, y);
-							}
-						}
-					}
-
-					if (Std.string(config.get("flipX")) != "null") {
-						flipX = CoolUtil.strToBool(Std.string(config.get("flipX")));
-					}
-				}
-
-				playAnim('idle');
-			case 'gf-custom':
-				for (file in FileSystem.readDirectory(Options.customGfPath)) {
-					if (file.endsWith(".xml")) {
-						frames = Paths.PEgetSparrowAtlas(Options.customGfPath + file.substring(0, file.length - 4));
-						break;
-					}
-				}
-				animation.addByPrefix('cheer', 'GF Cheer', 24, false);
-				animation.addByPrefix('singLEFT', 'GF left note', 24, false);
-				animation.addByPrefix('singRIGHT', 'GF Right Note', 24, false);
-				animation.addByPrefix('singUP', 'GF Up Note', 24, false);
-				animation.addByPrefix('singDOWN', 'GF Down Note', 24, false);
-				animation.addByIndices('sad', 'gf sad', [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12], "", 24, false);
-				animation.addByIndices('danceLeft', 'GF Dancing Beat', [30, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14], "", 24, false);
-				animation.addByIndices('danceRight', 'GF Dancing Beat', [15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29], "", 24, false);
-				animation.addByIndices('hairBlow', "GF Dancing Beat Hair blowing", [0, 1, 2, 3], "", 24);
-				animation.addByIndices('hairFall', "GF Dancing Beat Hair Landing", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], "", 24, false);
-				animation.addByPrefix('scared', 'GF FEAR', 24);
-
-				setOffset('cheer');
-				setOffset('sad', -2, -2);
-				setOffset('danceLeft', 0, -9);
-				setOffset('danceRight', 0, -9);
-
-				setOffset("singUP", 0, 4);
-				setOffset("singRIGHT", 0, -20);
-				setOffset("singLEFT", 0, -19);
-				setOffset("singDOWN", 0, -20);
-				setOffset('hairBlow', 45, -8);
-				setOffset('hairFall', 0, -9);
-
-				setOffset('scared', -2, -17);
-
-				setConfig(Options.customGfPath + "config.yml");
-
-				if (config != null) {
-					if (config.get('animations') != null) {
-						for (name in animationsFromAlt) {
-							if (config.get('animations').get(name) != null) {
-								var x = 0;
-								var y = 0;
-								if (Std.string(config.get('animations').get(name).get('X')) != "null") {
-									x = config.get('animations').get(name).get('X');
-								}
-								if (Std.string(config.get('animations').get(name).get('Y')) != "null") {
-									y = config.get('animations').get(name).get('Y');
-								}
-								setOffset(name, x, y);
-							}
-						}
-					}
-
-					if (Std.string(config.get("flipX")) != "null") {
-						flipX = CoolUtil.strToBool(Std.string(config.get("flipX")));
-					}
-				}
-
-				playAnim('danceRight');
-			case 'dad-custom':
-				// DAD ANIMATION LOADING CODE
-				for (file in FileSystem.readDirectory(Options.customDadPath)) {
-					if (file.endsWith(".xml")) {
-						frames = Paths.PEgetSparrowAtlas(Options.customDadPath + file.substring(0, file.length - 4));
-						break;
-					}
-				}
-				animation.addByPrefix('idle', 'Dad idle dance', 24, false);
-				animation.addByPrefix('singUP', 'Dad Sing Note UP', 24);
-				animation.addByPrefix('singRIGHT', 'Dad Sing Note RIGHT', 24);
-				animation.addByPrefix('singDOWN', 'Dad Sing Note DOWN', 24);
-				animation.addByPrefix('singLEFT', 'Dad Sing Note LEFT', 24);
-
-				animation.addByPrefix('singUP-alt', 'alt Dad Sing Note UP', 24, false);
-				animation.addByPrefix('singDOWN-alt', 'alt Dad Sing Note DOWN', 24, false);
-				animation.addByPrefix('singLEFT-alt', 'alt Dad Sing Note LEFT', 24, false);
-				animation.addByPrefix('singRIGHT-alt', 'alt Dad Sing Note RIGHT', 24, false);
-
-				setOffset('idle');
-				setOffset("singUP", -6, 50);
-				setOffset("singRIGHT", 0, 27);
-				setOffset("singLEFT", -10, 10);
-				setOffset("singDOWN", 0, -30);
-				setOffset("singUP-alt");
-				setOffset("singDOWN-alt");
-				setOffset("singLEFT-alt");
-				setOffset("singRIGHT-alt");
-
-				setConfig(Options.customDadPath + "config.yml");
-
-				if (config != null) {
-					if (config.get('animations') != null) {
-						for (name in animationsFromAlt) {
-							if (config.get('animations').get(name) != null) {
-								var x = 0;
-								var y = 0;
-								if (Std.string(config.get('animations').get(name).get('X')) != "null") {
-									x = config.get('animations').get(name).get('X');
-								}
-								if (Std.string(config.get('animations').get(name).get('Y')) != "null") {
-									y = config.get('animations').get(name).get('Y');
-								}
-								setOffset(name, x, y);
-							}
-						}
-					}
-
-					if (Std.string(config.get("flipX")) != "null") {
-						flipX = CoolUtil.strToBool(Std.string(config.get("flipX")));
-					}
-				}
-
-				playAnim('idle');
-		}
-
-		var idleAnim = null;
+		var idleAnim = "idle";
 
 		setConfig(CoolUtil.getCharacterPath(curCharacter) + 'config.yml');
 
@@ -364,7 +193,7 @@ class Character extends AnimatedSprite {
 			case 'parents-christmas':
 				playAnim('idle');
 			default:
-				//ass
+				playAnim(idleAnim);
 		}
 
 		dance();

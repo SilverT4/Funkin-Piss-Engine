@@ -23,7 +23,8 @@ class Options {
 		"customDadPath",
 		"disableCrashHandler",
 		"downscroll",
-		"updateChecker"
+		"updateChecker",
+		"disableSpamChecker"
 	];
 
 	// MAIN

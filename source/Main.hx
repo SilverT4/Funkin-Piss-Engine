@@ -29,7 +29,7 @@ import openfl.events.Event;
 
 class Main extends Sprite {
 	public static inline var ENGINE_NAME:String = "PEngine"; //engine name in case i will change it lmao
-	public static inline var ENGINE_VER = "v0.4.1";
+	public static inline var ENGINE_VER = "v0.5";
 
 	public static var gameWidth:Int = 1280; // Width of the game in pixels (might be less / more in actual pixels depending on your zoom).
 	public static var gameHeight:Int = 720; // Height of the game in pixels (might be less / more in actual pixels depending on your zoom).
@@ -224,28 +224,42 @@ class CrashHandler extends FlxState {
 }
 
 class Notification extends TextField {
+	public static var notifs:Array<Notification> = [];
+	var arrIndex = 0;
 	public function new(text:String, ?color:Int = FlxColor.RED) {
 		super();
 
 		selectable = false;
-		defaultTextFormat = new TextFormat("_sans", 24, color);
+		defaultTextFormat = new TextFormat("_sans", 32, color);
 		this.text = text;
 
-		this.x = (FlxG.width - width) / 2;
-		this.y = FlxG.height - 100;
+		width = textWidth;
+
+		x = (FlxG.width - width) / 2;
+		y = FlxG.height - 100;
 	}
 	public function show() {
-		/*
 		Main.instance.addChild(this);
+
+		notifs.push(this);
+		arrIndex = notifs.length - 1;
+
+		for (notif in notifs) {
+			if (notif != this) {
+				notifs.remove(notif);
+				notif.alpha = 0;
+				Main.instance.removeChild(notif);
+			}
+		}
 
 		var timer = new Timer(2000, 1);
 		timer.addEventListener(TimerEvent.TIMER_COMPLETE, event -> {
 			FlxTween.num(alpha, 0.0, 1, {onComplete: f -> {
+				notifs.remove(this);
 				Main.instance.removeChild(this);
 			}}, f -> alpha = f);
 		});
 		timer.start();
-		*/
 	}
 }
 

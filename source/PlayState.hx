@@ -2740,24 +2740,41 @@ class PlayState extends MusicBeatState {
 			if (SONG.song == "Stress") {
 				peecoStressOnArrowShoot(daNote);
 			}
-	
-			if (noteDiff > Conductor.safeZoneOffset * 0.9) {
+
+			/*
+			if (noteDiff > (curSpeed * 200)) {
 				daRating = 'shit';
 				score = 50;
 			}
-			else if (noteDiff > Conductor.safeZoneOffset * 0.75) {
+			*/
+	
+			if (noteDiff > Conductor.safeZoneOffset * 0.4) {
+				daRating = 'shit';
+				score = 50;
+			}
+			else if (noteDiff > Conductor.safeZoneOffset * 0.3) {
 				daRating = 'bad';
 				score = 100;
 			}
-			else if (noteDiff > Conductor.safeZoneOffset * 0.35) {
+			else if (noteDiff > Conductor.safeZoneOffset * 0.15) {
 				daRating = 'good';
 				score = 200;
 			}
-			else if (noteDiff <= Conductor.safeZoneOffset) {
+			else {
 				daRating = 'sick';
 				score = 350;
 				spawnSplashNote(daNote);
 			}
+			switch (daRating) {
+				case 'shit':
+					//cry about it
+					health -= 0.023;
+				case 'bad':
+					health += 0.003;
+				case 'good', 'sick':
+					health += 0.023;
+			}
+			//new Notification('${Conductor.safeZoneOffset} | $noteDiff', FlxColor.WHITE).show();
 
 			accuracy.judge(daRating);
 	
@@ -3694,18 +3711,9 @@ class PlayState extends MusicBeatState {
 		}
 
 		if (!note.wasGoodHit) {
-			if (note.noteData >= 0) {
-				if (note.isSustainNote) {
-					health += 0.0065;
-				}
-				else {
-					health += 0.023;
-				}
+			if (note.isSustainNote) {
+				health += 0.0065;
 			}
-			else {
-				health += 0.004;
-			}
-
 			if (noteHitAsDad) {
 				dad.playAnim(getAnimName(note.noteData), true);
 				
